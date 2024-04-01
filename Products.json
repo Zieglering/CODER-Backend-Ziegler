@@ -1,0 +1,92 @@
+[
+	{
+		"id": 1,
+		"title": "Cappuccino",
+		"description": "Café",
+		"price": 215,
+		"thumbnail": "./assets/coffee/cappuccino.jpg",
+		"code": "COF001",
+		"stock": 30
+	},
+	{
+		"id": 2,
+		"title": "Moca",
+		"description": "Café",
+		"price": 300,
+		"thumbnail": "./assets/coffee/moca.jpg",
+		"code": "COF002",
+		"stock": 22
+	},
+	{
+		"id": 3,
+		"title": "Espresso",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/Espresso.jpg",
+		"code": "COF003",
+		"stock": 42
+	},
+    {
+		"id": 4,
+		"title": "Latte",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/latte.jpg",
+		"code": "COF004",
+		"stock": 42
+	},
+    {
+		"id": 5,
+		"title": "Macchiato de Chocolate",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/macchiato_de_chocolate.jpg",
+		"code": "COF005",
+		"stock": 42
+	},
+    {
+		"id": 6,
+		"title": "Espresso Helado",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/espresso_helado.jpg",
+		"code": "COF006",
+		"stock": 42
+	},
+    {
+		"id": 7,
+		"title": "Irish",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/irish.jpg",
+		"code": "COF007",
+		"stock": 42
+	},
+    {
+		"id": 8,
+		"title": "Mikshake de Café",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/milkshake_de_cafe.jpg",
+		"code": "COF008",
+		"stock": 42
+	},
+    {
+		"id": 9,
+		"title": "Macchiato",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/macchiato.jpg",
+		"code": "COF009",
+		"stock": 42
+	},
+    {
+		"id": 10,
+		"title": "Doble Espresso",
+		"description": "Café",
+		"price": 320,
+		"thumbnail": "./assets/coffee/doble_espresso.jpg",
+		"code": "COF010",
+		"stock": 42
+	}
+]
