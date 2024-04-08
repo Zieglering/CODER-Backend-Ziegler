@@ -1,14 +1,12 @@
-import express from 'express';
-import ProductManager from './productManager.js';
-const path = "./Products.json";
+import { Router } from 'express'
+import ProductManager from '../productManager.js';
+const productsJsonPath = "./src/Products.json";
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+const router = Router()
 
-const { getProducts, addProduct, getProductsById, updateProduct, deleteProduct } = new ProductManager(path);
+const { getProducts, addProduct, getProductsById, updateProduct, deleteProduct } = new ProductManager(productsJsonPath);
 
-app.get('/api/products', async (req, res) => {
+router.get('/', async (req, res) => {
     const { limit } = req.query;
     const products = await getProducts();
 
@@ -20,7 +18,7 @@ app.get('/api/products', async (req, res) => {
     res.status(200).send({status:'success', payload:products});
 });
 
-app.post('/api/products', async (req, res) => {
+router.post('/', async (req, res) => {
     const { title, description, price, thumbnail, code, stock } = req.body;
     const products = await getProducts()
 
@@ -31,11 +29,11 @@ app.post('/api/products', async (req, res) => {
         return res.status(400).send({status:'error', error: `No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código`});
 
     const newProduct = await addProduct(title, description, price, thumbnail, code, stock);
-    res.status(200).send({status:'success', payload:newProduct});
+    res.status(201).send({status:'success', payload:newProduct});
 });
     
 
-app.get('/api/products/:pid', async (req, res) => {
+router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
     const productFound = await getProductsById(parseInt(pid));
 
@@ -45,7 +43,7 @@ app.get('/api/products/:pid', async (req, res) => {
     res.status(200).send({status:'success', payload: productFound});
 });
 
-app.put('/api/products/:pid', async (req, res) => {
+router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
     const { title, description, price, thumbnail, code, stock } = req.body;
     const productFound = await getProductsById(parseInt(pid));
@@ -57,10 +55,10 @@ app.put('/api/products/:pid', async (req, res) => {
     if (!productFound) return res.status(400).send({status:'error', error: `No existe el producto con el id ${pid}`}); 
     
     const updatedProduct = await updateProduct(parseInt(pid), {title, description, price, thumbnail, code, stock});
-    res.status(200).send({status:'success', payload:updatedProduct});
+    res.status(201).send({status:'success', payload:updatedProduct});
 });
 
-app.delete('/api/products/:pid', async (req, res) => {
+router.delete('/:pid', async (req, res) => {
     const { pid } = req.params;
     const productFound = await getProductsById(parseInt(pid));
 
@@ -71,7 +69,5 @@ app.delete('/api/products/:pid', async (req, res) => {
 
 });
 
-app.listen(8080, (error) => {
-    if(error) return console.log(error);
-    console.log('Server escuchando en el puerto 8080');
-});
+
+export default router;

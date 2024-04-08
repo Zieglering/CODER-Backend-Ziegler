@@ -1,0 +1,112 @@
+[
+	{
+		"id": 1,
+		"title": "Cappuccino",
+		"description": "Café",
+		"code": "COF001",
+		"price": 215,
+		"status": true,
+		"stock": 30,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+	{
+		"id": 2,
+		"title": "Moca",
+		"description": "Café",
+		"code": "COF002",
+		"price": 300,
+		"status": true,
+		"stock": 22,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+	{
+		"id": 3,
+		"title": "Espresso",
+		"description": "Café",
+		"code": "COF003",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+    {
+		"id": 4,
+		"title": "Latte",
+		"description": "Café",
+		"code": "COF004",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+    {
+		"id": 5,
+		"title": "Macchiato de Chocolate",
+		"description": "Café",
+		"code": "COF005",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+    {
+		"id": 6,
+		"title": "Espresso Helado",
+		"description": "Café",
+		"code": "COF006",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+    {
+		"id": 7,
+		"title": "Irish",
+		"description": "Café",
+		"code": "COF007",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+    {
+		"id": 8,
+		"title": "Mikshake de Café",
+		"description": "Café",
+		"code": "COF008",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+    {
+		"id": 9,
+		"title": "Macchiato",
+		"description": "Café",
+		"code": "COF009",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	},
+    {
+		"id": 10,
+		"title": "Doble Espresso",
+		"description": "Café",
+		"code": "COF010",
+		"price": 320,
+		"status": true,
+		"stock": 42,
+		"category": "coffee",
+		"thumbnail": "./images/IMG_placeholder.jpg"
+	}
+]

@@ -1,6 +1,5 @@
 import fs from 'fs'
 const path = "./Products.json";
-
 class ProductManager {
     
 
@@ -27,16 +26,18 @@ class ProductManager {
     }
  
     
-    addProduct = async (title, description, price, thumbnail, code, stock) => {
+    addProduct = async (title, description, code, price, status = true, stock, category, thumbnails = './images/IMG_placeholder.jpg') => {
         try {
         const product = {
             id: await this.getNextId(),
             title: title,
             description: description,
-            price: price,
-            thumbnail: thumbnail,
             code: code,
-            stock: stock
+            price: price,
+            status: status,
+            stock: stock,
+            category: category,
+            thumbnails: thumbnails
         };
         
         const productsData = await this.readProductsJson();
@@ -51,13 +52,25 @@ class ProductManager {
         }
         
 
-        if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
+        if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category) {
             if(completeProductCheck.length > 1) {
                 throw new Error(`¡ERROR! debe llenar todods los campos del producto nuevo\nFaltaron agregar ${completeProductCheck.join(', ')}`);
             } else {
                 throw new Error(`¡ERROR! debe llenar todods los campos del producto nuevo\nFaltó agregar ${completeProductCheck.join(', ')}`);
             }   
         };
+
+        if (typeof title !== 'string' || typeof description !== 'string' || typeof code !== 'string' || typeof category !== 'string' || typeof thumbnails !== 'string') {
+            throw new Error("title, description, thumbnails, y code deben ser string");
+        }
+
+        if (typeof price !== 'number' || typeof stock !== 'number') {
+            throw new Error("price y stock deben ser numeros");
+        }
+
+        if (typeof status !== 'boolean') {
+            throw new Error("status debe ser booleano");
+        }
         
         if (codeExistsCheck){
             throw new Error(`¡ERROR! Producto ${product.title} no agregado\nEl código ${product.code} ya está siendo utlizado por el producto ${codeExistsCheck.title}, con el id ${codeExistsCheck.id}`);
