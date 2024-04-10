@@ -8,7 +8,7 @@
 		"status": true,
 		"stock": 30,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
 	{
 		"id": 2,
@@ -19,7 +19,7 @@
 		"status": true,
 		"stock": 22,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
 	{
 		"id": 3,
@@ -30,7 +30,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
     {
 		"id": 4,
@@ -41,7 +41,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
     {
 		"id": 5,
@@ -52,7 +52,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
     {
 		"id": 6,
@@ -63,7 +63,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
     {
 		"id": 7,
@@ -74,7 +74,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
     {
 		"id": 8,
@@ -85,7 +85,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
     {
 		"id": 9,
@@ -96,7 +96,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
     {
 		"id": 10,
@@ -107,6 +107,6 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	}
 ]
