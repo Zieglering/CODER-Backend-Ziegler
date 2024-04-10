@@ -29,7 +29,7 @@ class ProductManager {
     }
  
     
-    addProduct = async (title, description, code, price, status = true, stock, category, thumbnails = './images/IMG_placeholder.jpg') => {
+    addProduct = async (title, description, code, price, status, stock, category, thumbnails = './images/IMG_placeholder.jpg') => {
         try {
         const product = {
             id: await this.getNextId(),

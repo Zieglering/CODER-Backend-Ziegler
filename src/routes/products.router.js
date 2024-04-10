@@ -21,16 +21,16 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const { title, description, price, thumbnail, code, stock } = req.body;
+    const { title, description, code, price, status = true, stock, category, thumbnails } = req.body;
     const products = await getProducts()
 
-    if(!title || !description || !price || !thumbnail || !code || !stock)
+    if(!title || !description || !code || !price || !stock || !category)
         return res.status(400).send({status:'error', error: 'faltan campos'});
     
     if (products.find((prod) => prod.code === code)) 
         return res.status(400).send({status:'error', error: `No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código`});
 
-    const newProduct = await addProduct(title, description, price, thumbnail, code, stock);
+    const newProduct = await addProduct(title, description, code, price, status, stock, category, thumbnails);
     res.status(201).send({status:'success', payload:newProduct});
 });
     
@@ -47,16 +47,16 @@ router.get('/:pid', async (req, res) => {
 
 router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
-    const { title, description, price, thumbnail, code, stock } = req.body;
+    const { title, description, code, price, status = true, stock, category, thumbnails } = req.body;
     const productFound = await getProductsById(parseInt(pid));
 
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+    if (!title || !description || !code || !price || !stock || !category) {
         return res.status(400).send({status:'error', error: 'faltan campos'});
     }
     
     if (!productFound) return res.status(400).send({status:'error', error: `No existe el producto con el id ${pid}`}); 
     
-    const updatedProduct = await updateProduct(parseInt(pid), {title, description, price, thumbnail, code, stock});
+    const updatedProduct = await updateProduct(parseInt(pid), {title, description, code, price, status, stock, category, thumbnails});
     res.status(201).send({status:'success', payload:updatedProduct});
 });
 
