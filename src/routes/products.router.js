@@ -1,6 +1,8 @@
 import { Router } from 'express'
+import { __dirname } from '../utils.js'
 import ProductManager from '../productManager.js';
-const productsJsonPath = "./src/Products.json";
+
+const productsJsonPath = `${__dirname}/Products.json`;
 
 const router = Router()
 

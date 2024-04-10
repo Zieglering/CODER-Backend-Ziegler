@@ -1,13 +1,14 @@
 import { Router } from 'express'
+import { __dirname } from '../utils.js'
 import CartManager from '../cartManager.js';
 import ProductManager from '../productManager.js';
 
 const router = Router()
 
-const cartsJsonPath = "./src/Carts.json"
+const cartsJsonPath = `${__dirname}/Carts.json`
 const { addNewCart, addProductToCart, getCartById } = new CartManager(cartsJsonPath);
 
-const productsJsonPath = "./src/Products.json";
+const productsJsonPath = `${__dirname}/Products.json`;
 const { getProductsById } = new ProductManager(productsJsonPath)
 
 router.post('/', async (req, res) => {
@@ -29,7 +30,7 @@ router.get('/:cid', async (req, res) => {
 
 
 
-router.post('/:cid/:pid', async (req, res) => {
+router.post('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     const cartFound = await getCartById(parseInt(cid));
     if (!cartFound.products) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe el carrito con el id ${cid}` });

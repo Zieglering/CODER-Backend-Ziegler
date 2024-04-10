@@ -1,5 +1,7 @@
 import fs from 'fs'
-const path = "./Carts.json";
+import { __dirname } from './utils.js'
+
+const path = `${__dirname}/Carts.json`;
 
 class CartManager {
     
