@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { __dirname } from '../utils.js'
 import ProductManager from '../productManager.js';
 
+
 const productsJsonPath = `${__dirname}/Products.json`;
 
 const router = Router()
@@ -33,7 +34,9 @@ router.post('/', async (req, res) => {
     const newProduct = await addProduct(title, description, code, price, status, stock, category, thumbnails);
     res.status(201).send({status:'success', payload:newProduct});
 });
-    
+
+
+
 
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;

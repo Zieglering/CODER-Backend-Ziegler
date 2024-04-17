@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import { __dirname } from './utils.js'
 
 const path = `${__dirname}/Products.json`;
@@ -47,7 +47,7 @@ class ProductManager {
 
         const codeExistsCheck = productsData.find((prod) => prod.code === code);
         
-        let completeProductCheck = [];
+        const completeProductCheck = [];
         for (const prop in product) {
             if (!product[prop]) {
                 completeProductCheck.push(prop);
@@ -56,11 +56,11 @@ class ProductManager {
         
 
         if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category) {
-            if(completeProductCheck.length > 1) {
+            if(completeProductCheck.length > 1) 
                 throw new Error(`¡ERROR! debe llenar todods los campos del producto nuevo\nFaltaron agregar ${completeProductCheck.join(', ')}`);
-            } else {
-                throw new Error(`¡ERROR! debe llenar todods los campos del producto nuevo\nFaltó agregar ${completeProductCheck.join(', ')}`);
-            }   
+            
+            throw new Error(`¡ERROR! debe llenar todods los campos del producto nuevo\nFaltó agregar ${completeProductCheck.join(', ')}`);
+               
         };
 
         if (typeof title !== 'string' || typeof description !== 'string' || typeof code !== 'string' || typeof category !== 'string' || typeof thumbnails !== 'string') {

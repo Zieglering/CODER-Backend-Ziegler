@@ -8,7 +8,7 @@
 		"status": true,
 		"stock": 30,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
 	{
 		"id": 2,
@@ -19,7 +19,7 @@
 		"status": true,
 		"stock": 22,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
 	{
 		"id": 3,
@@ -30,9 +30,9 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
-    {
+	{
 		"id": 4,
 		"title": "Latte",
 		"description": "Café",
@@ -41,9 +41,9 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
-    {
+	{
 		"id": 5,
 		"title": "Macchiato de Chocolate",
 		"description": "Café",
@@ -52,9 +52,9 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
-    {
+	{
 		"id": 6,
 		"title": "Espresso Helado",
 		"description": "Café",
@@ -63,9 +63,9 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
-    {
+	{
 		"id": 7,
 		"title": "Irish",
 		"description": "Café",
@@ -74,9 +74,9 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
-    {
+	{
 		"id": 8,
 		"title": "Mikshake de Café",
 		"description": "Café",
@@ -85,9 +85,9 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
-    {
+	{
 		"id": 9,
 		"title": "Macchiato",
 		"description": "Café",
@@ -96,9 +96,9 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	},
-    {
+	{
 		"id": 10,
 		"title": "Doble Espresso",
 		"description": "Café",
@@ -107,6 +107,7 @@
 		"status": true,
 		"stock": 42,
 		"category": "coffee",
-		"thumbnail": "./images/IMG_placeholder.jpg"
+		"thumbnails": "./images/IMG_placeholder.jpg"
 	}
+
 ]
