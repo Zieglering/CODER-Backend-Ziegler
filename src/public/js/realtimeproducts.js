@@ -1,4 +1,29 @@
-const socket = io()
+// import { io } from 'socket.io-client';
+
+
+
+const socket = io('http://localhost:8080');
+
+socket.on('connect', () => {
+    console.log('Conectado al servidor Socket.IO');
+
+});
+
+socket.on('getProducts', (products) => {
+  const listProducts = document.querySelector('#listProducts')
+  let product = ''
+  for (prod of products) {
+    product += `
+    <div class="container">
+      <li>${prod.title}</li>
+    </div>
+    `
+  }
+  
+  listProducts.innerHTML = product
+})
+
+
 
 
 
@@ -11,43 +36,34 @@ const statuse = document.querySelector('#status')
 const stock = document.querySelector('#stock')
 const category = document.querySelector('#category')
 const thumbnails = document.querySelector('#thumbnails')
+const btnBorrar = document.querySelector('#btnBorrar')
 
 statusCheck = () => {
   if (statuse.checked) return console.log('true') 
   return console.log('false') 
 }
 
+let newProduct = []
 
+addProductForm.addEventListener('click', async (evt) => {
+  evt.preventDefault()
+  const newProductData = {
+      title: title.value,
+      description: description.value,
+      code: code.value,
+      price: Number.parseInt(price.value),
+      status: Boolean(statusCheck),
+      stock: Number.parseInt(stock.value),
+      category: category.value,
+      thumbnails: thumbnails.value
+      };
+ 
+      newProduct = newProductData
+      socket.emit('addNewProduct', newProduct)
 
-    addProductForm.addEventListener('click', async evt => {
-      const newProduct = {
-          title: title.value,
-          description: description.value,
-          code: code.value,
-          price: Number.parseInt(price.value),
-          status: Boolean(statusCheck()),
-          stock: Number.parseInt(stock.value),
-          category: category.value,
-          thumbnails: thumbnails.value
-          };
-          socket.emit('client:newProduct', newProduct)
+      
+    });
+    
+ 
 
-          
-
-      });
-
-
-
-
-
-socket.on('server:listProducts', async getProducts => {
-
-  const listProducts = document.querySelector('#listProducts')
-  let product = ''
-  for (prod of getProducts) {
-    product += `<li>${prod.title}</li>`
-  }
-  
-  listProducts.innerHTML = product
-})
 

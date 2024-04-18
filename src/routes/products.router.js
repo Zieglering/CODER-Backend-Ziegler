@@ -32,6 +32,7 @@ router.post('/', async (req, res) => {
         return res.status(400).send({status:'error', error: `No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código`});
 
     const newProduct = await addProduct(title, description, code, price, status, stock, category, thumbnails);
+    // io.emit('productAdded', newProduct);
     res.status(201).send({status:'success', payload:newProduct});
 });
 
