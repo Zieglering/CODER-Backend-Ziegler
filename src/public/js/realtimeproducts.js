@@ -1,4 +1,4 @@
-const socket = io("http://localhost:8080");
+const socket = io();
 
 const addProductForm = document.querySelector("#addProductForm");
 const title = document.querySelector("#title");
@@ -10,9 +10,16 @@ const stock = document.querySelector("#stock");
 const category = document.querySelector("#category");
 const thumbnails = document.querySelector("#thumbnails");
 
-socket.on("connect", () => {
+statusCheck = () => {
+	if (productStatus.checked) return true;
+	return false;
+};
+
+socket.on("connection", async () => {
 	console.log("Conectado al servidor Socket.IO");
 });
+
+
 socket.on("getProducts", async (products) => {
 	const listProducts = document.querySelector("#listProducts");
 	let product = "";
@@ -41,11 +48,11 @@ socket.on("getProducts", async (products) => {
 		});
 	});
 
-	let updatedProduct = [];
-	btnUpdate = document.querySelectorAll(".btnUpdate");
+	const btnUpdate = document.querySelectorAll(".btnUpdate");
 	btnUpdate.forEach((btn) => {
 		btn.addEventListener("click", async (evt) => {
 			evt.preventDefault();
+
 
 			const updatedProductData = {
 				title: title.value,
@@ -57,23 +64,20 @@ socket.on("getProducts", async (products) => {
 				category: category.value,
 				thumbnails: thumbnails.value,
 			};
+			try {
 
-			updatedProduct = updatedProductData;
 
-			socket.emit("updateProduct", btn.id, updatedProduct);
+				socket.emit("updateProduct", btn.id, updatedProductData);
+			} catch (error) {
+				console.error("Error", error);
+
+			}
+
+
 		});
+
 	});
 });
-
-// console.log(productID)
-// socket.emit("deleteProduct", productID);
-
-statusCheck = () => {
-	if (productStatus.checked) return console.log("true");
-	return console.log("false");
-};
-
-let newProduct = [];
 
 addProductForm.addEventListener("click", async (evt) => {
 	evt.preventDefault();
@@ -87,7 +91,12 @@ addProductForm.addEventListener("click", async (evt) => {
 		category: category.value,
 		thumbnails: thumbnails.value,
 	};
-
-	newProduct = newProductData;
-	socket.emit("addNewProduct", newProduct);
+	try {
+		socket.emit("addProduct", newProductData);
+	} catch (error) {
+		console.error("Error", error);
+	}
 });
+
+
+

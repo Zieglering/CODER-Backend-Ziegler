@@ -1,7 +1,8 @@
+// CRUD en Archivos (Files System)
 import fs from 'node:fs'
-import { __dirname } from './utils.js'
+import { __dirname } from '../filenameUtils.js'
 
-const path = `${__dirname}/Products.json`;
+const path = `${__dirname}/FS-Database/Products.json`;
 
 class ProductManager {
     
@@ -108,10 +109,10 @@ class ProductManager {
     updateProduct = async (productId, updatedProduct) => {
         try {
             const productsData = await this.readProductsJson();
-            const productIndex = productsData.findIndex(product => product.id === productId);
+            const productIndex = await productsData.findIndex(product => product.id === productId);
 
-            if(productIndex === -1){
-                throw new error(`El Producto con el id: ${productId} no existe`);
+            if(await productIndex === -1){
+                throw new Error(`El Producto con el id: ${productId} no existe`);
             }
             
             const newUpdatedProduct = {
@@ -127,7 +128,8 @@ class ProductManager {
 
             
         } catch (error) {
-            return error;
+            
+            throw new Error('Error', error)
         }
 
     }

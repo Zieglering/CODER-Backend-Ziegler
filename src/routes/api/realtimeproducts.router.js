@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { __dirname } from '../utils.js';
-import ProductManager from '../productManager.js';
+import { __dirname } from '../../filenameUtils.js';
+import ProductManager from '../../daos/productsFS.manager.js';
 
-const productsJsonPath = `${__dirname}/Products.json`;
+const productsJsonPath = `${__dirname}/FS-Database/Products.json`;
 const router = Router();
 const { getProducts, addProduct } = new ProductManager(productsJsonPath);
 
@@ -30,10 +30,8 @@ router.post('/', async (req, res) => {
 
     const newProduct = await addProduct(title, description, code, price, status, stock, category, thumbnails);
 
-    // Respondemos al cliente con el nuevo producto agregado
     io.emit('productAdded', newProduct);
     res.status(201).send({status:'success', payload:newProduct});
-    // res.status(201).send({ status: 'success', payload: newProduct });
 });
 
 export default router;
