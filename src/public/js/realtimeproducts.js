@@ -97,6 +97,3 @@ addProductForm.addEventListener("click", async (evt) => {
 		console.error("Error", error);
 	}
 });
-
-
-

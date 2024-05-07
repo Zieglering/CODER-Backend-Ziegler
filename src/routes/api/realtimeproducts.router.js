@@ -30,7 +30,6 @@ router.post('/', async (req, res) => {
 
     const newProduct = await addProduct(title, description, code, price, status, stock, category, thumbnails);
 
-    io.emit('productAdded', newProduct);
     res.status(201).send({status:'success', payload:newProduct});
 });
 

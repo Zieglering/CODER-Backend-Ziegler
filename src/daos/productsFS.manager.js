@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import { __dirname } from '../filenameUtils.js'
 
 const path = `${__dirname}/FS-Database/Products.json`;
-
 class ProductManager {
     
 

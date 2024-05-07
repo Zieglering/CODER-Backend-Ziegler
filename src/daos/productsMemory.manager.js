@@ -1,6 +1,4 @@
 // CRUD en memoria
-
-
 class ProductManager {
     #products;
     

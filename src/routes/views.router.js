@@ -3,7 +3,7 @@ import { __dirname } from '../filenameUtils.js'
 import ProductManager from '../daos/productsFS.manager.js';
 
 
-const productsJsonPath = `${__dirname}/Products.json`;
+const productsJsonPath = `${__dirname}/FS-Database/Products.json`;
 const productManager = new ProductManager(productsJsonPath);
 
 const router = Router()

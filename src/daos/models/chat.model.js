@@ -1,8 +1,11 @@
 import {Schema, model} from 'mongoose'
 
 const chatsSchema = new Schema ({
-    user:string,
+    user:{
+        type: String,
+        required:true,
+    },
     message:String
 })
 
-export const chatsModel = model('chats', chatsSchema)
+export const chatsModel = model('messages', chatsSchema)

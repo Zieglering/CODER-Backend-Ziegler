@@ -1,36 +1,34 @@
-import usersModel from './models/users.models.js'
+import {chatsModel} from './models/chat.model.js'
 
 class ChatMongoManager {
 
     constructor() {
-        this.usersModel = usersModel
+        this.chatsModel = chatsModel
+    }
+    
+    getMessages = async() => {
+        try {
+            return await chatsModel.find();
+        
+        } catch (error) {
+            throw error
+        }
+    }
+    
+    addMessage = async(user, message) => {
+        const newMessage = {
+            user:user,
+            message:message
+        }
+        try {
+            console.log(newMessage)
+            return  await chatsModel.create(newMessage);
+
+            
+        } catch (error) {
+            throw error
+        }
     }
 }
-router.get('/', async (req, res) => {
-    const users = await usersModel.find({})
-    res.send({status: 'success', payload: users})
-})
 
-router.post('/', async (req, res) => {
-    const { body } = req 
-    const result = await usersModel.create(body)
-    res.send({status:'success', payload: result})
-})
-
-
-router.get('/:uid', async (req, res) => {
-    const {uid} = req.params
-    const userFound = await usersModel.findByOne({_id: uid})
-
-    res.send({status:'success', payload: userFound})
-})
-
-
-router.put('/:uid', (req, res) => {
-    res.send('update Users')
-})
-router.delete('/:uid', (req, res) => {
-    res.send('delete Users')
-})
-
-export default router
+export default ChatMongoManager
