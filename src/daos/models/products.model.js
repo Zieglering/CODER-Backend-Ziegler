@@ -17,6 +17,6 @@ const productsSchema = new Schema({
     thumbnails: String
 })
 
-const productsModel = model('Product', productsSchema)
+const productsModel = model('products', productsSchema)
 
 export default productsModel

@@ -9,7 +9,7 @@ class ProductsMongoManager {
     }
 
     getProducts = async () => {
-        return await this.productsModel.find();
+        return await this.productsModel.find().lean();
     }
     addProduct = async (title, description, code, price, status, stock, category, thumbnails = './images/IMG_placeholder.jpg') => {
         const newProduct = {

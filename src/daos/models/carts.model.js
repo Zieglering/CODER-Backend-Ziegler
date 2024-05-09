@@ -8,6 +8,6 @@ const cartsSchema = new Schema({
     }]
 })
 
-const cartsModel = model('Carts', cartsSchema)
+const cartsModel = model('carts', cartsSchema)
 
 export default cartsModel
