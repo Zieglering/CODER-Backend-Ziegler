@@ -1,22 +1,26 @@
 import express from "express";
-import { __dirname } from "./filenameUtils.js";
-import productsRouter from "./routes/api/products.router.js";
-import realtimeproductsRouter from "./routes/api/realtimeproducts.router.js";
-import cartsRouter from "./routes/api/carts.router.js";
-import chatRouter from "./routes/api/chat.router.js"
-import viewsRouter from "./routes/views.router.js";
 import handlebars from "express-handlebars";
-import { productsSocket } from './utils/productsSocket.js'
 import { Server } from "socket.io";
+import connectMongoDB from './config/mongooseConfig.js';
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import { __dirname } from "./filenameUtils.js";
+import { productsSocket } from './utils/productsSocket.js';
 import ProductManager from "./daos/productsFS.manager.js";
-import connectMongoDB from './config/mongooseConfig.js'
-import ChatMongoManager from "./daos/chatMongo.manager.js";
-
+import ChatMongoManager from "./daos/chatManagerMongo.js";
+import viewsRouter from "./routes/views.router.js";
+import pruebasRouter from "./routes/api/pruebas.router.js";
+import realtimeproductsRouter from "./routes/api/realtimeproducts.router.js";
+import productsRouter from "./routes/api/products.router.js";
+import cartsRouter from "./routes/api/carts.router.js";
+import chatRouter from "./routes/api/chat.router.js";
+import { sessionsRouter } from "./routes/api/sessions.router.js";
+import MongoStore from "connect-mongo";
 
 
 const productsJsonPath = `${__dirname}/FS-Database/Products.json`;
 const productManager = new ProductManager(productsJsonPath);
-const chatMongoManager = new ChatMongoManager
+const chatMongoManager = new ChatMongoManager;
 
 const app = express();
 const PORT = process.env.PORT || 8080 || 80 || '179.27.75.242';
@@ -31,8 +35,21 @@ const io = new Server(httpServer);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
+app.use(cookieParser('F1rmas3cr3t@'));
 
-connectMongoDB()
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://zieglering:bX5FNTpfWgkHOvE0@cluster0.vxpuioi.mongodb.net/ecommerce',
+        mongoOptions: {
+        },
+        ttl: 60 * 60 * 1000 * 24
+    }),
+    secret: 'F1rmas3cr3t@',
+    resave: true,
+    saveUninitialized: true
+}));
+
+connectMongoDB();
 
 
 app.engine(".hbs", handlebars.engine({
@@ -43,19 +60,19 @@ app.set("views", `${__dirname}/views`);
 app.set("view engine", ".handlebars");
 
 app.use("/", viewsRouter);
+app.use("/api/sessions", sessionsRouter);
 app.use("/api/products", productsRouter);
-app.use("/realtimeproducts", realtimeproductsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/realtimeproducts", realtimeproductsRouter);
 app.use("/chat", chatRouter);
+app.use("/pruebas", pruebasRouter);
 
-app.use(productsSocket(io))
+app.use(productsSocket(io));
 
 app.use((error, req, res, next) => {
-    console.log(error)
-    res.status(500).send('Error 500 en el server')
-})
-
-
+    console.log(error);
+    res.status(500).send('Error 500 en el server');
+});
 
 io.on("connection", async (socket) => {
     console.log('Cliente conectado');
@@ -83,46 +100,46 @@ io.on("connection", async (socket) => {
     socket.on("updateProduct", async (productID, updatedProduct) => {
         try {
 
-            await productManager.updateProduct(parseInt(productID), updatedProduct)
+            await productManager.updateProduct(parseInt(productID), updatedProduct);
             io.emit("getProducts", await productManager.getProducts());
 
         } catch (error) {
             console.error("Error", error);
 
         }
-    })
+    });
 
     socket.on("deleteProduct", async (productID) => {
         try {
-            await productManager.deleteProduct(parseInt(await productID))
+            await productManager.deleteProduct(parseInt(await productID));
             io.emit("getProducts", await productManager.getProducts());
 
         } catch (error) {
             console.error("Error", error);
 
         }
-    })
+    });
 
     // Chat socket
-    let messages = []
+    let messages = [];
 
     try {
         messages = await chatMongoManager.getMessages();
         socket.emit('messageLog', messages);
     } catch (error) {
-        throw error
+        throw error;
     }
 
     socket.on('message', async data => {
-        console.log('message data: ', data)
+        console.log('message data: ', data);
 
         try {
             await chatMongoManager.addMessage(data.user, data.message);
             messages = await chatMongoManager.getMessages();
             io.emit('messageLog', messages);
         } catch (error) {
-            throw error
+            throw error;
         }
 
-    })
-})
+    });
+});
