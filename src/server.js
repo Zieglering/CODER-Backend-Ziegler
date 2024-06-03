@@ -16,27 +16,25 @@ import cartsRouter from "./routes/api/carts.router.js";
 import chatRouter from "./routes/api/chat.router.js";
 import { sessionsRouter } from "./routes/api/sessions.router.js";
 import MongoStore from "connect-mongo";
-
+import passport from "passport";
+import { initializePassport } from "./config/passport.config.js";
 
 const productsJsonPath = `${__dirname}/FS-Database/Products.json`;
 const productManager = new ProductManager(productsJsonPath);
 const chatMongoManager = new ChatMongoManager;
 
 const app = express();
-const PORT = process.env.PORT || 8080 || 80 || '179.27.75.242';
-
+const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, (error) => {
     if (error) return console.log(error);
     console.log(`Server escuchando en el puerto ${PORT}`);
 });
-
 const io = new Server(httpServer);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser('F1rmas3cr3t@'));
-
 app.use(session({
     store: MongoStore.create({
         mongoUrl: 'mongodb+srv://zieglering:bX5FNTpfWgkHOvE0@cluster0.vxpuioi.mongodb.net/ecommerce',
@@ -49,8 +47,11 @@ app.use(session({
     saveUninitialized: true
 }));
 
-connectMongoDB();
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
+connectMongoDB();
 
 app.engine(".hbs", handlebars.engine({
     extname: '.hbs'
@@ -58,7 +59,6 @@ app.engine(".hbs", handlebars.engine({
 
 app.set("views", `${__dirname}/views`);
 app.set("view engine", ".handlebars");
-
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/products", productsRouter);
@@ -68,10 +68,10 @@ app.use("/chat", chatRouter);
 app.use("/pruebas", pruebasRouter);
 
 app.use(productsSocket(io));
-
 app.use((error, req, res, next) => {
     console.log(error);
     res.status(500).send('Error 500 en el server');
+    return next()
 });
 
 io.on("connection", async (socket) => {
@@ -92,6 +92,7 @@ io.on("connection", async (socket) => {
                 newProductData.thumbnails
             );
             io.emit("getProducts", await productManager.getProducts());
+            return responseData
         } catch (error) {
             console.error("Error", error);
         }
@@ -105,7 +106,6 @@ io.on("connection", async (socket) => {
 
         } catch (error) {
             console.error("Error", error);
-
         }
     });
 
@@ -122,24 +122,13 @@ io.on("connection", async (socket) => {
 
     // Chat socket
     let messages = [];
-
-    try {
-        messages = await chatMongoManager.getMessages();
-        socket.emit('messageLog', messages);
-    } catch (error) {
-        throw error;
-    }
+    messages = await chatMongoManager.getMessages();
+    socket.emit('messageLog', messages);
 
     socket.on('message', async data => {
         console.log('message data: ', data);
-
-        try {
-            await chatMongoManager.addMessage(data.user, data.message);
-            messages = await chatMongoManager.getMessages();
-            io.emit('messageLog', messages);
-        } catch (error) {
-            throw error;
-        }
-
+        await chatMongoManager.addMessage(data.user, data.message);
+        messages = await chatMongoManager.getMessages();
+        io.emit('messageLog', messages);
     });
 });

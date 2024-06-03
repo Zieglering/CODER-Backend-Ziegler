@@ -16,6 +16,7 @@ class CartManager {
             const cartsJson = await fs.promises.readFile(this.path, 'utf-8');
             return JSON.parse(cartsJson);
         } catch (error) {
+            console.log(error)
             return [];
         }
         
@@ -66,8 +67,8 @@ class CartManager {
 getCartById = async (cartId) => {
     try {
         const cartsData = await this.readCartsJson();
-
         const cartIdCheck = cartsData.find((cart) => cart.id === cartId);
+        
         if (cartIdCheck) return cartIdCheck;
         return [];
 
@@ -76,7 +77,6 @@ getCartById = async (cartId) => {
       }
 };   
 
-
     getNextId = async () => {
     const cartsData = await this.readCartsJson();
     if (cartsData.length === 0) {
@@ -84,7 +84,6 @@ getCartById = async (cartId) => {
       };
       return cartsData[cartsData.length -1].id + 1;
 };
-    
 }
 
 export default CartManager;

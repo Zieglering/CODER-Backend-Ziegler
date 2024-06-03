@@ -14,7 +14,6 @@ router.get('/', async (req, res) => {
         const limitedProducts = products.slice(0, parseInt(limit));
         return res.status(200).send({ status: 'success', payload: limitedProducts });
     }
-
     res.status(200).send({ status: 'success', payload: products });
 });
 
@@ -29,7 +28,6 @@ router.post('/', async (req, res) => {
         return res.status(400).send({ status: 'error', error: `No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código` });
 
     const newProduct = await addProduct(title, description, code, price, status, stock, category, thumbnails);
-
     res.status(201).send({status:'success', payload:newProduct});
 });
 

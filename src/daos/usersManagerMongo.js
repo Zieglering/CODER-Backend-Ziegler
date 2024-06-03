@@ -10,16 +10,20 @@ export class UsersManagerMongo {
     return users;
   }
 
-  async createUser(user) {
-    return await this.userModel.create(user);
+  async createUser(newUser) {
+    return await this.userModel.create(newUser);
   }
 
   async getUserBy(filter) {
     return this.userModel.findOne(filter);
   }
 
-  async getUserByEmail(email) {
-    return this.users.find((user) => user.email === email);
+  async updateUser(filter, updatedUser) {
+    return await this.userModel.updateOne(filter, {$set: updatedUser});
   }
+
+  deleteUser = async (filter) => {
+    return await this.productsModel.deleteOne(filter);
+}
 
 }
