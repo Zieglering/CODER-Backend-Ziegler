@@ -14,7 +14,7 @@ class ProductsMongoManager {
             query.status = status;
         }
         if (title) {
-            query.title = { $regex: title, $options: 'i' };
+            query.$text = { $search: title, $diacriticSensitive: false };
         }
         
         let toSortedByPrice = {}
@@ -40,6 +40,9 @@ class ProductsMongoManager {
     }
     getProductsById = async (productId) => {
         return await this.productsModel.findOne({ _id: productId }).lean();
+    }
+    getProductsBy = async (filter) => {
+        return await this.productsModel.findOne(filter).lean()
     }
     updateProduct = async (productId, updatedProduct) => {
         return await this.productsModel.updateOne({ _id: productId }, { $set: updatedProduct });

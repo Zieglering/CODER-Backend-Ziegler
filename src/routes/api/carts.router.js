@@ -46,7 +46,6 @@ router.post('/:cid/products/:pid', async (req, res) => {
     } catch (error) {
         res.status(500).send({ status: 'error', error: error });
     }
-
 });
 
 router.put('/:cid/products/:pid', async (req, res) => {
@@ -60,14 +59,12 @@ router.put('/:cid/products/:pid', async (req, res) => {
         if (!product) {
             return res.status(400).send({ status: 'error', error: `¡ERROR! No existe el producto con el id ${pid}` });
         }
-    
         await cartService.updateProductFromCart(cid, pid, parseInt(quantity));
         res.status(201).send({ status: 'success', payload: cartFound });
         
     } catch (error) {
         res.status(500).send({ status: 'error', error: error });
     }
-
 });
 
 router.put('/:cid', async (req, res) => {
@@ -83,8 +80,6 @@ router.put('/:cid', async (req, res) => {
     } catch (error) {
         res.status(500).send({ status: 'error', error: error });
     }
-
-
 });
 
 router.delete('/:cid/products/:pid', async (req, res) => {

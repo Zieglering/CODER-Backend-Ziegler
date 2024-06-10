@@ -3,6 +3,9 @@ import ProductsMongoManager from "../daos/productsManagerMongo.js";
 import CartsMongoManager from "../daos/cartsManagerMongo.js";
 import { UsersManagerMongo } from "../daos/usersManagerMongo.js";
 import { auth } from "../middlewares/auth.middleware.js";
+import passport from "passport";
+import { passportCall } from "../utils/passportCall.js";
+import { authorizationJwt } from "../utils/authorizationJwt.js";
 
 const productService = new ProductsMongoManager();
 const cartService = new CartsMongoManager();
@@ -36,7 +39,7 @@ router.get('/users', auth, async (req, res) => {
     });
 });
 
-router.get('/products', async (req, res) => {
+router.get('/products', passportCall('jwt'), authorizationJwt('admin', 'user'),  async (req, res) => {
     const { limit = 10, pageNum = 1, category, status, product: title, sortByPrice } = req.query;
     const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } = await productService.getProducts({ limit, pageNum, category, status, title, sortByPrice });
 
@@ -71,24 +74,21 @@ router.get('/products', async (req, res) => {
         category,
         sortByPrice,
         availability: status,
-        email: req.session.user.email,
-        role: req.session.user.role
+        email: req.user.email,
+        role: req.user.role,
+        cartID: req.user.cartID
     });
 });
 
-
-
-router.get('/product/:pid', async (req, res) => {
+router.get('/product/:pid', passportCall('jwt'), authorizationJwt('admin', 'user'), async (req, res) => {
     const { pid } = req.params;
     const product = await productService.getProductsById(pid);
-    // cart Id hardcodeado para probar el boton agregar al carrito
-    const cartId = '6641b6b5b2cc19ccdc4776eb';
-    res.render('./product.hbs', { product, cartId });
+    res.render('./product.hbs', { product, cartID: req.user.cartID });
 });
 
-router.get('/cart/:cid', async (req, res) => {
+router.get('/cart/:cid', passportCall('jwt'), authorizationJwt('admin', 'user'), async (req, res) => {
     const { cid } = req.params;
-    const cart = await cartService.getCartById(cid);
+    const cart = await cartService.getCartBy({_id: cid});
     res.render('./cart.hbs', { cart });
 });
 

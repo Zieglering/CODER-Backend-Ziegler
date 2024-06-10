@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         res.status(200).send({ status: 'success', payload: messages });
 
     } catch (error) {
-        throw error;
+        res.status(500).send({ status: 'error', error: error });
     }
 });
 
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
         res.send({ status: 'success', payload: newMessage });
 
     } catch (error) {
-        throw error;
+        res.status(500).send({ status: 'error', error: error });
     }
 });
 

@@ -10,7 +10,7 @@ const stock = document.querySelector("#stock");
 const category = document.querySelector("#category");
 const thumbnails = document.querySelector("#thumbnails");
 
-statusCheck = () => {
+const statusCheck = () => {
 	if (productStatus.checked) return true;
 	return false;
 };
@@ -19,19 +19,18 @@ socket.on("connection", async () => {
 	console.log("Conectado al servidor Socket.IO");
 });
 
-
 socket.on("getProducts", async (products) => {
 	const listProducts = document.querySelector("#listProducts");
 	let product = "";
-	for (prod of await products) {
+	for (product of await products) {
 		product += `
     <div class="container">
-      <li>${prod.title}</li>
+      <li>${product.title}</li>
       <div>
-        <button class="btnDelete" id="${prod.id}">Borrar</button>
+        <button class="btnDelete" id="${product.id}">Borrar</button>
       </div>
       <div>
-        <button class="btnUpdate" id="${prod.id}">Actualizar</button>
+        <button class="btnUpdate" id="${product.id}">Actualizar</button>
       </div>
     </div>
     `;
@@ -39,7 +38,7 @@ socket.on("getProducts", async (products) => {
 
 	listProducts.innerHTML = product;
 
-	btnDelete = document.querySelectorAll(".btnDelete");
+	const btnDelete = document.querySelectorAll(".btnDelete");
 
 	btnDelete.forEach((btn) => {
 		btn.addEventListener("click", async (evt) => {
@@ -53,7 +52,6 @@ socket.on("getProducts", async (products) => {
 		btn.addEventListener("click", async (evt) => {
 			evt.preventDefault();
 
-
 			const updatedProductData = {
 				title: title.value,
 				description: description.value,
@@ -65,17 +63,11 @@ socket.on("getProducts", async (products) => {
 				thumbnails: thumbnails.value,
 			};
 			try {
-
-
 				socket.emit("updateProduct", btn.id, updatedProductData);
 			} catch (error) {
 				console.error("Error", error);
-
 			}
-
-
 		});
-
 	});
 });
 

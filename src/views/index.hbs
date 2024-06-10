@@ -1,35 +1,95 @@
 <main class="main">
-  <h1>Bienvenido {{email}} - Rol: {{role}}</h1>
-  <button
-    id="logOutBtn"
-    class="btn btn-outline-danger w-100 mt-3"
-  >Logout</button>
+  <h1 id="userEmail">Bienvenido {{email}} - Rol: {{role}}</h1>
+  <h2 id="cartID">CartID:{{cartID}}</h2>
+  <div class="d-flex justify-content">
+    <button id="viewCartBtn" class="btn btn-outline-secondary me-2">Ver Carrito</button>
+    <button id="logOutBtn" class="btn btn-outline-danger">Logout</button>
+  </div>
 
   <section class="container">
     <h1>Nuestros cafés</h1>
-    <div>
+    <div class="dropdown my-3">
       <h2>Categorias</h2>
-      <a href="/products?category=cafe">Café</a>
-      <a href="/products?category=te">Té</a>
-      <a href="/products?category=comestibles">Comestibles</a>
-      <a href="/products">Todos</a>
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="categoryDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Categorías
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+        <li><a
+            class="dropdown-item"
+            href="/products?category=cafe"
+          >Café</a></li>
+        <li><a class="dropdown-item" href="/products?category=te">Té</a></li>
+        <li><a
+            class="dropdown-item"
+            href="/products?category=comestibles"
+          >Comestibles</a></li>
+        <li><a class="dropdown-item" href="/products">Todos</a></li>
+      </ul>
     </div>
-    <div>
+
+    <div class="my-3">
       <h2>Búsqueda de producto por su nombre</h2>
-      <form action="/products" method="get">
-        <input type="text" name="product" placeholder="Busca tu producto" />
-        <input type="submit" value="Submit" />
+      <p>(Presiona enter para buscar en todas las paginas)</p>
+      <form class="d-flex" action="/products" method="get">
+        <input
+          id="searchInput"
+          class="form-control me-2"
+          type="text"
+          name="product"
+          placeholder="Busca tu producto"
+          autocomplete="off"
+        />
       </form>
     </div>
-    <div>
-      <a href="/products?status=true">Disponibles</a>
-      <a href="/products?status=false">No disponibles</a>
+
+    <div class="dropdown my-3">
+      <h2>Disponibilidad</h2>
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="statusDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Disponibilidad
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+        <li><a
+            class="dropdown-item"
+            href="/products?status=true"
+          >Disponibles</a></li>
+        <li><a class="dropdown-item" href="/products?status=false">No
+            disponibles</a></li>
+      </ul>
     </div>
-    <div>
+
+    <div class="dropdown my-3">
       <h2>Ordenar por precio</h2>
-      <a href="/products?sortByPrice=1&category={{category}}">Ordenar ascendente</a>
-      <a href="/products?sortByPrice=-1&category={{category}}">Ordenar
-        descendente</a>
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="priceDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Ordenar por precio
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="priceDropdown">
+        <li><a
+            class="dropdown-item"
+            href="/products?sortByPrice=1&category={{category}}"
+          >Ordenar ascendente</a></li>
+        <li><a
+            class="dropdown-item"
+            href="/products?sortByPrice=-1&category={{category}}"
+          >Ordenar descendente</a></li>
+      </ul>
     </div>
     <div>
       <h2>Productos</h2>

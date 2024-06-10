@@ -24,7 +24,6 @@ router.get('/logout', (req, res) => {
     });
 });
 
-// cookies
 router.get('/setCookie', (req, res) => {
     res.cookie('CoderCookie', 'Esta es una cookie muy poderosa', { maxAge: 10000000 }).send('cookie');
 });

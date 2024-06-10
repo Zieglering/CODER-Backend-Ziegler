@@ -3,7 +3,6 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import connectMongoDB from './config/mongooseConfig.js';
 import cookieParser from "cookie-parser";
-import session from "express-session";
 import { __dirname } from "./filenameUtils.js";
 import { productsSocket } from './utils/productsSocket.js';
 import ProductManager from "./daos/productsFS.manager.js";
@@ -15,9 +14,10 @@ import productsRouter from "./routes/api/products.router.js";
 import cartsRouter from "./routes/api/carts.router.js";
 import chatRouter from "./routes/api/chat.router.js";
 import { sessionsRouter } from "./routes/api/sessions.router.js";
-import MongoStore from "connect-mongo";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const productsJsonPath = `${__dirname}/FS-Database/Products.json`;
 const productManager = new ProductManager(productsJsonPath);
@@ -34,28 +34,16 @@ const io = new Server(httpServer);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
-app.use(cookieParser('F1rmas3cr3t@'));
-app.use(session({
-    store: MongoStore.create({
-        mongoUrl: 'mongodb+srv://zieglering:bX5FNTpfWgkHOvE0@cluster0.vxpuioi.mongodb.net/ecommerce',
-        mongoOptions: {
-        },
-        ttl: 60 * 60 * 1000 * 24
-    }),
-    secret: 'F1rmas3cr3t@',
-    resave: true,
-    saveUninitialized: true
-}));
-
-initializePassport()
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(cookieParser());
 
 connectMongoDB();
 
 app.engine(".hbs", handlebars.engine({
     extname: '.hbs'
 }));
+
+initializePassport()
+app.use(passport.initialize())
 
 app.set("views", `${__dirname}/views`);
 app.set("view engine", ".handlebars");
@@ -71,9 +59,11 @@ app.use(productsSocket(io));
 app.use((error, req, res, next) => {
     console.log(error);
     res.status(500).send('Error 500 en el server');
-    return next()
+    return next();
 });
 
+
+// socket.io config para el endpoint de realtimeproducts
 io.on("connection", async (socket) => {
     console.log('Cliente conectado');
 
@@ -92,7 +82,7 @@ io.on("connection", async (socket) => {
                 newProductData.thumbnails
             );
             io.emit("getProducts", await productManager.getProducts());
-            return responseData
+            return responseData;
         } catch (error) {
             console.error("Error", error);
         }

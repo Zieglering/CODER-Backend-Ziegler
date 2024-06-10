@@ -1,10 +1,8 @@
 import { Router } from 'express'
 import { UsersManagerMongo } from '../../daos/usersManagerMongo.js';
 
-
 const router = Router()
 const userService = new UsersManagerMongo;
-
 
 router.get('/', async (req, res) => {
     try {
@@ -27,7 +25,6 @@ router.post('/', async (req, res) => {
     }
 
 })
-
 
 router.get('/:uid', async (req, res) => {
     const {uid} = req.params

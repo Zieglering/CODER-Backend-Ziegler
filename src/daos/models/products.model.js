@@ -19,8 +19,7 @@ const productsSchema = new Schema({
     thumbnails: String
 })
 
-
-productsSchema.plugin(mongoosePaginate)
+productsSchema.plugin(mongoosePaginate).index({ title: 'text' });
 
 const productsModel = model('products', productsSchema)
 export default productsModel

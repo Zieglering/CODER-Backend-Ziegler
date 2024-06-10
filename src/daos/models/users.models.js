@@ -5,19 +5,24 @@ const userCollection = 'users';
 
 const userSchema = new Schema({
     first_name: {
-        type: String,
-        index: true
+        type: String
     },
     last_name: String,
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        index: true
     },
+    age: Number,
     password: String,
+    cartID: {
+        type: Schema.Types.ObjectId,
+        ref: 'carts'
+    },
     role: {
         type: String,
-        emum: ['user', 'admin'],
+        emum: ['user', 'premium-user', 'admin'],
         default: 'user'
     }
 });

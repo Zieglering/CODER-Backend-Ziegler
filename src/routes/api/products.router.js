@@ -49,7 +49,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-
 router.post('/', async (req, res) => {
     const { title, description, code, price, status = true, stock, category, thumbnails } = req.body;
     const products = await productService.getProducts();
@@ -114,6 +113,5 @@ router.delete('/:pid', async (req, res) => {
         res.status(500).send({ status: 'error', error: error });
     }
 });
-
 
 export default router;

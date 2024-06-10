@@ -41,6 +41,4 @@ registerForm.addEventListener('submit', async (evt) => {
               confirmButtonText: 'OK'
             });
           }
-
-
 });
