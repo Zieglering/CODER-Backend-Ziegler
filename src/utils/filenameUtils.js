@@ -1,6 +1,8 @@
 import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 
 // funcionalidad __dirname con type: "module" 
 const __filename = fileURLToPath(import.meta.url);
-export const __dirname = dirname(__filename);
+const __dirname = join(dirname(__filename), '..');
+
+export default __dirname

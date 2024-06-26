@@ -1,9 +1,9 @@
 // CRUD en Archivos (Files System)
 import fs from 'node:fs'
-import { __dirname } from '../filenameUtils.js'
+import __dirname from '../utils/filenameUtils.js'
 
 const path = `${__dirname}/FS-Database/Products.json`;
-class ProductManager {
+class ProductDao {
     
 
     constructor(path) {
@@ -155,4 +155,4 @@ class ProductManager {
     };
 };
 
-export default ProductManager;
+export default ProductDao;

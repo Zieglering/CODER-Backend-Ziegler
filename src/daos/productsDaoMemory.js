@@ -1,5 +1,5 @@
 // CRUD en memoria
-class ProductManager {
+class ProductDao {
     #products;
     
     constructor() {

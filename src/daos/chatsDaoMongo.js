@@ -1,6 +1,6 @@
 import {chatsModel} from './models/chat.model.js'
 
-class ChatMongoManager {
+class ChatDaoMongo {
     constructor() {
         this.chatsModel = chatsModel
     }
@@ -20,4 +20,4 @@ class ChatMongoManager {
     }
 }
 
-export default ChatMongoManager
+export default ChatDaoMongo

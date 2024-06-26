@@ -1,14 +1,14 @@
 import { Router } from "express";
-import ProductsMongoManager from "../daos/productsManagerMongo.js";
-import CartsMongoManager from "../daos/cartsManagerMongo.js";
-import { UsersManagerMongo } from "../daos/usersManagerMongo.js";
+import ProductsDaoMongo from "../daos/productsDaoMongo.js";
+import CartsDaoMongo from "../daos/cartsDaoMongo.js";
+import UsersDaoMongo from "../daos/usersDaoMongo.js";
 import { auth } from "../middlewares/auth.middleware.js";
 import passport from "passport";
 import { passportCall } from "../utils/passportCall.js";
 import { authorizationJwt } from "../utils/authorizationJwt.js";
 
-const productService = new ProductsMongoManager();
-const cartService = new CartsMongoManager();
+const productService = new ProductsDaoMongo();
+const cartService = new CartsDaoMongo();
 
 const router = Router();
 
@@ -24,9 +24,9 @@ router.get('/register', (req, res) => {
     res.render('register.hbs');
 });
 
-router.get('/users', auth, async (req, res) => {
+router.get('/users', passportCall('jwt'), authorizationJwt('admin', 'user'), async (req, res) => {
     const { numPage, limit } = req.query;
-    const userService = new UsersManagerMongo();
+    const userService = new UsersDaoMongo();
     const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = await userService.getUsers({ limit, numPage });
 
     res.render('users.hbs', {
@@ -76,14 +76,14 @@ router.get('/products', passportCall('jwt'), authorizationJwt('admin', 'user'), 
         availability: status,
         email: req.user.email,
         role: req.user.role,
-        cartID: req.user.cartID
+        cart: req.user.cart
     });
 });
 
 router.get('/product/:pid', passportCall('jwt'), authorizationJwt('admin', 'user'), async (req, res) => {
     const { pid } = req.params;
     const product = await productService.getProductsById(pid);
-    res.render('./product.hbs', { product, cartID: req.user.cartID });
+    res.render('./product.hbs', { product, cart: req.user.cart });
 });
 
 router.get('/cart/:cid', passportCall('jwt'), authorizationJwt('admin', 'user'), async (req, res) => {

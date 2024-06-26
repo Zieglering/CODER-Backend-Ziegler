@@ -16,7 +16,7 @@ const userSchema = new Schema({
     },
     age: Number,
     password: String,
-    cartID: {
+    cart: {
         type: Schema.Types.ObjectId,
         ref: 'carts'
     },

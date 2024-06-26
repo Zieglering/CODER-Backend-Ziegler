@@ -1,16 +1,19 @@
 import { Router } from 'express';
-import { UsersManagerMongo } from '../../daos/usersManagerMongo.js';
+import UsersDaoMongo from '../../daos/usersDaoMongo.js';
 import { createHash, isValidPassword } from '../../utils/bcrypt.js';
 import passport from 'passport';
 import { passportCall } from '../../utils/passportCall.js';
-import CartsMongoManager from '../../daos/cartsManagerMongo.js';
+import CartsDaoMongo from '../../daos/cartsDaoMongo.js';
 import { authorizationJwt } from '../../utils/authorizationJwt.js';
-import { auth } from '../../middlewares/auth.middleware.js';
 import { authTokenMiddleware, generateToken } from '../../utils/jsonwebtoken.js';
+import { objectConfig } from '../../config/config.js';
+// import { auth } from '../../middlewares/auth.middleware.js';
 
 export const sessionsRouter = Router();
-const userService = new UsersManagerMongo;
-const cartsService = new CartsMongoManager;
+const userService = new UsersDaoMongo;
+const cartsService = new CartsDaoMongo;
+const {admin_email, admin_password, admin_cart} = objectConfig
+
 
 sessionsRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
 
@@ -40,17 +43,15 @@ sessionsRouter.post('/register', async (req, res) => {
             email,
             age: parseInt(age) || null,
             password: createHash(password),
-            cartID: newCart._id
+            cart: newCart._id
         };
         const result = await userService.createUser(newUser);
         const token = generateToken({
             id: result._id,
             email,
             role: result.role,
-            cartID: result.cartID
+            cart: result.cart
         });
-        console.log(result._id)
-        console.log(newCart._id)
 
         return res.cookie('token', token, {
             maxAge: 60 * 60 * 1000 * 24,
@@ -66,14 +67,15 @@ sessionsRouter.post('/register', async (req, res) => {
 sessionsRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
     // Admin hardcodeado
-    const adminEmail = 'adminCoder@coder.com';
-    const adminPassword = 'adminCod3r123';
+    const adminEmail = admin_email;
+    const adminCart = admin_cart
+    const adminPassword = admin_password;
 
     if (email === adminEmail && password === adminPassword) {
         req.user = {
             email: adminEmail,
             role: 'admin',
-            cartID: '1234'
+            cart: adminCart
         };
         return res.status(200).send({ status: 'Success', message: `Admin ${email} Logueado con exito` });
     }
@@ -89,7 +91,7 @@ sessionsRouter.post('/login', async (req, res) => {
         id: userFound._id,
         email,
         role: userFound.role,
-        cartID: userFound.cartID
+        cart: userFound.cart
     });
 
     res.cookie('token', token, {

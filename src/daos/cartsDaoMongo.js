@@ -1,6 +1,6 @@
 import cartsModel from "./models/carts.model.js";
 
-class CartsMongoManager {
+class CartsDaoMongo {
     constructor() {
         this.cartsModel = cartsModel;
     }
@@ -83,4 +83,4 @@ class CartsMongoManager {
 }
 
 
-export default CartsMongoManager;
+export default CartsDaoMongo;

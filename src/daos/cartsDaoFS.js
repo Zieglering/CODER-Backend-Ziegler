@@ -3,7 +3,7 @@ import { __dirname } from '../filenameUtils.js'
 
 const path = `${__dirname}/Carts.json`;
 
-class CartManager {
+class CartDao {
     
 
     constructor(path) {
@@ -86,4 +86,4 @@ getCartById = async (cartId) => {
 };
 }
 
-export default CartManager;
+export default CartDao;

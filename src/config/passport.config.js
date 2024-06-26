@@ -1,14 +1,16 @@
 import passport from 'passport';
-import { UsersManagerMongo } from '../daos/usersManagerMongo.js';
+import UsersDaoMongo from '../daos/usersDaoMongo.js';
 import GithubStrategy from 'passport-github2';
 import jwt from 'passport-jwt';
 import { PRIVATE_KEY, generateToken } from '../utils/jsonwebtoken.js';
-import CartsMongoManager from '../daos/cartsManagerMongo.js';
+import CartsDaoMongo from '../daos/cartsDaoMongo.js';
+import { objectConfig } from './config.js';
 
-const userService = new UsersManagerMongo();
+const { github_CallbackURL, github_ClientSecret, github_ClientID } = objectConfig;
+const userService = new UsersDaoMongo();
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
-const cartsService = new CartsMongoManager
+const cartsService = new CartsDaoMongo;
 
 export const initializePassport = () => {
 
@@ -33,13 +35,13 @@ export const initializePassport = () => {
     }));
 
     passport.use('github', new GithubStrategy({
-        clientID: 'Iv23liQxo01u9lMy7LxQ',
-        clientSecret: 'fe4104715d07c3b0f2c65f81e450feaf9f659d08',
-        callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
+        clientID: github_ClientID,
+        clientSecret: github_ClientSecret,
+        callbackURL: github_CallbackURL
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             let user = await userService.getUserBy({ email: profile._json.login });
-            const newCart = await cartsService.addNewCart()
+            const newCart = await cartsService.addNewCart();
             if (!user) {
                 let newUser = {
                     first_name: profile._json.name,
@@ -47,12 +49,12 @@ export const initializePassport = () => {
                     email: profile._json.login,
                     age: null,
                     password: '',
-                    cartID: newCart._id
+                    cart: newCart._id
                 };
                 let result = await userService.createUser(newUser);
                 user = result;
-            } 
-            const token = generateToken({ id: user._id, email: user.email, role: user.role, cartID: newCart._id });
+            }
+            const token = generateToken({ id: user._id, email: user.email, role: user.role, cart: newCart._id });
             user.token = token;
 
             done(null, user);
