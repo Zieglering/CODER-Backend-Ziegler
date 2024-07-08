@@ -1,5 +1,5 @@
 <main>
-  <h1>Carrito {{cart._id}}</h1>
+  <h1 id="cartID">Carrito: {{cart._id}}</h1>
   <div>
     {{#each cart.products}}
       <div class="container">
@@ -12,12 +12,17 @@
             <h4 id="productli">{{quantity}}</h4>
             <h3 id="productli" class="product-price">${{product.price}}</h3>
           </div>
-          {{! <button id="removeFromCartBtn">Quitar</button> }}
         </div>
       </div>
     {{/each}}
   </div>
+  
+  <div class="total-amount">
+    <h3>Total: ${{cart.totalAmount}}</h3>
+  </div>
+
   <button id="volverBtn" class="product-btn">Volver</button>
+  <button id="ticketBtn" class="product-btn">Finalizar Compra</button>
 </main>
 
 <link rel="stylesheet" href="/css/cart.css" />

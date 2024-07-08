@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { connect } from 'mongoose';
 import { program } from '../utils/commander.js';
-// import { orderModel } from '../models/order.model.js'
 
 const { mode } = program.opts();
 dotenv.config({
@@ -18,7 +17,8 @@ export const objectConfig = {
   mongo_local_url: process.env.MONGO_LOCAL_URL,
   admin_email: process.env.ADMIN_EMAIL,
   admin_password: process.env.ADMIN_PASS,
-  admin_cart: process.env.ADMIN_CART
+  admin_cart: process.env.ADMIN_CART,
+  persistence: process.env.PERSISTENCE
 };
 export const connectMongoDb = async () => {
   console.log('Base de datos conectada');

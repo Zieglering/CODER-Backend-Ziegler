@@ -12,7 +12,7 @@ export const chatSocketIO = (io) => {
         
         socket.on('message', async data => {
             console.log('message data: ', data);
-            await chatService.addMessage(data.user, data.message);
+            await chatService.createMessage(data.user, data.message);
             messages = await chatService.getMessages();
             io.emit('messageLog', messages);
         });

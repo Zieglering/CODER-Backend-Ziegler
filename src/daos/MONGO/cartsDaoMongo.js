@@ -5,7 +5,7 @@ class CartsDaoMongo {
         this.cartsModel = cartsModel;
     }
 
-    addNewCart = async () => {
+    create = async () => {
         const cart = {
             products: []
         };
@@ -35,7 +35,9 @@ class CartsDaoMongo {
         }
     };
 
-    getCartBy = async (filter) => await this.cartsModel.findOne(filter).lean();
+    getBy = async (filter) => {
+        return await this.cartsModel.findOne(filter).lean()
+    };
 
     updateProductFromCart = async (cartId, product, quantity) => {
         const cartExists = this.cartsModel.where({ _id: cartId, 'products.product': product });
@@ -54,9 +56,9 @@ class CartsDaoMongo {
         }
     };
 
-    updateCart = async (cid, pid) => {
+    update = async (cid, pid) => {
         const result = await cartsModel.findOneAndUpdate(
-            { _id: cid, 'prodcuts.product': pid },
+            { _id: cid, 'products.product': pid },
             { $inc: { 'products.$.quantity': 1 } },
             { new: true }
         );
@@ -75,7 +77,7 @@ class CartsDaoMongo {
         { new: true }
     );
 
-    deleteCart = async (cid) => cartsModel.findOneAndUpdate(
+    remove = async (cid) => cartsModel.findOneAndUpdate(
         { _id: cid },
         { $set: { products: [] } },
         { new: true }

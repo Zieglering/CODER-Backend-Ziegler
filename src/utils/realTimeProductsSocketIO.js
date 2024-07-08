@@ -1,10 +1,10 @@
-import realTimeProductController from "../controller/realTimeProductsController.js";
+import RealTimeProductController from "../controller/realTimeProductsController.js";
 // falta implementar createRealTimeProduct
 
 const {
     getRealTimeProducts,
     createRealTimeProduct
-} = new realTimeProductController();
+} = new RealTimeProductController();
 
 // socket.io config para el endpoint de realtimeproducts
 export const realTimeProducts = (io) => {
@@ -14,9 +14,9 @@ export const realTimeProducts = (io) => {
 
         socket.emit("getProducts", products.docs);
 
-        socket.on("addProduct", async (newProductData) => {
+        socket.on("createProduct", async (newProductData) => {
             try {
-                const responseData = await productService.addProduct(
+                const responseData = await createRealTimeProduct(
                     newProductData.title,
                     newProductData.description,
                     newProductData.code,
@@ -26,7 +26,7 @@ export const realTimeProducts = (io) => {
                     newProductData.category,
                     newProductData.thumbnails
                 );
-                io.emit("getProducts", await productService.getProducts());
+                io.emit("getProducts", await getRealTimeProducts());
                 return responseData;
             } catch (error) {
                 console.error("Error", error);
@@ -36,8 +36,8 @@ export const realTimeProducts = (io) => {
         socket.on("updateProduct", async (productID, updatedProduct) => {
             try {
 
-                await productService.updateProduct(parseInt(productID), updatedProduct);
-                io.emit("getProducts", await productService.getProducts());
+                await productService.update(parseInt(productID), updatedProduct);
+                io.emit("getProducts", await getRealTimeProducts());
 
             } catch (error) {
                 console.error("Error", error);
@@ -46,8 +46,8 @@ export const realTimeProducts = (io) => {
 
         socket.on("deleteProduct", async (productID) => {
             try {
-                await productService.deleteProduct(parseInt(await productID));
-                io.emit("getProducts", await productService.getProducts());
+                await productService.remove(parseInt(await productID));
+                io.emit("getProducts", await getRealTimeProducts());
 
             } catch (error) {
                 console.error("Error", error);

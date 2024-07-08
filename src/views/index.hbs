@@ -20,23 +20,17 @@
         Categorías
       </button>
       <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-        <li><a
-            class="dropdown-item"
-            href="/products?category=cafe"
-          >Café</a></li>
-        <li><a class="dropdown-item" href="/products?category=te">Té</a></li>
-        <li><a
-            class="dropdown-item"
-            href="/products?category=comestibles"
-          >Comestibles</a></li>
-        <li><a class="dropdown-item" href="/products">Todos</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="category" data-value="cafe" href="#">Café</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="category" data-value="te" href="#">Té</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="category" data-value="comestibles" href="#">Comestibles</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="category" data-value="" href="#">Todos</a></li>
       </ul>
     </div>
 
     <div class="my-3">
       <h2>Búsqueda de producto por su nombre</h2>
-      <p>(Presiona enter para buscar en todas las paginas)</p>
-      <form class="d-flex" action="/products" method="get">
+      <p>(Presiona enter para buscar en todas las páginas)</p>
+      <form id="searchForm" class="d-flex" action="/products" method="get">
         <input
           id="searchInput"
           class="form-control me-2"
@@ -60,12 +54,8 @@
         Disponibilidad
       </button>
       <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-        <li><a
-            class="dropdown-item"
-            href="/products?status=true"
-          >Disponibles</a></li>
-        <li><a class="dropdown-item" href="/products?status=false">No
-            disponibles</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="status" data-value="true" href="#">Disponibles</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="status" data-value="false" href="#">No disponibles</a></li>
       </ul>
     </div>
 
@@ -81,14 +71,8 @@
         Ordenar por precio
       </button>
       <ul class="dropdown-menu" aria-labelledby="priceDropdown">
-        <li><a
-            class="dropdown-item"
-            href="/products?sortByPrice=1&category={{category}}"
-          >Ordenar ascendente</a></li>
-        <li><a
-            class="dropdown-item"
-            href="/products?sortByPrice=-1&category={{category}}"
-          >Ordenar descendente</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="sortByPrice" data-value="1" href="#">Ordenar ascendente</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="sortByPrice" data-value="-1" href="#">Ordenar descendente</a></li>
       </ul>
     </div>
     <div>
@@ -106,8 +90,8 @@
               </div>
               <a href="/product/{{this._id}}"><button
                   class="product-btn"
-                  data-product-id="{{product._id}}"
-                  data-cart-id="{{cartId}}"
+                  data-product-id="{{this._id}}"
+                  data-cart-id="{{../cart}}"
                 >Ver más</button></a>
             </div>
           {{/each}}
@@ -118,13 +102,12 @@
   <section class="container-center">
     <div class="div-flex">
       <div class="div-center">
-
         {{#if hasPrevPage}}
-          <a href={{prevLink}}>Anterior</a>
+          <a href="{{prevLink}}">Anterior</a>
         {{/if}}
         <p>{{page}}</p>
         {{#if hasNextPage}}
-          <a href={{nextLink}}>Siguiente</a>
+          <a href="{{nextLink}}">Siguiente</a>
         {{/if}}
       </div>
     </div>

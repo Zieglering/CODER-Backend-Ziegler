@@ -48,5 +48,5 @@ httpServer.listen(port, (error) => {
 
 
 
-realTimeProducts(io);
+// realTimeProducts(io);
 chatSocketIO(io);

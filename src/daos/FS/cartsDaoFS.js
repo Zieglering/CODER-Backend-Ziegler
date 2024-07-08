@@ -1,14 +1,11 @@
-import fs from 'fs'
-import { __dirname } from '../filenameUtils.js'
+import fs from 'fs';
+import { __dirname } from '../filenameUtils.js';
 
 const path = `${__dirname}/Carts.json`;
 
-class CartDao {
-    
-
+class CartsDaoFS {
     constructor(path) {
         this.path = path;
-        
     }
 
     readCartsJson = async () => {
@@ -16,18 +13,16 @@ class CartDao {
             const cartsJson = await fs.promises.readFile(this.path, 'utf-8');
             return JSON.parse(cartsJson);
         } catch (error) {
-            console.log(error)
+            console.log(error);
             return [];
         }
-        
-    }
+    };
 
     writeCart = async (cartsData) => {
         await fs.promises.writeFile(this.path, JSON.stringify(cartsData, null, '\t'), 'utf-8');
-    }
-    
-    
-    addNewCart = async () => {
+    };
+
+    create = async () => {
         const cart = {
             id: await this.getNextId(),
             products: []
@@ -36,54 +31,54 @@ class CartDao {
         cartsData.push(cart);
         await this.writeCart(cartsData);
         return cartsData;
-    }
+    };
+
     addProductToCart = async (cartId, product, quantity) => {
         try {
             const cartsData = await this.readCartsJson();
             const cartIndex = cartsData.findIndex(cart => cart.id === cartId);
-        
+
             if (cartIndex === -1) {
                 throw new Error(`No existe el carrito con el id ${cartId}`);
             }
-        
+
             const cart = cartsData[cartIndex];
-        
+
             const existingProductIndex = cart.products.findIndex(prod => prod.product === product);
-        
+
             if (existingProductIndex !== -1) {
                 cart.products[existingProductIndex].quantity += quantity;
             } else {
                 cart.products.push({ product, quantity });
             }
-        
+
             await this.writeCart(cartsData);
             return cart;
 
         } catch (error) {
             return error;
         }
-    }
+    };
 
-getCartById = async (cartId) => {
-    try {
-        const cartsData = await this.readCartsJson();
-        const cartIdCheck = cartsData.find((cart) => cart.id === cartId);
-        
-        if (cartIdCheck) return cartIdCheck;
-        return [];
+    getBy = async (filter) => {
+        try {
+            const cartsData = await this.readCartsJson();
+            const foundCart = cartsData.find(cart => cart.filter === filter);
 
-    } catch (error) {
-        return error;
-      }
-};   
+            if (foundCart) return foundCart;
+            return [];
+        } catch (error) {
+            return error;
+        }
+    };
 
     getNextId = async () => {
-    const cartsData = await this.readCartsJson();
-    if (cartsData.length === 0) {
-        return 1;
-      };
-      return cartsData[cartsData.length -1].id + 1;
-};
+        const cartsData = await this.readCartsJson();
+        if (cartsData.length === 0) {
+            return 1;
+        };
+        return cartsData[cartsData.length - 1].id + 1;
+    };
 }
 
-export default CartDao;
+export default CartsDaoFS;

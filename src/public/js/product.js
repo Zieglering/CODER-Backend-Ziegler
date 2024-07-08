@@ -2,11 +2,10 @@ const addToCartBtn = document.querySelector('#addToCartBtn');
 const cartIDElement = document.querySelector('#cartID');
 
 addToCartBtn.addEventListener('click', async () => {
-    // const cartId = addToCartBtn.dataset.cartId;
     const productId = addToCartBtn.dataset.productId;
     const productTitle = addToCartBtn.dataset.productTitle;
     let quantity = 1;
-
+    
     try {
         const cartID = cartIDElement.textContent.split(':')[1].trim();
         const response = await fetch(`/api/carts/${cartID}/products/${productId}`, {

@@ -1,18 +1,20 @@
 import { Router } from 'express';
 import __dirname from '../../utils/filenameUtils.js';
-import ProductDao from '../../daos/productsDaoFS.js';
-import realTimeProductController from '../../controller/realTimeProductsController.js';
+import RealTimeProductController from '../../controller/realTimeProductsController.js';
 
-const productsJsonPath = `${__dirname}/FS-Database/Products.json`;
 const router = Router();
-const { getProducts, addProduct } = new ProductDao(productsJsonPath);
-
 const {
+    createRealTimeProduct,
     getRealTimeProducts,
-    createRealTimeProduct
-} = new realTimeProductController()
+    getRealTimeProductBy,
+    updateRealTimeProduct,
+    removeRealTimeProduct
+} = new RealTimeProductController()
 
-router.get('/', getRealTimeProducts);
 router.post('/', createRealTimeProduct);
+router.get('/', getRealTimeProducts);
+router.get('/:pid', getRealTimeProductBy);
+router.put('/:pid', updateRealTimeProduct);
+router.delete('/:pid', removeRealTimeProduct);
 
 export default router;

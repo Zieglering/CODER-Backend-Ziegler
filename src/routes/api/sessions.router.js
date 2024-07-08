@@ -1,19 +1,18 @@
 import { Router } from 'express';
-import UsersDaoMongo from '../../daos/usersDaoMongo.js';
-import { createHash, isValidPassword } from '../../utils/bcrypt.js';
 import passport from 'passport';
-import { passportCall } from '../../utils/passportCall.js';
-import CartsDaoMongo from '../../daos/cartsDaoMongo.js';
 import { authorizationJwt } from '../../utils/authorizationJwt.js';
+import { createHash, isValidPassword } from '../../utils/bcrypt.js';
+import { passportCall } from '../../utils/passportCall.js';
 import { authTokenMiddleware, generateToken } from '../../utils/jsonwebtoken.js';
 import { objectConfig } from '../../config/config.js';
-// import { auth } from '../../middlewares/auth.middleware.js';
+import UserDto from '../../dtos/usersDto.js';
+import CartController from '../../controller/carts.controller.js';
+import { cartService, userService } from '../../service/service.js';
 
 export const sessionsRouter = Router();
-const userService = new UsersDaoMongo;
-const cartsService = new CartsDaoMongo;
-const {admin_email, admin_password, admin_cart} = objectConfig
 
+const cartController = new CartController;
+const {admin_email, admin_password, admin_cart} = objectConfig
 
 sessionsRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
 
@@ -33,18 +32,19 @@ sessionsRouter.post('/register', async (req, res) => {
         const { first_name, last_name, email, age, password } = req.body;
         if (!email || !password) return res.status(401).send({ status: 'error', error: `Faltan campos, ingresa email y password` });
 
-        const userExist = await userService.getUserBy({ email });
+        const userExist = await userService.getUser({ email });
         if (userExist) return res.status(401).send({ status: 'error', error: `El usuario con el email ${userExist.email} ya existe` });
 
-        const newCart = await cartsService.addNewCart();
-        const newUser = {
+        const newCart = await cartService.createCart();
+        const newUser = new UserDto({
             first_name,
             last_name,
             email,
             age: parseInt(age) || null,
             password: createHash(password),
             cart: newCart._id
-        };
+        })
+        
         const result = await userService.createUser(newUser);
         const token = generateToken({
             id: result._id,
@@ -82,7 +82,7 @@ sessionsRouter.post('/login', async (req, res) => {
 
     if (!email || !password) return res.status(401).render('login.hbs', ({ status: 'error', error: `Faltan campos, ingresa email y password` }));
 
-    const userFound = await userService.getUserBy({ email });
+    const userFound = await userService.getUser({ email });
     if (!userFound) return res.status(400).render('login.hbs', ({ status: 'error', error: `Usuario no encontrado` }));
 
     if (!isValidPassword(password, { password: userFound.password })) return res.status(401).send({ status: 'error', error: 'Password incorrecto' });
@@ -109,6 +109,7 @@ sessionsRouter.post('/logout', (req, res) => {
         return res.status(500).send({ status: 'error', error: 'Ocurrió un error, por favor intentalo nuevamente' });
     }
 });
+
 
 sessionsRouter.get('/current', passportCall('jwt'), authorizationJwt('admin', 'user'), (req, res) => {
     res.send(`Datos que puede ver el Rol: ${req.user.role}`);

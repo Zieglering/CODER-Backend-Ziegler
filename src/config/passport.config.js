@@ -1,9 +1,9 @@
 import passport from 'passport';
-import UsersDaoMongo from '../daos/usersDaoMongo.js';
-import GithubStrategy from 'passport-github2';
 import jwt from 'passport-jwt';
+import GithubStrategy from 'passport-github2';
+import UsersDaoMongo from '../daos/MONGO/usersDaoMongo.js';
+import CartsDaoMongo from '../daos/MONGO/cartsDaoMongo.js';
 import { PRIVATE_KEY, generateToken } from '../utils/jsonwebtoken.js';
-import CartsDaoMongo from '../daos/cartsDaoMongo.js';
 import { objectConfig } from './config.js';
 
 const { github_CallbackURL, github_ClientSecret, github_ClientID } = objectConfig;
@@ -40,8 +40,8 @@ export const initializePassport = () => {
         callbackURL: github_CallbackURL
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            let user = await userService.getUserBy({ email: profile._json.login });
-            const newCart = await cartsService.addNewCart();
+            let user = await userService.getBy({ email: profile._json.login });
+            const newCart = await cartsService.create();
             if (!user) {
                 let newUser = {
                     first_name: profile._json.name,
@@ -51,7 +51,7 @@ export const initializePassport = () => {
                     password: '',
                     cart: newCart._id
                 };
-                let result = await userService.createUser(newUser);
+                let result = await userService.create(newUser);
                 user = result;
             }
             const token = generateToken({ id: user._id, email: user.email, role: user.role, cart: newCart._id });

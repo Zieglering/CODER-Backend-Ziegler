@@ -8,7 +8,7 @@ const cartsSchema = new Schema({
             ref:'products'
         },
         quantity: Number
-    }]
+    }],
 })
 
 cartsSchema.pre('findOne', function() {

@@ -1,23 +1,27 @@
 import { Router } from 'express';
 import CartController from '../../controller/carts.controller.js';
+import { authorizationJwt } from '../../utils/authorizationJwt.js';
+import { passportCall } from '../../utils/passportCall.js';
 
 const router = Router();
 const {
-    getCart,
     createCart,
     addProductToCart,
+    purchase,
+    getCart,
     updateProductFromCart,
     updateCart,
     deleteProductFromCart,
-    deleteCart
+    removeCart
 } = new CartController();
 
-router.get('/:cid', getCart);
 router.post('/', createCart);
-router.post('/:cid/products/:pid', addProductToCart);
+router.post('/:cid/purchase', passportCall('jwt'), authorizationJwt('user'), purchase);
+router.post('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('user'), addProductToCart);
+router.get('/:cid', getCart);
 router.put('/:cid/products/:pid', updateProductFromCart);
 router.put('/:cid', updateCart);
 router.delete('/:cid/products/:pid', deleteProductFromCart);
-router.delete('/:cid', deleteCart);
+router.delete('/:cid', removeCart);
 
 export default router;

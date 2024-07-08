@@ -1,6 +1,6 @@
 const socket = io();
 
-const addProductForm = document.querySelector("#addProductForm");
+const createProductForm = document.querySelector("#createProductForm");
 const title = document.querySelector("#title");
 const description = document.querySelector("#description");
 const code = document.querySelector("#code");
@@ -70,7 +70,7 @@ socket.on("getProducts", (products) => {
     });
 });
 
-addProductForm.addEventListener("submit", (evt) => {
+createProductForm.addEventListener("submit", (evt) => {
     evt.preventDefault();
     const newProductData = {
         title: title.value,
@@ -83,7 +83,7 @@ addProductForm.addEventListener("submit", (evt) => {
         thumbnails: thumbnails.value,
     };
     try {
-        socket.emit("addProduct", newProductData);
+        socket.emit("createProduct", newProductData);
     } catch (error) {
         console.error("Error", error);
     }
