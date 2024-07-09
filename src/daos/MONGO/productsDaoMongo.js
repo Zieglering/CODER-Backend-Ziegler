@@ -43,8 +43,22 @@ class ProductsDaoMongo {
         return await this.productsModel.findOne(filter).lean();
     };
 
+    // update = async (productId, updatedProduct) => {
+    //     console.log(productId)
+    //     console.log(updatedProduct)
+    //     return await this.productsModel.updateOne({ _id: productId }, { $set: updatedProduct });
+    // };
     update = async (productId, updatedProduct) => {
-        return await this.productsModel.updateOne({ _id: productId }, { $set: updatedProduct });
+        if (updatedProduct.stock) {
+            return await this.productsModel.updateOne(
+                { _id: productId },
+                { $inc: { stock: updatedProduct.stock } }
+            );
+        }
+        return await this.productsModel.updateOne(
+            { _id: productId },
+            { $set: updatedProduct }
+        );
     };
 
     remove = async (productId) => {

@@ -7,44 +7,7 @@ class TicketController {
         this.cartService = cartService;
         this.userService = userService;
     }
-    //  generateUniqueCode = async () => {
-    //     let code;
-    //     let exists = true;
-    //     while (exists) {
-    //         code = Math.random().toString(36).substr(2, 9).toUpperCase();
-    //         exists = await this.ticketService.getTicket({ code });
-    //     }
-    //     return code;
-    // }
-
-    createTicket = async (ticketData) => {
-        try {
-            const { cartId, userId, totalAmount } = ticketData;
-            const cart = await this.cartService.getCart({ _id: cartId });
-            const user = await this.userService.getUser({ _id: userId });
-
-            if (!cart || !user) {
-                return res.status(404).send({ status: 'error', error: 'Cart or User not found' });
-            }
-            // const totalAmount = cart.products.forEach(product => {
-            //     product.price * product.quantity
-            // });
-            console.log(totalAmount);
-            // const totalAmount = cart.totalAmount;
-            const newTicket = {
-                code: Math.random().toString(36).substr(2, 9).toUpperCase(),
-                purchase_datetime: new Date(),
-                amount: totalAmount,
-                purchaser: user.email // Ensure you're passing ObjectId here
-            };
-
-            const createdTicket = await this.ticketService.createTicket(newTicket);
-            return createdTicket;
-        } catch (error) {
-            throw new Error(`Error creating ticket: ${error.message}`);
-        }
-    };
-
+    
     getTicket = async (req, res) => {
         const { tid } = req.params;
         const ticketFound = await ticketService.getTicket({ _id: tid });

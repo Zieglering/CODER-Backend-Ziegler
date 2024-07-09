@@ -67,6 +67,8 @@ class CartController {
     updateCart = async (req, res) => {
         const { cid } = req.params;
         const products = req.body;
+        console.log(cid)
+        console.log(products)
         try {
             const cartFound = await cartService.getCart({ _id: cid });
             if (!cartFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe el carrito con el id ${cid}` });
@@ -109,26 +111,34 @@ class CartController {
     };
 
     generateUniqueCode = async () => {
-        let code;
-        let exists = true;
-        while (exists) {
-            code = Math.random().toString(36).substr(2, 9).toUpperCase();
-            exists = await this.ticketService.getTicket({ code });
+        let uniqueCode;
+        let codeExists = true;
+    
+        while (codeExists) {
+            uniqueCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+            const existingTicket = await this.ticketService.getTicket({uniqueCode});
+            if (!existingTicket) {
+                codeExists = false;
+            }
         }
-        return code;
-    }
+    
+        return uniqueCode;
+    };
 
     purchase = async (req, res) => {
         const { cid } = req.params;
         const user = req.user;
 
         try {
+            console.log(`Este es el cid: ${cid}`)
             const cart = await cartService.getCart({ _id: cid });
             if (!cart) {
                 throw new Error('Cart not found');
             }
+
             const productsToProcess = [];
             const productsNotProcessed = [];
+            let totalAmount = 0;
 
             for (const item of cart.products) {
                 const product = await productService.getProduct(item.product);
@@ -136,37 +146,37 @@ class CartController {
                     throw new Error(`Producto con ID ${item.product} no encontrado`);
                 }
                 if (product.stock >= item.quantity) {
-                    product.stock -= item.quantity;
-                    const updatedProduct = await productService.updateProduct(product._id, product);
-                    productsToProcess.push(item.product);
+                    productsToProcess.push(item);
+                    totalAmount += product.price * item.quantity;
                 } else {
-                    productsNotProcessed.push(item.product);
+                    productsNotProcessed.push(item);
                 }
             }
-
-                    
-            cart.products = cart.products.filter(item => !productsNotProcessed.includes(item.product));
-            await cartService.updateCart(cart);
-
-            const totalAmount = cart.products.reduce((total, item) => {
-                const productPrice = item.product.price;
-                const quantity = item.quantity;
-                return total + (productPrice * quantity);
-            }, 0);
-
+            
+            const uniqueCode = await this.generateUniqueCode();
             const newTicket = {
-                cartId: cart._id,
-                userId: user._id,
-                totalAmount,
+                code: String(uniqueCode),
+                purchase_datetime: new Date(),
+                amount: totalAmount,
+                purchaser: user.email
             };
+            // console.log('Creating ticket:', newTicket);
+            const createdTicket = await this.ticketService.createTicket(newTicket);
+            // console.log('Ticket created:', createdTicket)
+            for (const item of productsToProcess) {
+                await this.productService.updateProduct(item.product, { stock: -item.quantity });
+            }
 
-            const createdTicket = await ticketService.createTicket(newTicket);
+            cart.products = productsNotProcessed;
+            await this.cartService.updateCart(cart._id, cart.products);
+
             return res.status(200).send({ status: 'success', payload: createdTicket });
         } catch (error) {
             console.error('Error during purchase:', error);
-            res.status(500).send({ status: 'error', error: { message: error.message, stack: error.stack } });
+            res.status(500).send({ status: 'error', error: error.message });
+        }
     }
-    };
+
 }
 
 export default CartController;

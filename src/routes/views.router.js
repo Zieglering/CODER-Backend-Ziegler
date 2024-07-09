@@ -85,7 +85,7 @@ router.get('/cart/:cid', passportCall('jwt'), authorizationJwt('admin', 'user'),
     res.render('./cart.hbs', { cart });
 });
 
-router.get('/ticket/:tid', passportCall('jwt'), authorizationJwt('admin', 'user'), async (req, res) => {
+router.get('/ticket/:tid', async (req, res) => {
     const { tid } = req.params;
     const ticket = await ticketService.getBy({_id: tid});
     res.render('./ticket.hbs', { ticket });

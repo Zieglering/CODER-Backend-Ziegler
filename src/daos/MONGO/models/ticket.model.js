@@ -3,30 +3,22 @@ import { Schema, model } from 'mongoose';
 const ticketSchema = new Schema({
     code: {
         type: String,
-        default:'A',
         required: true,
+        unique: true
     },
     purchase_datetime: {
         type: Date,
-        default: Date.now
+        required: true
     },
     amount: {
         type: Number,
-        default:0,
         required: true
     },
-    // purchaser: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'users',
-    //     required: true
-    // }
     purchaser: {
         type: String,
-        default:'mail',
         required: true,
     }
-
 });
 
-const ticketModel = model('tickets', ticketSchema);
+const ticketModel = model('ticket', ticketSchema);
 export default ticketModel;

@@ -8,6 +8,6 @@ const {
 } = new TicketController();
 
 router.get('/:tid', getTicket);
-router.delete('/:cid', removeTicket);
+router.delete('/:tid', removeTicket);
 
 export default router;

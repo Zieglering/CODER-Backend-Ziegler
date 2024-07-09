@@ -7,8 +7,8 @@ const cartID = cartIDElement.textContent.split(':')[1]?.trim();
 volverBtn.addEventListener('click', () => {
     window.location.href = '/products';
 });
-
 ticketBtn.addEventListener('click', async () => {
+    console.log(cartID)
     if (!cartID) {
         alert('Error: no se encuentra cart ID');
         return;
@@ -21,9 +21,8 @@ ticketBtn.addEventListener('click', async () => {
                 'Content-Type': 'application/json'
             }
         });
-
         const responseData = await response.json();
-        console.log('Response from purchase API:', responseData);
+        console.log('respuesta desde el endpoint api/carts/:cid/purchase:', responseData);
 
         if (response.ok) {
             alert('Compra finalizada con éxito');

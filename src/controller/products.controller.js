@@ -85,6 +85,8 @@ class ProductController {
     updateProduct = async (req, res) => {
         const { pid } = req.params;
         const { title, description, code, price, status, stock, category, thumbnails } = req.body;
+        console.log(req.body)
+        console.log(pid)
         const productFound = await productService.getProduct({ _id: pid });
         try {
             if (!title || !description || !code || !price || !stock || !category) {

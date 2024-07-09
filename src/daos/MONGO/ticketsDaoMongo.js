@@ -5,8 +5,17 @@ class TicketsDaoMongo {
     this.ticketModel = ticketModel;
   }
 
-  create = async (newTicket) => {
-    return await this.ticketModel.create(newTicket);
+  create = async (ticketData) => {
+    // console.log('Creating ticket:', newTicket);
+    // return await this.ticketModel.collection.insertOne(newTicket);
+    try {
+      console.log('Creating ticket:', ticketData);
+      const result = await ticketModel.create(ticketData);
+      return result;
+  } catch (error) {
+      console.error('Error creating ticket:', error);
+      throw error;
+  }
   };
 
   getBy = async (filter) => {
