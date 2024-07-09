@@ -130,7 +130,7 @@ class CartController {
         const user = req.user;
 
         try {
-            console.log(`Este es el cid: ${cid}`)
+            // console.log(`Este es el cid: ${cid}`)
             const cart = await cartService.getCart({ _id: cid });
             if (!cart) {
                 throw new Error('Cart not found');
@@ -164,7 +164,10 @@ class CartController {
             const createdTicket = await this.ticketService.createTicket(newTicket);
             // console.log('Ticket created:', createdTicket)
             for (const item of productsToProcess) {
-                await this.productService.updateProduct(item.product, { stock: -item.quantity });
+                // console.log('estos son los items', item.product._id)
+                // console.log(productsToProcess)
+                let updateProductStock = await this.productService.updateProduct(item.product._id, { stock: -item.quantity });
+                console.log(updateProductStock)
             }
 
             cart.products = productsNotProcessed;

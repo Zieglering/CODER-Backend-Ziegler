@@ -22,7 +22,7 @@ ticketBtn.addEventListener('click', async () => {
             }
         });
         const responseData = await response.json();
-        console.log('respuesta desde el endpoint api/carts/:cid/purchase:', responseData);
+        console.log(`respuesta desde el endpoint api/carts/:cid/purchase: ${responseData.payload || responseData.error}`);
 
         if (response.ok) {
             alert('Compra finalizada con éxito');

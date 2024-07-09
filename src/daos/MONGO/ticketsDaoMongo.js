@@ -9,7 +9,7 @@ class TicketsDaoMongo {
     // console.log('Creating ticket:', newTicket);
     // return await this.ticketModel.collection.insertOne(newTicket);
     try {
-      console.log('Creating ticket:', ticketData);
+      // console.log('Creating ticket:', ticketData);
       const result = await ticketModel.create(ticketData);
       return result;
   } catch (error) {

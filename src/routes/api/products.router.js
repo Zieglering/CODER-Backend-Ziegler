@@ -12,10 +12,10 @@ const {
     removeProduct
 } = new ProductController();
 
-router.post('/',createProduct);
+router.post('/',passportCall('jwt'), authorizationJwt('admin'), createProduct);
 router.get('/', getProducts);
 router.get('/:pid', getProductBy);
 router.put('/:pid',updateProduct);
-router.delete('/:pid',removeProduct);
+router.delete('/:pid', passportCall('jwt'), authorizationJwt('admin'), removeProduct);
 
 export default router;

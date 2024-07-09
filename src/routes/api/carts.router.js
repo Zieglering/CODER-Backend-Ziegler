@@ -16,8 +16,8 @@ const {
 } = new CartController();
 
 router.post('/', createCart);
-router.post('/:cid/purchase', passportCall('jwt'), purchase);
-router.post('/:cid/products/:pid', addProductToCart);
+router.post('/:cid/purchase', passportCall('jwt'), authorizationJwt('user', 'admin'), purchase);
+router.post('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('user'), addProductToCart);
 router.get('/:cid', getCart);
 router.put('/:cid/products/:pid', updateProductFromCart);
 router.put('/:cid', updateCart);

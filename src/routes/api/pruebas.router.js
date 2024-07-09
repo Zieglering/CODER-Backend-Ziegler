@@ -6,11 +6,12 @@ import { userService } from '../../service/service.js';
 
 const router = Router();
 
+
 router.get('/current', passportCall('jwt'), authorizationJwt('user'), async (req, res) => {
     const {uid} = req.params
     const user = await userService.getUsers({_id: uid});
-
-    res.render('user.hbs', {user});
+    // console.log(user.docs)
+    res.render('users.hbs', {users: user.docs});
 
 });
 // router.get('/current', passportCall('jwt'), authorizationJwt('user'), (req, res) => {

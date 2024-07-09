@@ -50,17 +50,20 @@ class ProductsDaoMongo {
     // };
     update = async (productId, updatedProduct) => {
         if (updatedProduct.stock) {
-            return await this.productsModel.updateOne(
+            return await this.productsModel.findOneAndUpdate(
                 { _id: productId },
-                { $inc: { stock: updatedProduct.stock } }
+                { $inc: { stock: updatedProduct.stock } },
+                { upsert: true }
             );
         }
-        return await this.productsModel.updateOne(
+        return await this.productsModel.findOneAndUpdate(
             { _id: productId },
-            { $set: updatedProduct }
+            { $set: updatedProduct },
+            { upsert: true }
         );
     };
 
+    
     remove = async (productId) => {
         return await this.productsModel.deleteOne({ _id: productId });
     };

@@ -57,7 +57,6 @@ class CartsDaoMongo {
     };
 
     update = async (cid, products) => {
-        console.log(products)
         const result = await this.cartsModel.findOneAndUpdate(
             { _id: cid },
             { $set: { products: products } },
