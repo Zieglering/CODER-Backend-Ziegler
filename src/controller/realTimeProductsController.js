@@ -26,7 +26,7 @@ class RealTimeProductController {
     getRealTimeProducts = async (req = {}, res) => {
         try {
             const limit = req.query?.limit;
-            const products = await realTimeProductsService.getRealTimeProducts();
+            const products = await realTimeProductsService.getProducts();
 
             if (limit) {
                 const limitedProducts = products.slice(0, parseInt(limit));

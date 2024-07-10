@@ -65,22 +65,6 @@ class CartsDaoMongo {
         return result;
     };
 
-    // update = async (cid, productToUpdate) => {
-    //     console.log(productToUpdate)
-    //     const result = await cartsModel.findOneAndUpdate(
-    //         { _id: cid, 'products.product': productToUpdate },
-    //         { $inc: { 'products.$.quantity': 1 } },
-    //         { new: true }
-    //     );
-    //     if (result) return result;
-    //     const newProductInCart = await cartsModel.findOneAndUpdate(
-    //         { _ud: cid },
-    //         { $push: { products: { product: productToUpdate, quantity: 1 } } },
-    //         { new: true }
-    //     );
-    //     return newProductInCart;
-    // };
-
     deleteProductFromCart = async (cid, pid) => await cartsModel.findOneAndUpdate(
         { _id: cid },
         { $pull: { products: { product: pid, quantity: 1 } } },

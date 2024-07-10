@@ -20,5 +20,5 @@ const ticketSchema = new Schema({
     }
 });
 
-const ticketModel = model('ticket', ticketSchema);
+const ticketModel = model('tickets', ticketSchema);
 export default ticketModel;

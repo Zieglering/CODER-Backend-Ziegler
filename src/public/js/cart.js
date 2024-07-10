@@ -2,36 +2,33 @@ const volverBtn = document.querySelector('#volverBtn');
 const ticketBtn = document.querySelector('#ticketBtn');
 const cartIDElement = document.querySelector('#cartID');
 
-const cartID = cartIDElement.textContent.split(':')[1]?.trim();
+const cid = cartIDElement.textContent.split(':')[1]?.trim();
 
 volverBtn.addEventListener('click', () => {
     window.location.href = '/products';
 });
 ticketBtn.addEventListener('click', async () => {
-    console.log(cartID)
-    if (!cartID) {
+    if (!cid) {
         alert('Error: no se encuentra cart ID');
         return;
     }
 
     try {
-        const response = await fetch(`/api/carts/${cartID}/purchase`, {
+        const response = await fetch(`/api/carts/${cid}/purchase`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
         const responseData = await response.json();
-        console.log(`respuesta desde el endpoint api/carts/:cid/purchase: ${responseData.payload || responseData.error}`);
 
         if (response.ok) {
-            alert('Compra finalizada con éxito');
+            alert(`Compra finalizada con éxito\nHora de la compra: ${responseData.payload.purchase_datetime}\nTicket generado con el codigo ${responseData.payload.code}\nComprador ${responseData.payload.purchaser}\nTotal ${responseData.payload.amount}`);
             window.location.href = '/products';
         } else {
-            alert(`Error al finalizar la compra: ${responseData.error.message || responseData.error}`);
+            alert(`Error al finalizar la compra: ${responseData.error}`);
         }
     } catch (error) {
-        console.error('Error finalizando la compra:', error);
         alert('Error al finalizar la compra');
     }
 });

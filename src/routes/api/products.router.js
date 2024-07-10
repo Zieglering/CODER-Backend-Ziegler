@@ -15,7 +15,7 @@ const {
 router.post('/',passportCall('jwt'), authorizationJwt('admin'), createProduct);
 router.get('/', getProducts);
 router.get('/:pid', getProductBy);
-router.put('/:pid',updateProduct);
+router.put('/:pid',passportCall('jwt'), authorizationJwt('admin'), updateProduct);
 router.delete('/:pid', passportCall('jwt'), authorizationJwt('admin'), removeProduct);
 
 export default router;

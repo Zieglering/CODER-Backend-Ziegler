@@ -2,6 +2,7 @@ import { Router } from "express";
 import { passportCall } from "../utils/passportCall.js";
 import { authorizationJwt } from "../utils/authorizationJwt.js";
 import { productService, cartService, userService ,ticketService } from "../service/service.js";
+import UserDto from "../dtos/usersDto.js";
 
 
 const router = Router();
@@ -20,7 +21,7 @@ router.get('/register', (req, res) => {
 
 router.get('/users', passportCall('jwt'), authorizationJwt('admin', 'user'), async (req, res) => {
     const { numPage, limit } = req.query;
-    const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = await userService.getAll({ limit, numPage });
+    const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = await userService.getUsers({ limit, numPage });
 
     res.render('users.hbs', {
         users: docs,

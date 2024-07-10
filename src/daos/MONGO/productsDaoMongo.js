@@ -44,8 +44,6 @@ class ProductsDaoMongo {
     };
 
     // update = async (productId, updatedProduct) => {
-    //     console.log(productId)
-    //     console.log(updatedProduct)
     //     return await this.productsModel.updateOne({ _id: productId }, { $set: updatedProduct });
     // };
     update = async (productId, updatedProduct) => {
