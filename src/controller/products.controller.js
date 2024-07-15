@@ -1,3 +1,6 @@
+import { CustomError } from '../service/errors/CustomError.js';
+import { EError } from '../service/errors/enums.js';
+import { generateInvalidProductError } from '../service/errors/info.js';
 import { productService } from '../service/service.js';
 
 class ProductController {
@@ -5,13 +8,20 @@ class ProductController {
         this.productService = productService;
     }
 
-    createProduct = async (req, res) => {
+    createProduct = async (req, res, next) => {
         const { title, description, code, price, status = true, stock, category, thumbnails } = req.body;
-        const products = await productService.getProducts();
         try {
-            if (!title || !description || !code || !price || !stock || !category)
-                return res.status(400).send({ status: 'error', error: 'faltan campos' });
+            
+            if (!title || !description || !code || !price || !stock || !category) {
+                CustomError.createError({
+                    name: 'Error al crear el producto',
+                    cause: generateInvalidProductError({ title, description, code, price, stock, category }),
+                    message: 'Error al crear el producto, campos faltantes o inválidos',
+                    code: EError.MISSING_OR_INVALID_REQUIRED_DATA_ERROR
+                });
+            }
 
+            const { docs: products } = await productService.getProducts();
             if (products.find((prod) => prod.code === code))
                 return res.status(400).send({ status: 'error', error: `No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código` });
 
@@ -19,7 +29,7 @@ class ProductController {
             res.status(201).send({ status: 'success', payload: newProduct });
 
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error });
+            next(error);
         }
     };
 
@@ -85,8 +95,8 @@ class ProductController {
     updateProduct = async (req, res) => {
         const { pid } = req.params;
         const { title, description, code, price, status, stock, category, thumbnails } = req.body;
-        console.log(req.body)
-        console.log(pid)
+        console.log(req.body);
+        console.log(pid);
         const productFound = await productService.getProduct({ _id: pid });
         try {
             if (!title || !description || !code || !price || !stock || !category) {

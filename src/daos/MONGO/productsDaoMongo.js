@@ -16,7 +16,8 @@ class ProductsDaoMongo {
             category: category,
             thumbnails: thumbnails
         };
-        return await this.productsModel.collection.insertOne(newProduct);
+        const result = await this.productsModel.create(newProduct);
+        return result; 
     };
 
     getAll = async ({ limit = 10, pageNum = 1, sortByPrice, category, status, title } = {}) => {

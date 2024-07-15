@@ -9,10 +9,10 @@ import { initializePassport } from "./config/passport.config.js";
 import { connectMongoDb, objectConfig } from "./config/config.js";
 import routerApp from './routes/routes.js';
 import dotenv from 'dotenv';
-
 import __dirname from "./utils/filenameUtils.js";
 import { chatSocketIO } from "./utils/chatSocketIO.js";
 import { realTimeProducts } from "./utils/realTimeProductsSocketIO.js";
+import { handleErrors } from "./middlewares/errors/errors.middleware.js";
 
 dotenv.config();
 
@@ -20,7 +20,6 @@ const app = express();
 const httpServer = new serverHttp(app);
 const io = new ServerIO(httpServer);
 const { port } = objectConfig;
-
 
 connectMongoDb();
 app.use(express.json());
@@ -37,16 +36,13 @@ app.engine(".hbs", handlebars.engine({
 app.set("views", `${__dirname}/views`);
 app.set("view engine", ".handlebars");
 
-
 app.use(routerApp);
-
+app.use(handleErrors)
 
 httpServer.listen(port, (error) => {
     if (error) return console.log(error);
     console.log(`Server escuchando en el puerto ${port}`);
 });
-
-
 
 // realTimeProducts(io);
 chatSocketIO(io);

@@ -19,7 +19,10 @@ class TicketsDaoMongo {
   };
 
   getBy = async (filter) => {
-    return ticketModel.findOne(filter);
+    return ticketModel.findOne(filter).lean();
+  };
+  getAll = async (filter) => {
+    return ticketModel.find(filter).lean();
   };
 
   remove = async (filter) => {

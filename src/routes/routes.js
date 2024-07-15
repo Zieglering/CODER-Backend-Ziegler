@@ -20,10 +20,4 @@ router.use("/realtimeproducts", realtimeproductsRouter);
 router.use("/chat", chatRouter);
 router.use("/pruebas", pruebasRouter);
 
-router.use((error, req, res, next) => {
-    console.log(error);
-    res.status(500).send('Error 500 en el server');
-    return next();
-});
-
 export default router
