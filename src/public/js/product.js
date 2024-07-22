@@ -34,6 +34,7 @@ addToCartBtn.addEventListener('click', async () => {
 
     return response;
 } catch (error) {
+    
     console.error('Error al agregar el producto al carrito:', error);
     Swal.fire({
         title: 'Error',

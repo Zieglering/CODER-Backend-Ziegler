@@ -13,6 +13,7 @@ import __dirname from "./utils/filenameUtils.js";
 import { chatSocketIO } from "./utils/chatSocketIO.js";
 import { realTimeProducts } from "./utils/realTimeProductsSocketIO.js";
 import { handleErrors } from "./middlewares/errors/errors.middleware.js";
+import { addLogger, logger } from "./utils/logger.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use(productsSocket(io));
 initializePassport();
 app.use(passport.initialize());
+app.use(addLogger)
 
 app.engine(".hbs", handlebars.engine({
     extname: '.hbs'
@@ -40,9 +42,9 @@ app.use(routerApp);
 app.use(handleErrors)
 
 httpServer.listen(port, (error) => {
-    if (error) return console.log(error);
-    console.log(`Server escuchando en el puerto ${port}`);
+    if (error) return logger.error(error);
+    logger.info(`Server escuchando en el puerto ${port}`);
 });
 
-// realTimeProducts(io);
+realTimeProducts(io);
 chatSocketIO(io);

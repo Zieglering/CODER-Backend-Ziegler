@@ -99,11 +99,11 @@ router.get('/cart/:cid', passportCall('jwt'), authorizationJwt('admin', 'user'),
 router.get('/tickets', passportCall('jwt'), async (req, res) => {
     const { email } = req.user;
     const ticket = await ticketService.getTickets({purchaser: email});
-    console.log(ticket)
+    
     res.render('./tickets.hbs', { ticket, email });
 });
 
-router.get('/realtimeproducts', async (req, res) => {
+router.get('/realtimeproducts', passportCall('jwt'), async (req, res) => {
     res.render('./realtimeproducts.hbs', {});
 });
 

@@ -1,22 +1,28 @@
 import { Router } from 'express';
-import { auth } from '../../middlewares/auth.middleware.js';
 import { passportCall } from '../../utils/passportCall.js';
 import { authorizationJwt } from '../../utils/authorizationJwt.js';
 import { userService } from '../../service/service.js';
 
 const router = Router();
 
+router.get('/loggerTest', async (req, res) => {
+    req.logger.debug('Log de Debug!')
+    // req.logger.http('Log de Http!')
+    // req.logger.info('Log de Info!')
+    // req.logger.warning('Log de Alerta!')
+    // req.logger.error('Log de Error!')
+    // req.logger.fatal('Error Fatal!')
+    res.send({message: "Prueba Logger"})
+})
+
 
 router.get('/current', passportCall('jwt'), authorizationJwt('user'), async (req, res) => {
     const {uid} = req.params
     const user = await userService.getUsers({_id: uid});
-    // console.log(user.docs)
+
     res.render('users.hbs', {users: user.docs});
 
 });
-// router.get('/current', passportCall('jwt'), authorizationJwt('user'), (req, res) => {
-//     res.send('datos sensibles que solo puede ver el admin');
-// });
 
 router.get('/session', (req, res) => {
     if (req.session.counter) {

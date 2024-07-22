@@ -15,11 +15,12 @@ const statusCheck = () => {
 };
 
 socket.on("connection", () => {
-    console.log("Conectado al servidor Socket.IO");
+    
+    console.info("Conectado al servidor Socket.IO");
 });
 
 socket.on("getProducts", (products) => {
-	console.log('Received products:', products);
+	console.info('Received products:', products);
     const listProducts = document.querySelector("#listProducts");
     let productHtml = "";
     products.forEach(product => {

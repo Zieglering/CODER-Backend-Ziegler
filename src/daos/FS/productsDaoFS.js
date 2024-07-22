@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import __dirname from '../../utils/filenameUtils.js';
+import { logger } from '../../utils/logger.js';
 
 const path = `${__dirname}/FS-Database/Products.json`;
 class ProductsDaoFS {
@@ -119,7 +120,8 @@ class ProductsDaoFS {
         if (productToDeleteIndex === -1) {
             return `No existe el producto con id: ${productId}`;
         }
-        console.log(`EL producto ${productsData[productToDeleteIndex].title} con el id ${productId} fue eliminado`);
+        
+        logger.info(`EL producto ${productsData[productToDeleteIndex].title} con el id ${productId} fue eliminado`);
         productsData.splice(productToDeleteIndex, 1);
         this.writeProductJson(productsData);
     };

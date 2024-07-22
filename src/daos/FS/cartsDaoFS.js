@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { __dirname } from '../filenameUtils.js';
+import { logger } from '../../utils/logger.js';
 
 const path = `${__dirname}/Carts.json`;
 
@@ -13,7 +14,7 @@ class CartsDaoFS {
             const cartsJson = await fs.promises.readFile(this.path, 'utf-8');
             return JSON.parse(cartsJson);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             return [];
         }
     };

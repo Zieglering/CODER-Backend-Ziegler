@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { connect } from 'mongoose';
 import { program } from '../utils/commander.js';
 
+
 const { mode } = program.opts();
 dotenv.config({
   path: mode === 'production' ? './.env.production' : './.env.development'
@@ -18,8 +19,11 @@ export const objectConfig = {
   admin_email: process.env.ADMIN_EMAIL,
   admin_password: process.env.ADMIN_PASS,
   admin_cart: process.env.ADMIN_CART,
-  persistence: process.env.PERSISTENCE
+  persistence: process.env.PERSISTENCE,
+  environment: process.env.ENVIRONMENT
 };
+
+
 export const connectMongoDb = async () => {
   console.log('Base de datos conectada');
   connect(process.env.MONGO_URL);

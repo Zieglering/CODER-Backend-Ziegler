@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import __dirname from '../../utils/filenameUtils.js';
+import { logger } from '../../utils/logger.js';
 
 const path = `${__dirname}/FS-Database/Users.json`;
 class UsersDaoFS {
@@ -115,7 +116,8 @@ class UsersDaoFS {
         if (userToDeleteIndex === -1) {
             return `No existe el producto con id: ${userId}`;
         }
-        console.log(`EL usuario ${userData[userToDeleteIndex].email} con el id ${userId} fue eliminado`);
+        
+        logger.info(`EL usuario ${userData[userToDeleteIndex].email} con el id ${userId} fue eliminado`);
         userData.splice(userToDeleteIndex, 1);
         this.writeUserJson(userData);
     };

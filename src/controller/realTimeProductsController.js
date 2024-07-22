@@ -23,16 +23,16 @@ class RealTimeProductController {
         }
     };
 
-    getRealTimeProducts = async (req = {}, res) => {
+    getRealTimeProducts = async (req, res) => {
         try {
-            const limit = req.query?.limit;
+            // const limit = req.query?.limit;
             const products = await realTimeProductsService.getProducts();
 
-            if (limit) {
-                const limitedProducts = products.slice(0, parseInt(limit));
-                if (res) return res.status(200).send({ status: 'success', payload: limitedProducts });
-                return limitedProducts;
-            }
+            // if (limit) {
+            //     const limitedProducts = products.slice(0, parseInt(limit));
+            //     if (res) return res.status(200).send({ status: 'success', payload: limitedProducts });
+            //     return limitedProducts;
+            // }
             if (res) return res.status(200).send({ status: 'success', payload: products });
             return products;
         } catch (error) {

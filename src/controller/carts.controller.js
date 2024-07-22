@@ -1,4 +1,5 @@
 import { cartService, productService, ticketService } from "../service/service.js";
+import { logger } from "../utils/logger.js";
 
 class CartController {
     constructor() {
@@ -30,7 +31,7 @@ class CartController {
             const updatedCart = await this.cartService.addProductToCart(cid, pid, parseInt(quantity));
             res.status(201).send({ status: 'success', payload: updatedCart });
         } catch (error) {
-            console.error('Error agregando producto al carrito:', error);
+            logger.error('Error agregando producto al carrito:', error);
             res.status(500).send({ status: 'error', error: error });
         }
     };
@@ -67,8 +68,7 @@ class CartController {
     updateCart = async (req, res) => {
         const { cid } = req.params;
         const products = req.body;
-        // console.log(cid)
-        // console.log(products)
+        
         try {
             const cartFound = await this.cartService.getCart({ _id: cid });
             if (!cartFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe el carrito con el id ${cid}` });
@@ -126,12 +126,10 @@ class CartController {
     };
 
     purchase = async (req, res) => {
-        // console.log('este es el req.prams de purchase ', req.params)
         const { cid } = req.params;
         const user = req.user;
 
         try {
-            // console.log(`Este es el cid: ${cid}`)
             const cart = await cartService.getCart({ _id: cid });
             if (!cart) {
                 throw new Error('Cart not found');
@@ -154,7 +152,6 @@ class CartController {
                 }
             }
             productsNotProcessed.forEach(product => {
-                // console.log(product._id)
                 return product._id
             });
             if (productsToProcess.length === 0) throw new Error('No hay productos para procesar');
@@ -179,7 +176,7 @@ class CartController {
                 return res.status(200).send({ status: 'success', payload: createdTicket });
         
         } catch (error) {
-            // console.error('Error during purchase:', error);
+            logger.error('Error during purchase:', error);
             res.status(500).send({ status: 'error', error: error.message });
         }
     }

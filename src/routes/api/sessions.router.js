@@ -8,6 +8,7 @@ import { objectConfig } from '../../config/config.js';
 import UserDto from '../../dtos/usersDto.js';
 import CartController from '../../controller/carts.controller.js';
 import { cartService, userService } from '../../service/service.js';
+import { logger } from '../../utils/logger.js';
 
 export const sessionsRouter = Router();
 
@@ -59,7 +60,7 @@ sessionsRouter.post('/register', async (req, res) => {
         }).send({ status: 'Success', message: 'Usuario registrado' });
 
     } catch (error) {
-        console.log('error:', error);
+        logger.error('error:', error);
         return res.status(500).send({ status: 'error', error: 'Ocurrió un error, por favor intentalo nuevamente' });
     }
 });
@@ -105,7 +106,7 @@ sessionsRouter.post('/logout', (req, res) => {
         res.clearCookie('token');
         return res.redirect('/login');
     } catch (error) {
-        console.log('error:', error);
+        logger.error('error:', error);
         return res.status(500).send({ status: 'error', error: 'Ocurrió un error, por favor intentalo nuevamente' });
     }
 });
