@@ -1,12 +1,12 @@
-import { Schema, model } from 'mongoose'
-import mongoosePaginate from 'mongoose-paginate-v2'
+import { Schema, model } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const productsSchema = new Schema({
     title: String,
     description: String,
     code: {
         type: String,
-        required:true,
+        required: true,
         unique: true
     },
     price: Number,
@@ -14,12 +14,16 @@ const productsSchema = new Schema({
     stock: Number,
     category: {
         type: String,
-        emum: ["cafe", "te", "comestibles","jugos"]
+        emum: ["cafe", "te", "comestibles", "jugos"]
     },
-    thumbnails: String
-})
+    thumbnails: String,
+    owner: {
+        type: String,
+        default: "admin"
+    }
+});
 
 productsSchema.plugin(mongoosePaginate).index({ title: 'text' });
 
-const productsModel = model('products', productsSchema)
-export default productsModel
+const productsModel = model('products', productsSchema);
+export default productsModel;

@@ -1,4 +1,11 @@
-.contenedor {
+body,
+html {
+  width: 100%;
+  height: 100%;
+ 
+  /* background-color: rgb(233, 235, 233); */
+}
+/* .contenedor {
     overflow: hidden;
 }
 
@@ -6,4 +13,4 @@
     float: left;
     width: 30%;
 
-}
+} */

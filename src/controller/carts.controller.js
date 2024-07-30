@@ -1,4 +1,4 @@
-import { cartService, productService, ticketService } from "../service/service.js";
+import { cartService, productService, ticketService, userService } from "../service/service.js";
 import { logger } from "../utils/logger.js";
 
 class CartController {
@@ -6,6 +6,7 @@ class CartController {
         this.cartService = cartService;
         this.productService = productService;
         this.ticketService = ticketService
+        this.userService = userService
     }
 
     createCart = async (req, res) => {
@@ -19,6 +20,7 @@ class CartController {
 
     addProductToCart = async (req, res) => {
         const { cid, pid } = req.params;
+        const user = req.user
         try {
             const cartFound = await this.cartService.getCart({ _id: cid });
             if (!cartFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe el carrito con el id ${cid}` });
@@ -26,6 +28,10 @@ class CartController {
             if (!product) {
                 return res.status(400).send({ status: 'error', error: `¡ERROR! No existe el producto con el id ${pid}` });
             }
+            // const userFound = await userService.getUser(uid)
+            logger.info(user.role)
+            if (user.role === 'premium' && product.owner === user.email ) return res.status(401).send({ status: 'error', error: `el usuario ${user.email} creó el producto ${product} por lo tanto no puede agregarlo a su carrito` });
+            
             let quantity = req.body.quantity || 1;
 
             const updatedCart = await this.cartService.addProductToCart(cid, pid, parseInt(quantity));

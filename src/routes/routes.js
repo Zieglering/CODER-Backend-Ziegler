@@ -7,7 +7,7 @@ import cartsRouter from "./api/carts.router.js";
 import usersRouter from "./api/users.router.js";
 import chatRouter from "./api/chat.router.js";
 import { sessionsRouter } from "./api/sessions.router.js";
-
+import notFoundRouter from "./api/notFound.router.js";
 
 const router = Router()
 
@@ -19,5 +19,6 @@ router.use("/api/carts", cartsRouter);
 router.use("/realtimeproducts", realtimeproductsRouter);
 router.use("/chat", chatRouter);
 router.use("/pruebas", pruebasRouter);
+router.use("*", notFoundRouter)
 
 export default router

@@ -1,4 +1,5 @@
 const registerBtn = document.querySelector('#registerBtn');
+const forgotPasswordBtn = document.querySelector('#forgotPasswordBtn')
 
 registerBtn.addEventListener('click', (evt) => {
     evt.preventDefault();
@@ -43,4 +44,9 @@ loginForm.addEventListener('submit', async (evt) => {
             confirmButtonText: 'OK'
         });
     }
+});
+
+forgotPasswordBtn.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    window.location.href = '/password-recovery';
 });

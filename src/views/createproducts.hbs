@@ -1,5 +1,5 @@
 <main>
-  <h1>Nuestros cafés</h1>
+  <h1>Creador Productos</h1>
   <div class="contenedor">
     <div class="box">
       <form id="createProductForm">
@@ -39,29 +39,7 @@
         <button type="submit">Agregar Producto</button>
       </form>
     </div>
-    <div class="box">
-      <h2>Productos</h2>
-      <ul id="listProducts">
-        <div>
-          <div class="product-grid">
-            {{#each products}}
-            <div class="product-card">
-              <div class="product-image">
-                <img src="/images/IMG_placeholder.jpg" alt="Product" />
-              </div>
-              <div class="product-info">
-                <h2 class="product-title">{{this.title}}</h2>
-                <h3 class="product-price">${{this.price}}</h3>
-              </div>
-              <a href="/product/{{this._id}}"><button class="product-btn" data-product-id="{{this._id}}"
-                  data-cart-id="{{../cart}}">Ver más</button></a>
-            </div>
-            {{/each}}
-          </div>
-        </div>
-      </ul>
-    </div>
+
   </div>
 </main>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/realtimeproducts.js"></script>
+<script src="/js/addproducts.js"></script>

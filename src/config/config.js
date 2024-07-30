@@ -19,6 +19,8 @@ export const objectConfig = {
   admin_email: process.env.ADMIN_EMAIL,
   admin_password: process.env.ADMIN_PASS,
   admin_cart: process.env.ADMIN_CART,
+  gmail_user: process.env.GMAIL_USER,
+  gmail_pass: process.env.GMAIL_PASS,
   persistence: process.env.PERSISTENCE,
   environment: process.env.ENVIRONMENT
 };

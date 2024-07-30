@@ -5,7 +5,7 @@ class ProductsDaoMongo {
         this.productsModel = productsModel;
     }
 
-    create = async (title, description, code, price, status, stock, category, thumbnails = './images/IMG_placeholder.jpg') => {
+    create = async (title, description, code, price, status, stock, category, thumbnails = './images/IMG_placeholder.jpg', owner = 'admin') => {
         const newProduct = {
             title: title,
             description: description,
@@ -14,7 +14,8 @@ class ProductsDaoMongo {
             status: status,
             stock: stock,
             category: category,
-            thumbnails: thumbnails
+            thumbnails: thumbnails,
+            owner: owner
         };
         const result = await this.productsModel.create(newProduct);
         return result; 
@@ -44,9 +45,6 @@ class ProductsDaoMongo {
         return await this.productsModel.findOne(filter).lean();
     };
 
-    // update = async (productId, updatedProduct) => {
-    //     return await this.productsModel.updateOne({ _id: productId }, { $set: updatedProduct });
-    // };
     update = async (productId, updatedProduct) => {
         if (updatedProduct.stock) {
             return await this.productsModel.findOneAndUpdate(
@@ -62,7 +60,6 @@ class ProductsDaoMongo {
         );
     };
 
-    
     remove = async (productId) => {
         return await this.productsModel.deleteOne({ _id: productId });
     };

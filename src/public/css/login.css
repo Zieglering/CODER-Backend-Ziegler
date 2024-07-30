@@ -1,0 +1,32 @@
+/* body,
+html {
+  max-width: max-content;
+ 
+  background-color: rgb(233, 235, 233);
+} */
+.altLogin{
+    margin-top: 100px;
+}
+.mainLogin {
+  max-width: 1200px;
+  margin: auto;
+  /* padding: 20px; */
+  margin: auto;
+  align-content: center;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  justify-items: center;
+  justify-self: center;
+}
+
+.forgot-password-link{
+    color: grey;
+    text-decoration: none;
+}
+.forgot-password-link:hover{
+    color: brown;
+}
+.forgot-password-link:active{
+    color: black;
+}

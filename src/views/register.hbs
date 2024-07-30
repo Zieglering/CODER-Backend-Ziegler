@@ -1,46 +1,16 @@
 <main class="container">
   <h1>Register</h1>
-  <form
-    id="registerForm"
-    action="/api/sessions/register"
-    method="POST"
-    class="form-group w-50"
-  >
+  <form id="registerForm" action="/api/sessions/register" method="POST" class="form-group w-50">
     <label>Nombre</label>
-    <input
-      type="text"
-      name="first_name"
-      placeholder="Ingresa tu nombre"
-      class="form-control"
-    />
+    <input type="text" name="first_name" placeholder="Ingresa tu nombre" class="form-control" />
     <label>Apellido</label>
-    <input
-      type="text"
-      name="last_name"
-      placeholder="Ingresa tu Apellido"
-      class="form-control"
-    />
+    <input type="text" name="last_name" placeholder="Ingresa tu Apellido" class="form-control" />
     <label>Email</label>
-    <input
-      type="email"
-      name="email"
-      placeholder="Ingresa tu mail ejemplo@mail.com"
-      class="form-control"
-    />
+    <input type="email" name="email" placeholder="Ingresa tu mail ejemplo@mail.com" class="form-control" />
     <label>Edad</label>
-    <input
-      type="number"
-      name="age"
-      placeholder="Cuantos años tienes"
-      class="form-control"
-    />
+    <input type="number" name="age" placeholder="Cuantos años tienes" class="form-control" />
     <label>password</label>
-    <input
-      type="text"
-      name="password"
-      placeholder="Ingresa tu contraseña"
-      class="form-control"
-    />
+    <input type="text" name="password" placeholder="Ingresa tu contraseña" class="form-control" />
     <button class="btn btn-outline-dark w-100 mt-3">Registrarse</button>
   </form>
   <div>
@@ -53,7 +23,5 @@
   </div>
 </main>
 
-<script
-  src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js "
-></script>
+<script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js "></script>
 <script async src="/js/register.js"></script>

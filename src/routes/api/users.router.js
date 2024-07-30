@@ -7,13 +7,15 @@ const {
     getUsers,
     getUserBy,
     updateUser,
-    removeUser
+    removeUser,
+    updateRole
 } = new UserController();
 
 router.post('/', createUser);
 router.get('/', getUsers);
 router.get('/:uid', getUserBy);
 router.put('/:uid', updateUser);
+router.put('/premium/:uid', updateRole);
 router.delete('/:uid', removeUser);
 
 export default router;

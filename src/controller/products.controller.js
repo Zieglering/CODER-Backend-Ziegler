@@ -1,17 +1,21 @@
 import { CustomError } from '../service/errors/CustomError.js';
 import { EError } from '../service/errors/enums.js';
 import { generateInvalidProductError } from '../service/errors/info.js';
-import { productService } from '../service/service.js';
+import { productService, userService } from '../service/service.js';
+import { logger } from '../utils/logger.js';
 
 class ProductController {
     constructor() {
         this.productService = productService;
+        this.userService = userService;
     }
 
     createProduct = async (req, res, next) => {
         const { title, description, code, price, status = true, stock, category, thumbnails } = req.body;
+        const user = req.user;
+
         try {
-            
+
             if (!title || !description || !code || !price || !stock || !category) {
                 CustomError.createError({
                     name: 'Error al crear el producto',
@@ -24,8 +28,17 @@ class ProductController {
             const { docs: products } = await productService.getProducts();
             if (products.find((prod) => prod.code === code))
                 return res.status(400).send({ status: 'error', error: `No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código` });
+            
+            let owner;
+            if (user.role === 'premium') {
+                owner = user.email;
+            } else if (user.role === 'admin') {
+                owner = 'admin';
+            } else {
+                owner = 'admin';
+            }
 
-            const newProduct = await productService.createProduct(title, description, code, price, status, stock, category, thumbnails);
+            const newProduct = await productService.createProduct(title, description, code, price, status, stock, category, thumbnails, owner);
             res.status(201).send({ status: 'success', payload: newProduct });
 
         } catch (error) {
@@ -88,14 +101,14 @@ class ProductController {
             res.status(200).send({ status: 'success', payload: productFound });
 
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error });
+            res.status(500).send({ status: 'error', error: error.message });
         }
     };
 
     updateProduct = async (req, res) => {
         const { pid } = req.params;
         const { title, description, code, price, status, stock, category, thumbnails } = req.body;
-        
+
         const productFound = await productService.getProduct({ _id: pid });
         try {
             if (!title || !description || !code || !price || !stock || !category) {
@@ -114,15 +127,18 @@ class ProductController {
 
     removeProduct = async (req, res) => {
         const { pid } = req.params;
-        const productFound = await productService.getProduct({ _id: pid });
-        try {
-            if (!productFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe ningún producto con el id ${pid}` });
+        const user = req.user
 
+        try {
+            const productFound = await productService.getProduct({ _id: pid });
+            if (!productFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe ningún producto con el id ${pid}` });
+            if (user.role === 'premium' && productFound.owner !== user.email) return res.status(401).send({ status: 'error', error: `el producto ${productFound.title} no le pertenece a ${user.email}, por lo tanto no puede borrarlo` });
+            
+            await productService.deleteProduct(pid);
             res.status(200).send({ status: 'success', payload: productFound });
-            productService.removeProduct(pid);
 
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error });
+            res.status(500).send({ status: 'error', error: error.message });
         }
     };
 }
