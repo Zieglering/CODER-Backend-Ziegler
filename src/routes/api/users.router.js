@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import UserController from '../../controller/users.controller.js';
+import { authorizationJwt } from '../../utils/authorizationJwt.js';
+
 
 const router = Router();
 const {
@@ -14,7 +16,7 @@ const {
 router.post('/', createUser);
 router.get('/', getUsers);
 router.get('/:uid', getUserBy);
-router.put('/:uid', updateUser);
+router.put('/:uid', authorizationJwt('admin', 'premium'), updateUser);
 router.put('/premium/:uid', updateRole);
 router.delete('/:uid', removeUser);
 

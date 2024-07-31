@@ -79,8 +79,8 @@ class UserController {
 
         try {
             const userFound = await userService.getUser({ _id: uid });
-            if (!userFound) {
-                return res.status(404).send({ status: 'error', message: 'No existe el usuario' });
+            if (!userFound || userFound.role === 'admin') {
+                return res.status(404).send({ status: 'error', message: 'No existe el usuario, o no esta atorizado a cambiar este usuario' });
             }
 
             const userRoleToUpdate = await userService.updateUser({ _id: uid }, { role: role });

@@ -114,16 +114,14 @@ sessionsRouter.post('/logout', (req, res) => {
 
 sessionsRouter.post('/send-password-reset-email', async (req, res) => {
     const email = req.body;
-    logger.info('email:', email);
 
     try {
-        const user = await userService.getUser(email);
-        logger.info(user);
+        const user = await userService.getUser({email: email.email});
 
-        if (!user) return res.status(400).send({ status: 'error', error: `El usuario con el mail ${user.email} no existe` });
+        if (!user) return res.status(400).send({ status: 'error', error: `El usuario con el mail ${email.email} no existe` });
 
         const token = generateToken({ id: user._id }, '1h');
-        logger.info(token);
+
         sendPasswordRecoveryEmail({
             email: user.email,
             subject: 'Recuperar contraseña',
@@ -140,6 +138,7 @@ sessionsRouter.post('/send-password-reset-email', async (req, res) => {
         }).send({ status: 'success', error: 'Email enviado a su casilla' });
     } catch (error) {
         logger.error(error);
+        return res.status(500).send({ status: 'error', error: error.message });
     }
 });
 sessionsRouter.post('/reset-password', passportCall('jwt'), async (req, res) => {
@@ -158,7 +157,6 @@ sessionsRouter.post('/reset-password', passportCall('jwt'), async (req, res) => 
     
     try {
         await userService.updateUser({ _id: user.id }, {
-            first_name: "Martin",
             password: createHash(newPassword)
         });
         res.status(200).send({ status: 'success', error: 'Contraseña actualizada' });
