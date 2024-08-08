@@ -9,3 +9,11 @@ export const generateInvalidProductError = (product) => {
     * category:     REQUERIDO - Tiene que ser un string, se recibió --> ${product.category}
     `
 }
+
+export const generateInvalidUserError = (user) => {
+    return `Propiedades del usuario ingresado incompletas o no válidas.
+    Propiedades requeridas:
+    * email:        REQUERIDO - Tiene que ser un string, se recibió --> ${user.email}
+    * password:     REQUERIDO - Tiene que ser un string, se recibió --> ${user.password}
+    `
+}

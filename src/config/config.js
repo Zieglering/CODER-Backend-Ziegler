@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
-import { connect } from 'mongoose';
 import { program } from '../utils/commander.js';
+import handlebars from "express-handlebars";
+import handlebarsHelpers from "handlebars-helpers"
 
 
 const { mode } = program.opts();
@@ -25,8 +26,7 @@ export const objectConfig = {
   environment: process.env.ENVIRONMENT
 };
 
-
-export const connectMongoDb = async () => {
-  console.log('Base de datos conectada');
-  connect(process.env.MONGO_URL);
-};
+export const handlebarsConfig = handlebars.create({
+    extname: '.hbs',
+    helpers: handlebarsHelpers()
+})

@@ -1,8 +1,5 @@
-import { CustomError } from '../service/errors/CustomError.js';
-import { EError } from '../service/errors/enums.js';
-import { generateInvalidProductError } from '../service/errors/info.js';
 import { productService, userService } from '../service/service.js';
-import { logger } from '../utils/logger.js';
+import ProductDTO from '../dtos/ProductDTO.js';
 
 class ProductController {
     constructor() {
@@ -11,36 +8,9 @@ class ProductController {
     }
 
     createProduct = async (req, res, next) => {
-        const { title, description, code, price, status = true, stock, category, thumbnails } = req.body;
-        const user = req.user;
-
         try {
-
-            if (!title || !description || !code || !price || !stock || !category) {
-                CustomError.createError({
-                    name: 'Error al crear el producto',
-                    cause: generateInvalidProductError({ title, description, code, price, stock, category }),
-                    message: 'Error al crear el producto, campos faltantes o inválidos',
-                    code: EError.MISSING_OR_INVALID_REQUIRED_DATA_ERROR
-                });
-            }
-
-            const { docs: products } = await productService.getProducts();
-            if (products.find((prod) => prod.code === code))
-                return res.status(400).send({ status: 'error', error: `No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código` });
-            
-            let owner;
-            if (user.role === 'premium') {
-                owner = user.email;
-            } else if (user.role === 'admin') {
-                owner = 'admin';
-            } else {
-                owner = 'admin';
-            }
-
-            const newProduct = await productService.createProduct(title, description, code, price, status, stock, category, thumbnails, owner);
-            res.status(201).send({ status: 'success', payload: newProduct });
-
+            const newProduct = await productService.createProduct(req.body, req.user);
+            return res.status(201).json({ status: 'success', payload: new ProductDTO(newProduct, req.user) });
         } catch (error) {
             next(error);
         }

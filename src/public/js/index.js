@@ -1,9 +1,10 @@
 const logOutBtn = document.querySelector('#logOutBtn');
 const viewCartBtn = document.querySelector('#viewCartBtn');
 const cartIDElement = document.querySelector('#cartID');
-const searchInput = document.getElementById('searchInput');
+const searchInput = document.querySelector('#searchInput');
 const filterLinks = document.querySelectorAll('.filter-link');
-const searchForm = document.getElementById('searchForm');
+const searchForm = document.querySelector('#searchForm');
+const createProductBtn = document.querySelector('#createProductBtn');
 
 function updateUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -48,7 +49,13 @@ viewCartBtn.addEventListener('click', (evt) => {
     }
 });
 
-// funcion para cuando buscamos, encuentre la palabra igual con y sin acento
+if (createProductBtn) {
+    createProductBtn.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        window.location.href = '/create-products';
+    });
+}
+
 function removeDiacritics(text) {
     return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -110,7 +117,3 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('sortByPriceDropdownButton').textContent = sortByPrice === '1' ? 'Ordenar ascendente' : 'Ordenar descendente';
     }
 });
-// searchForm.addEventListener('submit', (evt) => {
-//     evt.preventDefault();
-//     updateUrl();
-// });

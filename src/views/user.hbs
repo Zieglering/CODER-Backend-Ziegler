@@ -1,9 +1,13 @@
 <div>
   <h1>Datos del usuario</h1>
-  
-    <p>Nombre: {{user.fullName}}</p>
-    <p>Edad: {{user.age}}</p>
-    <p>Email: {{user.email}}</p>
-    <hr />
-  
+  <div class="d-flex flex-row-reverse bd-highlight">
+    <button id="volverBtn" class="product-btn btn btn-secondary btn-lg">Volver</button>
+  </div>
+  <div class="user-details">
+      <p>Nombre: {{user.fullName}}</p>
+      <p>Edad: {{user.age}}</p>
+      <p>Email: {{user.email}}</p>
+      <p>Rol: <span id="role-{{user._id}}">{{user.role}}</span></p>
+    </div>
 </div>
+<script src="/js/user.js"></script>

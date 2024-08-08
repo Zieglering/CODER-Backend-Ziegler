@@ -1,17 +1,42 @@
-<div>
-  <h1>Page de Users</h1>
-  {{#each users}}
-    <p>Nombre: {{this.first_name}} - {{this.last_name}}</p>
-    <p>Email: {{this.email}}</p>
-    <hr />
-  {{/each}}
-  <center>
-    {{#if hasPrevPage}}
+<section>
+  <div class="container mt-2">
+    <h1>Todos los Usuarios</h1>
+    <div class="d-flex flex-row-reverse bd-highlight">
+      <button id="volverBtn" class="product-btn btn btn-secondary btn-lg">Volver</button>
+    </div>
+  </div>
+  <div class="container mt-2">
+    {{#each users}}
+    <div class="user-details">
+      <p>Email: {{this.email}}</p>
+      <p>User id: {{this._id}}</p>
+      <p>Rol: <span id="role-{{this._id}}">{{this.role}}</span></p>
+      <p>Nombre: {{this.first_name}} - {{this.last_name}}</p>
+      <p>Edad: {{this.age}}</p>
+      <p>ID Carrito Asignado: {{this.cart}}</p>
+      <div class="form-check form-switch">
+        <input class="form-check-input role-switch" type="checkbox" data-user-id="{{this._id}}" {{#if (eq
+          this.role 'premium' )}}checked{{/if}}>
+        <label class="form-check-label" for="flexSwitchCheckChecked">Premium user</label>
+      </div>
+      <div class="container mt-2">
+        <button class="product-btn btn btn-outline-dark mt-3 user-details-btn" data-user-id="{{this._id}}">Detalles del
+          Usuario</button>
+        <button type="submit" class="btn btn-outline-danger mt-3" data-user-id="{{this._id}}">Borrar Usuario</button>
+      </div>
+      <hr />
+    </div>
+    {{/each}}
+    <center>
+      {{#if hasPrevPage}}
       <a href="/users?numPage={{prevPage}}">Anterior</a>
-    {{/if}}
-    <label>{{page}}</label>
-    {{#if hasNextPage}}
-      <a href="/users?numPage={{nextPage}}">Siguente</a>
-    {{/if}}
-  </center>
-</div>
+      {{/if}}
+      <label>{{page}}</label>
+      {{#if hasNextPage}}
+      <a href="/users?numPage={{nextPage}}">Siguiente</a>
+      {{/if}}
+    </center>
+  </div>
+  </div>
+  <script src="/js/users.js"></script>
+</section>

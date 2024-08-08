@@ -34,7 +34,7 @@ sessionsRouter.post('/register', async (req, res) => {
         const { first_name, last_name, email, age, password } = req.body;
         if (!email || !password) return res.status(401).send({ status: 'error', error: `Faltan campos, ingresa email y password` });
 
-        const userExist = await userService.getUser({ email });
+        const userExist = await userService.getUserBy({ email });
         if (userExist) return res.status(401).send({ status: 'error', error: `El usuario con el email ${userExist.email} ya existe` });
 
         const newCart = await cartService.createCart();
@@ -84,7 +84,7 @@ sessionsRouter.post('/login', async (req, res) => {
 
     if (!email || !password) return res.status(401).render('login.hbs', ({ status: 'error', error: `Faltan campos, ingresa email y password` }));
 
-    const userFound = await userService.getUser({ email });
+    const userFound = await userService.getUserBy({ email });
     if (!userFound) return res.status(400).render('login.hbs', ({ status: 'error', error: `Usuario no encontrado` }));
 
     if (!isValidPassword(password, { password: userFound.password })) return res.status(401).send({ status: 'error', error: 'Password incorrecto' });
@@ -116,7 +116,7 @@ sessionsRouter.post('/send-password-reset-email', async (req, res) => {
     const email = req.body;
 
     try {
-        const user = await userService.getUser({email: email.email});
+        const user = await userService.getUserBy({email: email.email});
 
         if (!user) return res.status(400).send({ status: 'error', error: `El usuario con el mail ${email.email} no existe` });
 
@@ -149,7 +149,7 @@ sessionsRouter.post('/reset-password', passportCall('jwt'), async (req, res) => 
     if (!newPassword) return res.status(400).send({ status: 'error', error: 'Escribe tu nueva contraseña' });
     if (newPassword !== newPasswordRetype) return res.status(400).send({ status: 'error', error: 'Las contraseñas deben coincidir' });
 
-    const userFound = await userService.getUser({ _id: user.id });
+    const userFound = await userService.getUserBy({ _id: user.id });
 
     if (!token) return res.status(400).send({ status: 'error', error: 'Tiempo agotado, vuelve a pedir un link para restablecer la contraseña' })
     if (!userFound) return res.status(400).send({ status: 'error', error: 'Usuario no existe' });

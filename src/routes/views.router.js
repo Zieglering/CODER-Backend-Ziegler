@@ -17,6 +17,11 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/login', (req, res) => {
+    const token = req.cookies.token
+    
+    if (token) {
+        return res.redirect('/products');
+    }
     res.render('login.hbs');
 });
 
@@ -27,7 +32,7 @@ router.get('/password-recovery', async (req, res) => {
     res.render('password-recovery.hbs');
 });
 router.get('/reset-password',async (req, res) => {
-    const token = req.query.token
+    const token = req.token
     
     if (!token) {
         return res.render('password-recovery.hbs');
@@ -44,7 +49,7 @@ router.get('/reset-password',async (req, res) => {
 });
 
 
-router.get('/users', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), async (req, res) => {
+router.get('/users', passportCall('jwt'), authorizationJwt('admin', 'premium'), async (req, res) => {
     const { numPage, limit } = req.query;
     const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = await userService.getUsers({ limit, numPage });
 
@@ -58,13 +63,12 @@ router.get('/users', passportCall('jwt'), authorizationJwt('admin', 'premium', '
     });
 });
 
-router.get('/current', passportCall('jwt'), authorizationJwt('user'), async (req, res) => {
-    const {id} = req.user
-    const user = await userService.getUser({_id:id})
+router.get('/user/:uid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), async (req, res) => {
+    const {uid} = req.params
+    const user = await userService.getUserBy({_id:uid})
     const secureUser = new UserSecureDto(user);
-
-    res.render('user.hbs', {user:secureUser});
-});
+    return res.render('user.hbs', {user:secureUser});
+})
 
 router.get('/products', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'),  async (req, res) => {
     const { limit = 10, pageNum = 1, category, status, product: title, sortByPrice } = req.query;
@@ -88,7 +92,7 @@ router.get('/products', passportCall('jwt'), authorizationJwt('admin', 'premium'
         if (status) nextLink += `&status=${status}`;
         if (sortByPrice) nextLink += `&sortByPrice=${sortByPrice}`;
     }
-    return res.render('./index.hbs', {
+    return res.render('index.hbs', {
         products: docs,
         totalPages,
         prevPage,
@@ -111,7 +115,7 @@ router.get('/product/:pid', passportCall('jwt'), authorizationJwt('admin', 'prem
     const { pid } = req.params;
     try {
         const product = await productService.getProduct({_id: pid});
-        res.render('./product.hbs', { product, cart: req.user.cart });
+        res.render('product.hbs', { product, cart: req.user.cart });
         
     } catch (error) {
         res.send({status:"error", error: error.message } )
@@ -121,22 +125,83 @@ router.get('/product/:pid', passportCall('jwt'), authorizationJwt('admin', 'prem
 router.get('/cart/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), async (req, res) => {
     const { cid } = req.params;
     const cart = await cartService.getCart({_id: cid});
-    res.render('./cart.hbs', { cart });
+    res.render('cart.hbs', { cart });
 });
 
 router.get('/tickets', passportCall('jwt'), async (req, res) => {
     const { email } = req.user;
     const ticket = await ticketService.getTickets({purchaser: email});
     
-    res.render('./tickets.hbs', { ticket, email });
+    res.render('tickets.hbs', { ticket, email });
 });
 
-router.get('/create-products', passportCall('jwt'), authorizationJwt('premium', 'admin'), async (req, res) =>{
-    res.render('./createproducts.hbs')
-})
+router.get('/create-products', passportCall('jwt'), authorizationJwt('admin', 'premium'), async (req, res) => {
+    const user = req.user;
+    const { limit = 10, pageNum = 1, category, status, title, sortByPrice } = req.query;
+
+    // Create a filter object
+    let filter = {};
+    
+    // If the user is premium, only show products created by this user
+    if (user.role === 'premium') {
+        filter.owner = user.email;
+    }
+    
+    // Add other query parameters to the filter
+    if (category) filter.category = category;
+    if (status) filter.status = status;
+    if (title) filter.title = new RegExp(title, 'i'); // Assuming partial title matching
+    
+    // Get paginated products based on the filter
+    const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } = await productService.getProducts({
+        limit, 
+        pageNum, 
+        filter, 
+        sortByPrice
+    });
+
+    let prevLink = null;
+    let nextLink = null;
+    if (hasPrevPage) {
+        prevLink = `/create-products?pageNum=${prevPage}`;
+        if (limit) prevLink += `&limit=${limit}`;
+        if (title) prevLink += `&title=${title}`;
+        if (category) prevLink += `&category=${category}`;
+        if (status) prevLink += `&status=${status}`;
+        if (sortByPrice) prevLink += `&sortByPrice=${sortByPrice}`;
+    }
+
+    if (hasNextPage) {
+        nextLink = `/create-products?pageNum=${nextPage}`;
+        if (limit) nextLink += `&limit=${limit}`;
+        if (title) nextLink += `&title=${title}`;
+        if (category) nextLink += `&category=${category}`;
+        if (status) nextLink += `&status=${status}`;
+        if (sortByPrice) nextLink += `&sortByPrice=${sortByPrice}`;
+    }
+
+    return res.render('create-products.hbs', {
+        email: user.email,
+        products: docs,
+        totalPages,
+        prevPage,
+        nextPage,
+        page,
+        hasPrevPage,
+        hasNextPage,
+        prevLink,
+        nextLink,
+        category,
+        sortByPrice,
+        availability: status,
+        role: user.role,
+        cart: user.cart
+    });
+});
+
 
 router.get('/realtimeproducts', passportCall('jwt'), async (req, res) => {
-    res.render('./realtimeproducts.hbs', {});
+    res.render('realtimeproducts.hbs', {});
 });
 
 router.get('/chat', passportCall('jwt'), authorizationJwt('user'), async (req, res) => {

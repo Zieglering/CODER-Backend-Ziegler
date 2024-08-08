@@ -1,26 +1,23 @@
-import { ticketService, cartService, userService } from "../service/service.js";
-
+import { ticketService } from "../service/service.js";
 
 class TicketController {
     constructor() {
         this.ticketService = ticketService;
-        this.cartService = cartService;
-        this.userService = userService;
     }
-    
+
     getTicket = async (req, res) => {
         try {
-            const ticket = await ticketService.getAll();
-            res.send({ status: 'success', payload: ticket });
+            const tickets = await this.ticketService.getAll();
+            res.send({ status: 'success', payload: tickets });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error });
+            res.status(500).send({ status: 'error', error: error.message });
         }
     };
+
     getTickets = async (req, res) => {
         const { email } = req.params;
-        const ticketFound = await ticketService.getTickets({ purchaser: email });
         try {
-            if (!ticketFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe el ticket del usuario ${email}` });
+            const ticketFound = await this.ticketService.getTickets({ purchaser: email });
             res.status(200).send({ status: 'success', payload: ticketFound });
         } catch (error) {
             res.status(500).send({ status: 'error', error: error.message });
@@ -30,11 +27,9 @@ class TicketController {
     removeTicket = async (req, res) => {
         const { tid } = req.params;
         try {
-            const ticketFound = await ticketService.getTicket({ _id: tid });
-
-            if (!ticketFound) return res.status(400).send({ status: 'error', error: `¡Error! No existe el ticket` });
-            res.status(200).send({ status: 'success', payload: ticketFound });
-            ticketService.removeTicket(tid);
+            const ticketFound = await this.ticketService.getTicket({ _id: tid });
+            await this.ticketService.removeTicket(tid);
+            res.status(200).send({ status: 'success', payload: `El ticket con id ${tid} ha sido eliminado` });
         } catch (error) {
             res.status(500).send({ status: 'error', error: error.message });
         }

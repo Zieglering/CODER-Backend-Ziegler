@@ -1,5 +1,6 @@
 const addToCartBtn = document.querySelector('#addToCartBtn');
 const cartIDElement = document.querySelector('#cartID');
+const volverBtn = document.querySelector('#volverBtn')
 
 addToCartBtn.addEventListener('click', async () => {
     const productId = addToCartBtn.dataset.productId;
@@ -45,7 +46,7 @@ addToCartBtn.addEventListener('click', async () => {
 }
 });
 
-const volverBtn = document.querySelector('#volverBtn')
+
 
 volverBtn.addEventListener('click', async () => {
     window.location.href = '/products';

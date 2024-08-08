@@ -10,7 +10,11 @@ const productsSchema = new Schema({
         unique: true
     },
     price: Number,
-    status: Boolean,
+    status: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
     stock: Number,
     category: {
         type: String,

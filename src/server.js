@@ -1,12 +1,11 @@
 import express from "express";
-import handlebars from "express-handlebars";
 import { productsSocket } from './utils/productsSocket.js';
 import { Server as ServerIO } from "socket.io";
 import { Server as serverHttp } from "http";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import { initializePassport } from "./config/passport.config.js";
-import { connectMongoDb, objectConfig } from "./config/config.js";
+import { handlebarsConfig, objectConfig } from "./config/config.js";
 import routerApp from './routes/routes.js';
 import dotenv from 'dotenv';
 import __dirname from "./utils/filenameUtils.js";
@@ -14,6 +13,7 @@ import { chatSocketIO } from "./utils/chatSocketIO.js";
 import { realTimeProducts } from "./utils/realTimeProductsSocketIO.js";
 import { handleErrors } from "./middlewares/errors/errors.middleware.js";
 import { addLogger, logger } from "./utils/logger.js";
+import { connectMongoDb } from "./config/mongoDB.config.js";
 
 dotenv.config();
 
@@ -28,13 +28,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
 app.use(productsSocket(io));
-initializePassport();
-app.use(passport.initialize());
 app.use(addLogger)
 
-app.engine(".hbs", handlebars.engine({
-    extname: '.hbs'
-}));
+initializePassport();
+app.use(passport.initialize());
+
+app.engine('.hbs', handlebarsConfig.engine);
+
 app.set("views", `${__dirname}/views`);
 app.set("view engine", ".handlebars");
 

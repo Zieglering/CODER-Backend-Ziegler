@@ -7,6 +7,7 @@ class UserSecureDto {
         this.email = user.email
         this.age = user.age
         this.fullName = `${capitalizeFirstLetter(user.first_name)} ${capitalizeFirstLetter(user.last_name)}`
+        this.role = user.role
     }
 }
 

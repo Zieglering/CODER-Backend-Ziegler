@@ -1,0 +1,226 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: productos obtenidos correctamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        "500":
+          description: Error interno del servidor, query defectuosa, o fallo de la conexión con la base de datos
+  
+  /api/products:
+    post:
+      summary: Crea un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/createProduct'
+      responses:
+        "201":
+          description: Producto creado correctamente
+        "400":
+          description: El producto no se pudo crear
+
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto filtrando por su id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto que se desea solicitar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Producto no encontrado
+  
+    put:
+      summary: Actualiza el producto filtrado por su id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto que se desea actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Producto actualizado correctamente
+        "404":
+          description: Producto no encontrado
+  
+    delete:
+      summary: Elimina un producto existente
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto que se desea eliminar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado correctamente
+        "404":
+          description: Producto no encontrado
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id del producto, autogenerado de MongoDB.
+        title:
+          type: string
+          description: Nombre del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        code:
+          type: string
+          description: Código del producto, es único para cáda producto.
+        price:
+          type: string
+          description: Precio del producto.
+        status:
+          type: string
+          description: Estado del producto, true/false para habilitar/deshabilitar de la store.
+        stock:
+          type: string
+          description: Stock del producto.
+        category:
+          type: string
+          description: A que categoría pertenece el producto.
+        thumbnail:
+          type: string
+          description: nombre del archivo de imágen que representa el producto. 
+        owner:
+          type: string
+          description: email del usuario premium, o admin que creó el producto
+      example:
+        _id: "ObjectId('askljfhaklsfhalskfsa')"
+        title: "Cappuccino"
+        description: "Una bebida caliente con orígen en Italia, preparada con café expreso y leche montada con vapor para darle cremosidad."
+        code: "COF001"
+        price: "215"
+        status: true
+        stock: 46
+        category: "cafe"
+        thumbnail: "Cappuccino.jpg"
+        owner: "premiumUser@mailEjemplo.com"
+
+  requestBodies:
+    createProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        code:
+          type: string
+          description: Código del producto. IMPORTANTE ¡Debe ser único para cada producto!.
+        price:
+          type: string
+          description: Precio del producto.
+        status:
+          type: string
+          description: Estado del producto, true/false para habilitar/deshabilitar de la store.
+        stock:
+          type: string
+          description: Stock del producto.
+        category:
+          type: string
+          description: A que categoría pertenece el producto.
+        thumbnail:
+          type: string
+          description: Nombre del archivo de imágen que representa el producto. 
+        owner:
+          type: string
+          description: Email del usuario premium o admin que creó el producto. Este valor se completa automáticamente según el usuario logueado al momento de la creación del producto.
+      example:
+        title: "Cappuccino"
+        description: "Una bebida caliente con orígen en Italia, preparada con café expreso y leche montada con vapor para darle cremosidad."
+        code: "COF001"
+        price: "215"
+        status: true
+        stock: 46
+        category: "cafe"
+        thumbnail: "Cappuccino.jpg"
+        owner: "premiumUser@mailEjemplo.com"
+    
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        code:
+          type: string
+          description: Código del producto. IMPORTANTE ¡Debe ser único para cada producto!.
+        price:
+          type: string
+          description: Precio del producto.
+        status:
+          type: string
+          description: Estado del producto, true/false para habilitar/deshabilitar de la store.
+        stock:
+          type: string
+          description: Stock del producto.
+        category:
+          type: string
+          description: A que categoría pertenece el producto.
+        thumbnail:
+          type: string
+          description: Nombre del archivo de imágen que representa el producto. 
+        owner:
+          type: string
+          description: Email del usuario premium o admin que creó el producto.
+      example:
+        title: "Cappuccino"
+        description: "Una bebida caliente con orígen en Italia, preparada con café expreso y leche montada con vapor para darle cremosidad."
+        code: "COF001"
+        price: "215"
+        status: true
+        stock: 46
+        category: "cafe"
+        thumbnail: "Cappuccino.jpg"
+        owner: "premiumUser@mailEjemplo.com"

@@ -6,8 +6,8 @@ import { passportCall } from '../../utils/passportCall.js';
 const router = Router();
 const {
     createCart,
-    addProductToCart,
     purchase,
+    addProductToCart,
     getCart,
     updateProductFromCart,
     updateCart,
@@ -15,13 +15,13 @@ const {
     removeCart
 } = new CartController();
 
-router.post('/', createCart);
+router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), createCart);
 router.post('/:cid/purchase', passportCall('jwt'), authorizationJwt('user'), purchase);
 router.post('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('user', 'premium'), addProductToCart);
-router.get('/:cid', getCart);
+router.get('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getCart);
 router.put('/:cid/products/:pid', updateProductFromCart);
-router.put('/:cid', updateCart);
-router.delete('/:cid/products/:pid', deleteProductFromCart);
-router.delete('/:cid', removeCart);
+router.put('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), updateCart);
+router.delete('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), deleteProductFromCart);
+router.delete('/:cid', passportCall('jwt'), authorizationJwt('user'), removeCart);
 
 export default router;

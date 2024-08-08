@@ -1,0 +1,93 @@
+<main class="container">
+  <section>
+    <h1>Creador Productos</h1>
+    <div class="d-flex flex-row-reverse bd-highlight">
+      <button id="volverBtn" class="product-btn btn btn-secondary btn-lg">Volver</button>
+    </div>
+    <div class="box">
+      <h4>Agregar Producto Nuevo:</h4>
+      <form id="createProductForm" class="form-group w-50">
+        <div class="container mt-2">
+          <label for="title">title</label>
+          <input type="text" name="title" id="title" placeholder="title" value="Producto Prueba 01"
+            class="form-control" />
+        </div>
+        <div class="container mt-2">
+          <label for="description">description</label>
+          <input type="text" name="description" id="description" placeholder="description" value="Descripción Prueba 01"
+            class="form-control" />
+        </div>
+        <div class="container mt-2">
+          <label for="code">code</label>
+          <input type="text" name="code" id="code" placeholder="code" value="Código Prueba 01" class="form-control" />
+        </div>
+        <div class="container mt-2">
+          <label for="price">price</label>
+          <input type="text" name="price" id="price" placeholder="price" value="999" class="form-control" />
+        </div>
+        <div class="container mt-2">
+          <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckChecked">status</label>
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+          </div>
+        </div>
+        <div class="container mt-2">
+          <label for="stock" class="form-label">stock</label>
+          <input type="text" name="stock" id="stock" placeholder="stock" value="999" class="form-control" />
+        </div>
+        <div class="container mt-2">
+          <label for="category">category</label>
+          <input type="text" name="category" id="category" placeholder="category" value="Categoría Prueba 01"
+            class="form-control" />
+        </div>
+        <div class="container mt-2">
+          <label for="thumbnails">thumbnails</label>
+          <input type="text" name="thumbnails" id="thumbnails" placeholder="thumbnails" value="/rutade/thumbnails"
+            class="form-control" />
+        </div>
+        <div class="container mt-2">
+          {{#if (eq role "premium")}}
+          <a href="#" id="owner" class="btn btn-secondary btn-lg disabled w-100 mt-3" role="button"
+            aria-disabled="true">Owner: {{email}}</a>
+          {{else if (eq role "admin")}}
+          <a href="#" id="owner" class="btn btn-secondary btn-lg disabled w-100 mt-3" role="button"
+            aria-disabled="true">Owner: admin</a>
+          {{/if}}
+        </div>
+        <div class="container mt-2">
+          <button type="submit" class="btn btn-outline-dark w-100 mt-3">Agregar Producto</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <div class="container mt-5">
+      {{#if (eq role "premium")}}
+        <h2>Productos creados por {{email}}</h2>
+      {{else if (eq role "admin")}}
+        <h2>Todos los productos</h2>
+      {{/if}}
+      <div>
+        <div class="product-grid">
+          {{#each products}}
+          <div class="product-card">
+            <div class="product-image">
+              <img src="/images/IMG_placeholder.jpg" alt="Product" />
+            </div>
+            <div class="product-info">
+              <h2 class="product-title">{{this.title}}</h2>
+              <h3 class="product-price">${{this.price}}</h3>
+            </div>
+            <a href="/product/{{this._id}}"><button class="product-btn btn btn-primary btn-lg"
+                data-product-id="{{this._id}}" data-cart-id="{{../cart}}">Ver más</button></a>
+            <button id="deleteProductFromDB" class="delete-product-btn btn btn-danger btn-lg"
+              data-product-id="{{this._id}}">Borrar producto de la base de datos</button>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="/js/createproducts.js"></script>

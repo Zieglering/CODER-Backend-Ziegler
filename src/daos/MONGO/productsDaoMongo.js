@@ -5,40 +5,19 @@ class ProductsDaoMongo {
         this.productsModel = productsModel;
     }
 
-    create = async (title, description, code, price, status, stock, category, thumbnails = './images/IMG_placeholder.jpg', owner = 'admin') => {
-        const newProduct = {
-            title: title,
-            description: description,
-            code: code,
-            price: price,
-            status: status,
-            stock: stock,
-            category: category,
-            thumbnails: thumbnails,
-            owner: owner
-        };
-        const result = await this.productsModel.create(newProduct);
-        return result; 
+    create = async (newProduct) => {
+        return await this.productsModel.create(newProduct);
     };
 
-    getAll = async ({ limit = 10, pageNum = 1, sortByPrice, category, status, title } = {}) => {
-        let query = {};
-        if (category) {
-            query.category = category;
-        }
-        if (status) {
-            query.status = status;
-        }
-        if (title) {
-            query.$text = { $search: title, $diacriticSensitive: false };
-        }
+    getAll = async ({ limit = 10, pageNum = 1, filter = {}, sortByPrice, category, status, title } = {}) => {
+        if (category) query.category = category;
+        if (status) query.status = status;
+        if (title) query.$text = { $search: title, $diacriticSensitive: false };
 
         let toSortedByPrice = {};
-        if (sortByPrice) {
-            toSortedByPrice = { price: parseInt(sortByPrice) };
-        }
+        if (sortByPrice) toSortedByPrice = { price: parseInt(sortByPrice) };
 
-        return await this.productsModel.paginate(query, { limit: limit, page: pageNum, lean: true, sort: toSortedByPrice });
+        return await this.productsModel.paginate(filter, { limit: limit, page: pageNum, lean: true, sort: toSortedByPrice });
     };
 
     getBy = async (filter) => {
@@ -46,22 +25,11 @@ class ProductsDaoMongo {
     };
 
     update = async (productId, updatedProduct) => {
-        if (updatedProduct.stock) {
-            return await this.productsModel.findOneAndUpdate(
-                { _id: productId },
-                { $inc: { stock: updatedProduct.stock } },
-                { upsert: true }
-            );
-        }
-        return await this.productsModel.findOneAndUpdate(
-            { _id: productId },
-            { $set: updatedProduct },
-            { upsert: true }
-        );
+        return await this.productsModel.findByIdAndUpdate(productId, updatedProduct, { new: true });
     };
 
     remove = async (productId) => {
-        return await this.productsModel.deleteOne({ _id: productId });
+        return await this.productsModel.findByIdAndDelete(productId);
     };
 }
 
