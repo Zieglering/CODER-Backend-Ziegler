@@ -10,6 +10,7 @@ import { cartService, userService } from '../../service/service.js';
 import { logger } from '../../utils/logger.js';
 import { sendPasswordRecoveryEmail } from '../../utils/sendPasswordRecoveryEmail.js';
 import jwt from 'jsonwebtoken';
+import UserSecureDto from '../../dtos/userSecureDto.js';
 
 
 export const sessionsRouter = Router();
@@ -75,11 +76,26 @@ sessionsRouter.post('/login', async (req, res) => {
 
     if (email === adminEmail && password === adminPassword) {
         req.user = {
+            fullName: '',
+            first_name: '',
+            last_name: '',
+            email: adminEmail,
+            age: 99,
+            password: adminPassword,
+            cart: adminCart,
+            role: 'admin'
+        };
+        const token = generateToken({
+            // id: userFound._id,
             email: adminEmail,
             role: 'admin',
             cart: adminCart
-        };
-        return res.status(200).send({ status: 'Success', message: `Admin ${email} Logueado con exito` });
+        });
+        return res.cookie('token', token, {
+            maxAge: 60 * 60 * 1000 * 24,
+            httpOnly: true,
+        }).status(200).send({ status: 'Success', message: `Admin ${email} Logueado con exito` });
+        // return res.status(200).send({ status: 'Success', message: `Admin ${email} Logueado con exito` });
     }
 
     if (!email || !password) return res.status(401).render('login.hbs', ({ status: 'error', error: `Faltan campos, ingresa email y password` }));
@@ -116,7 +132,7 @@ sessionsRouter.post('/send-password-reset-email', async (req, res) => {
     const email = req.body;
 
     try {
-        const user = await userService.getUserBy({email: email.email});
+        const user = await userService.getUserBy({ email: email.email });
 
         if (!user) return res.status(400).send({ status: 'error', error: `El usuario con el mail ${email.email} no existe` });
 
@@ -135,7 +151,7 @@ sessionsRouter.post('/send-password-reset-email', async (req, res) => {
         res.cookie('token', token, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
-        }).send({ status: 'success', error: 'Email enviado a su casilla' });
+        }).send({ status: 'success', message: 'Email enviado a su casilla' });
     } catch (error) {
         logger.error(error);
         return res.status(500).send({ status: 'error', error: error.message });
@@ -145,21 +161,21 @@ sessionsRouter.post('/reset-password', passportCall('jwt'), async (req, res) => 
     const { newPassword, newPasswordRetype } = req.body;
     const token = req.headers.authorization;
     const user = req.user;
-   
+
     if (!newPassword) return res.status(400).send({ status: 'error', error: 'Escribe tu nueva contraseña' });
     if (newPassword !== newPasswordRetype) return res.status(400).send({ status: 'error', error: 'Las contraseñas deben coincidir' });
 
     const userFound = await userService.getUserBy({ _id: user.id });
 
-    if (!token) return res.status(400).send({ status: 'error', error: 'Tiempo agotado, vuelve a pedir un link para restablecer la contraseña' })
+    if (!token) return res.status(400).send({ status: 'error', error: 'Tiempo agotado, vuelve a pedir un link para restablecer la contraseña' });
     if (!userFound) return res.status(400).send({ status: 'error', error: 'Usuario no existe' });
     if (isValidPassword(newPassword, userFound)) return res.status(400).send({ status: 'error', error: 'Debes ingresar una contraseña diferente a la anterior' });
-    
+
     try {
         await userService.updateUser({ _id: user.id }, {
             password: createHash(newPassword)
         });
-        res.status(200).send({ status: 'success', error: 'Contraseña actualizada' });
+        res.status(200).send({ status: 'success', message: 'Contraseña actualizada' });
     } catch (error) {
         logger.error('Error al crear la contraseña nueva:', error);
         res.status(500).send({ status: 'error', error: 'Error' });
@@ -167,5 +183,12 @@ sessionsRouter.post('/reset-password', passportCall('jwt'), async (req, res) => 
 });
 
 sessionsRouter.get('/current', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), (req, res) => {
-    res.send(`Datos que puede ver el Rol: ${req.user.role}`);
+    try {
+        if (req.user.role === 'admin') return res.status(200).send({ status: 'success', payload: `${ req.user.role }`});
+        if (req.user.role === 'premium') return res.status(200).send({ status: 'success', payload: `${ req.user.role }`});
+        if (req.user.role === 'user') return res.status(200).send({ status: 'success', payload: `${ req.user.role }`});
+
+    } catch (error) {
+        res.status(500).send({ status: 'error', error: error.message });
+    }
 });

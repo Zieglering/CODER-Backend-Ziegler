@@ -45,10 +45,10 @@ class RealTimeProductController {
         }
     };
 
-    removeRealTimeProduct = async (req, res) => {
+    deleteRealTimeProduct = async (req, res) => {
         const { pid } = req.params;
         try {
-            await this.realTimeProductsService.remove(pid);
+            await this.realTimeProductsService.delete(pid);
             res.status(200).send({ status: 'success', payload: `El producto con id ${pid} ha sido eliminado` });
         } catch (error) {
             res.status(500).send({ status: 'error', error: error.message });

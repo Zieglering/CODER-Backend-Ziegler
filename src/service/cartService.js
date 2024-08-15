@@ -54,9 +54,9 @@ export default class CartService {
         return await this.cartRepository.deleteProductFromCart(cid, pid);
     }
 
-    async removeCart(cid) {
+    async deleteCart(cid) {
         await this.getCart({ _id: cid });
-        return await this.cartRepository.removeCart(cid);
+        return await this.cartRepository.deleteCart(cid);
     }
 
     async generateUniqueCode() {

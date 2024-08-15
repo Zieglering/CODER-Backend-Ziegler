@@ -12,6 +12,10 @@
             <h4 id="productli">Cantidad: {{quantity}}</h4>
             <h3 id="productli" class="product-price">${{product.price}}</h3>
             <h3 id="productli" class="product-price">Stock: {{product.stock}}</h3>
+            <input type="hidden" id="productData" class="product-id" value="{{product}}">
+          </div>
+          <div>
+            <button id="removeProductFromCartBtn" class="removeProductFromCartBtn btn btn-danger h-100">Remove</button>
           </div>
         </div>
       </div>

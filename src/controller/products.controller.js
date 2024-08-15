@@ -95,7 +95,7 @@ class ProductController {
         }
     };
 
-    removeProduct = async (req, res) => {
+    deleteProduct = async (req, res) => {
         const { pid } = req.params;
         const user = req.user
 

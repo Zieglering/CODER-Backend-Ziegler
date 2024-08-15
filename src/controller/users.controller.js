@@ -1,8 +1,9 @@
-import { userService } from '../service/service.js';
+import { userService, cartService } from '../service/service.js';
 
 class UserController {
     constructor() {
         this.userService = userService;
+        this.cartService = cartService;
     }
 
     getUsers = async (req, res) => {
@@ -58,10 +59,13 @@ class UserController {
         }
     };
 
-    removeUser = async (req, res) => {
+    deleteUser = async (req, res) => {
         const { uid } = req.params;
         try {
-            const result = await this.userService.deleteUser({_id:uid});
+            const userFound = await this.userService.getUserBy({_id: uid});
+            const cid = userFound.cart
+            await cartService.deleteCart({_id: cid})
+            const result = await this.userService.deleteUser({_id: uid});
             res.send({ status: 'success', payload: `user: ${result} deleted` });
         } catch (error) {
             res.status(500).send({ status: 'Error', message: error.message });

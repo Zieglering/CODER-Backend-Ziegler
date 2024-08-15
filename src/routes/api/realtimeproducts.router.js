@@ -10,13 +10,13 @@ const {
     getRealTimeProducts,
     getRealTimeProductBy,
     updateRealTimeProduct,
-    removeRealTimeProduct
+    deleteRealTimeProduct
 } = new RealTimeProductController()
 
 router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium'), createRealTimeProduct);
 router.get('/', getRealTimeProducts);
 router.get('/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium'), getRealTimeProductBy);
 router.put('/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium'),  updateRealTimeProduct);
-router.delete('/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium'), removeRealTimeProduct);
+router.delete('/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium'), deleteRealTimeProduct);
 
 export default router;

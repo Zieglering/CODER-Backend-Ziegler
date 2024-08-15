@@ -4,6 +4,7 @@ function capitalizeFirstLetter(string) {
 
 class UserDto {
     constructor(user) {
+        this._id = user._id
         this.first_name = capitalizeFirstLetter(user.first_name)
         this.last_name = capitalizeFirstLetter(user.last_name)
         this.email = user.email

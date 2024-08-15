@@ -7,5 +7,5 @@ export default class UsersRepository {
     getUsers = async () => await this.userDao.getAll();
     getUserBy = async filter => await this.userDao.getBy(filter);
     updateUser = async (uid, userToUpdate) => await this.userDao.update(uid, userToUpdate);
-    deleteUser = async uid => await this.userDao.remove(uid);
+    deleteUser = async uid => await this.userDao.delete(uid);
 }

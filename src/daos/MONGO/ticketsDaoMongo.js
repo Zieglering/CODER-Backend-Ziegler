@@ -25,7 +25,7 @@ class TicketsDaoMongo {
     return ticketModel.find(filter).lean();
   };
 
-  remove = async (filter) => {
+  delete = async (filter) => {
     return await ticketModel.deleteOne(filter);
   };
 }

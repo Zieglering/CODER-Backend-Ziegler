@@ -9,7 +9,7 @@ class ChatController {
         try {
             const { user, message } = req.body;
             const newMessage = await this.chatService.createMessage(user, message);
-            res.send({ status: 'success', payload: newMessage });
+            res.status(201).send({ status: 'success', payload: newMessage });
         } catch (error) {
             res.status(500).send({ status: 'error', error: error.message });
         }
@@ -45,7 +45,7 @@ class ChatController {
         }
     };
 
-    removeMessage = async (req, res) => {
+    deleteMessage = async (req, res) => {
         const { pid: id } = req.params;
         try {
             await this.chatService.deleteMessage(id);

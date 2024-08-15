@@ -7,5 +7,5 @@ export default class ChatsRepository {
     getMessages = async () => await this.chatsDao.getAll();
     getMessage = async filter => await this.chatsDao.getBy(filter);
     updateMessage = async (mid, chatToUpdate) => await this.chatsDao.update(mid, chatToUpdate);
-    deleteMessage = async mid => await this.chatsDao.remove(mid);
+    deleteMessage = async mid => await this.chatsDao.delete(mid);
 }

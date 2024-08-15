@@ -22,7 +22,7 @@ const realTimeProductsRepository = new RealTimeProductsRepository(new RealtimePr
 
 // Services
 export const productService = new ProductService(productRepository);
-export const userService = new UserService(userRepository);
+export const userService = new UserService(userRepository, cartRepository);
 export const ticketService = new TicketService(ticketRepository);
 export const chatService = new ChatService(chatRepository);
 export const realTimeProductsService = new RealTimeProductsService(realTimeProductsRepository);

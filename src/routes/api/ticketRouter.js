@@ -4,10 +4,10 @@ import TicketController from '../../controller/tickets.controller';
 const router = Router();
 const {
     getTicket,
-    removeTicket
+    deleteTicket
 } = new TicketController();
 
 router.get('/:tid', getTicket);
-router.delete('/:tid', removeTicket);
+router.delete('/:tid', deleteTicket);
 
 export default router;

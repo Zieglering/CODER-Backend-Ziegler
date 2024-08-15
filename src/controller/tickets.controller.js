@@ -24,11 +24,11 @@ class TicketController {
         }
     };
 
-    removeTicket = async (req, res) => {
+    deleteTicket = async (req, res) => {
         const { tid } = req.params;
         try {
             const ticketFound = await this.ticketService.getTicket({ _id: tid });
-            await this.ticketService.removeTicket(tid);
+            await this.ticketService.deleteTicket(tid);
             res.status(200).send({ status: 'success', payload: `El ticket con id ${tid} ha sido eliminado` });
         } catch (error) {
             res.status(500).send({ status: 'error', error: error.message });

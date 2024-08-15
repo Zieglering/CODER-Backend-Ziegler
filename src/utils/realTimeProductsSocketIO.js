@@ -47,7 +47,7 @@ export const realTimeProducts = (io) => {
 
         socket.on("deleteProduct", async (productID) => {
             try {
-                await productService.remove(parseInt(await productID));
+                await productService.delete(parseInt(await productID));
                 io.emit("getProducts", await getRealTimeProducts());
 
             } catch (error) {

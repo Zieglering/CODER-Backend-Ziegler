@@ -9,6 +9,6 @@ export default class CartsRepository {
     getCart = async (filter) => await this.cartsDao.getBy(filter);
     updateCart = async (cid, cartToUpdate) => await this.cartsDao.update(cid, cartToUpdate);
     updateProductFromCart = async (cid, pid, quantity) => await this.cartsDao.updateProductFromCart(cid, pid, quantity);
-    deleteCart = async (cid) => await this.cartsDao.remove(cid);
+    deleteCart = async (cid) => await this.cartsDao.delete(cid);
     deleteProductFromCart = async (cid, pid) => await this.cartsDao.deleteProductFromCart(cid, pid);
 }

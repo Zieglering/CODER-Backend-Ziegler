@@ -1,14 +1,19 @@
+import UserDto from '../dtos/usersDto.js';
 import { CustomError } from '../service/errors/CustomError.js';
 import { EError } from '../service/errors/enums.js';
 import { generateInvalidUserError } from '../service/errors/info.js';
+import { createHash } from '../utils/bcrypt.js';
+import { cartService } from './service.js';
 
 export default class UserService {
-    constructor(userRepository) {
+    constructor(userRepository, cartRepository) {
         this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
+
     }
 
     async createUser(userData) {
-        const { first_name, last_name, email, password } = userData;
+        const { first_name, last_name, email, age, password, cart } = userData;
         if (!first_name || !last_name || !email || !password) {
             throw CustomError.createError({
                 name: 'Error al crear el usuario',
@@ -22,6 +27,16 @@ export default class UserService {
         if (existingUser) {
             throw new Error(`Ya existe un usuario con el email ${email}`);
         }
+        // const newCart = await this.cartRepository.createCart();
+        // const newUser = new UserDto({
+        //     first_name,
+        //     last_name,
+        //     email,
+        //     age: parseInt(age) || null,
+        //     password: createHash(password),
+        //     cart: newCart._id
+        // });
+        
 
         return await this.userRepository.createUser(userData);
     }
@@ -77,10 +92,13 @@ export default class UserService {
     }
 
     async deleteUser(uid) {
-        const userFound = await this.userRepository.getUserBy({ _id:uid });
+        const userFound = await this.userRepository.getUserBy(uid);
+        const cid = userFound.cart
         if (!userFound) {
-            throw new Error(`No se encontró ningún usuario con el id ${uid}`);
+            throw new Error(`No se encontró ningún usuario con el filtro ${uid}`);
         }
-        return await this.userRepository.deleteUser({ _id:uid });
+        
+        await this.userRepository.deleteUser(uid);
+        await this.cartRepository.deleteCart(cid);
     }
 }

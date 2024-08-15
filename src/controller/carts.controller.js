@@ -25,7 +25,7 @@ class CartController {
 
         try {
             const updatedCart = await this.cartService.addProductToCart(cid, pid, quantity, user);
-            res.status(201).send({ status: 'success', payload: updatedCart });
+            res.status(200).send({ status: 'success', payload: updatedCart });
         } catch (error) {
             logger.error('Error agregando producto al carrito:', error);
             res.status(500).send({ status: 'error', error: error.message });
@@ -78,10 +78,10 @@ class CartController {
         }
     };
 
-    removeCart = async (req, res) => {
+    deleteCart = async (req, res) => {
         const { cid } = req.params;
         try {
-            await this.cartService.removeCart(cid);
+            await this.cartService.deleteCart(cid);
             res.status(200).send({ status: 'success', payload: `El carrito ${cid} ha sido eliminado` });
         } catch (error) {
             res.status(500).send({ status: 'error', error: error.message });

@@ -7,5 +7,5 @@ export default class ProductsRepository {
     getProduct = async (filter) => await this.productsDao.getBy(filter);
     createProduct = async (product) => await this.productsDao.create(product);
     updateProduct = async (pid, productToUpdate) => await this.productsDao.update(pid, productToUpdate);
-    deleteProduct = async pid => await this.productsDao.remove(pid);
+    deleteProduct = async pid => await this.productsDao.delete(pid);
 }

@@ -8,13 +8,13 @@ const {
     getMessages,
     getMessageBy,
     updateMessage,
-    removeMessage
+    deleteMessage
 } = new ChatController;
 
 router.post('/', createMessage);
 router.get('/', getMessages);
 router.get('/:id', getMessageBy);
 router.get('/:id', updateMessage);
-router.get('/:id', removeMessage);
+router.get('/:id', deleteMessage);
 
 export default router;

@@ -113,7 +113,7 @@ class realTimeProductsDaoFS {
         }
     };
 
-    remove = async (productId) => {
+    delete = async (productId) => {
         const productsData = await this.readProductsJson();
         const productToDeleteIndex = productsData.findIndex(product => product.id === productId);
 

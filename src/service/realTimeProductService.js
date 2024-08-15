@@ -54,8 +54,8 @@ export default class RealTimeProductsService {
         return await this.productRepository.update(id, updateData);
     }
 
-    async remove(id) {
+    async delete(id) {
         const product = await this.getBy({ _id: id });
-        return await this.productRepository.remove(id);
+        return await this.productRepository.delete(id);
     }
 }

@@ -1,12 +1,9 @@
 # CODERHOUSE - Ecommerce App
 
 ## Desafío complementario
-Documentación de API
+Módulos de Testing para proyecto final.
+Testing de Router de products, carts, y sessions
 
-Documentados el módulo de productos y carrito
-
-## Como ver la documentación de la API
-Para ver la documentacion debe ser usuario premium o admin
-y acceder luego de loguearse en el boton API Docs
-
-También se puede acceder a la documentación desde el endpoint /apidocs
+## Como usar testing
+npm run dev para iniciar el servidor
+npm run test para iniciar el test (con el servidor inciado)

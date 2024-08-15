@@ -12,7 +12,7 @@ const {
     updateProductFromCart,
     updateCart,
     deleteProductFromCart,
-    removeCart
+    deleteCart
 } = new CartController();
 
 router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), createCart);
@@ -22,6 +22,6 @@ router.get('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'u
 router.put('/:cid/products/:pid', updateProductFromCart);
 router.put('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), updateCart);
 router.delete('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), deleteProductFromCart);
-router.delete('/:cid', passportCall('jwt'), authorizationJwt('user'), removeCart);
+router.delete('/:cid', passportCall('jwt'), authorizationJwt('admin'), deleteCart);
 
 export default router;

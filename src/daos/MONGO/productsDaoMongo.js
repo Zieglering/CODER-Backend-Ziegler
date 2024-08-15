@@ -28,7 +28,7 @@ class ProductsDaoMongo {
         return await this.productsModel.findByIdAndUpdate(productId, updatedProduct, { new: true });
     };
 
-    remove = async (productId) => {
+    delete = async (productId) => {
         return await this.productsModel.findByIdAndDelete(productId);
     };
 }

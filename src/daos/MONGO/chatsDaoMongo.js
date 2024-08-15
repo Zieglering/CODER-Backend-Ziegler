@@ -25,7 +25,7 @@ class ChatsDaoMongo {
         return await this.productsModel.updateOne({ _id: filter }, { $set: `Editado: ${update}` });
     };
 
-    remove = async (filter) => {
+    delete = async (filter) => {
         return await this.productsModel.deleteOne({ _id: filter });
     };
 }

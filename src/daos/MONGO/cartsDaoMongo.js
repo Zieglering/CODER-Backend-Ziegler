@@ -71,7 +71,7 @@ class CartsDaoMongo {
         { new: true }
     );
 
-    remove = async (cid) => cartsModel.findOneAndUpdate(
+    delete = async (cid) => cartsModel.findOneAndDelete(
         { _id: cid },
         { $set: { products: [] } },
         { new: true }

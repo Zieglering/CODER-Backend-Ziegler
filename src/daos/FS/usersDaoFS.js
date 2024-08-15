@@ -109,7 +109,7 @@ class UsersDaoFS {
         }
     };
 
-    remove = async (userId) => {
+    delete = async (userId) => {
         const userData = await this.readUsersJson();
         const userToDeleteIndex = userData.findIndex(usr => usr.id === userId);
 

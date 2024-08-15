@@ -7,5 +7,5 @@ export default class RealTimeProductsRepository {
     getProduct = async filter => await this.RealtimeProductsDao.getBy(filter);
     createProduct = async newProduct => await this.RealtimeProductsDao.create(newProduct);
     updateProduct = async (pid, productToUpdate) => await this.RealtimeProductsDao.update(pid, productToUpdate);
-    deleteProduct = async pid => await this.RealtimeProductsDao.remove(pid);
+    deleteProduct = async pid => await this.RealtimeProductsDao.delete(pid);
 }

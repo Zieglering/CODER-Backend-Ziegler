@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha './test/ecommerce.test.js'",
     "start": "node --watch ./src/server.js --mode production",
     "dev": "node --watch ./src/server.js --mode development"
   },
@@ -39,6 +39,9 @@
     "winston": "^3.13.1"
   },
   "devDependencies": {
-    "eslint": "^9.4.0"
+    "chai": "^5.1.1",
+    "eslint": "^9.4.0",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
   }
 }

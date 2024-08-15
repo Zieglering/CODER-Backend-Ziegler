@@ -55,7 +55,7 @@ class ProductsDaoMemory {
     }
 
     update(filter) {}
-    remove(filter) {}
+    delete(filter) {}
 
     getNextId() {
         if (this.#products.length === 0) {

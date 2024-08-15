@@ -23,8 +23,8 @@ export default class TicketService {
         return ticket;
     }
 
-    async removeTicket(tid) {
+    async deleteTicket(tid) {
         const ticket = await this.getTicket({ _id: tid });
-        return await this.ticketRepository.removeTicket(tid);
+        return await this.ticketRepository.deleteTicket(tid);
     }
 }
