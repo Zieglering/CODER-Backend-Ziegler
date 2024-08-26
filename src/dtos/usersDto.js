@@ -12,6 +12,8 @@ class UserDto {
         this.password = user.password
         this.cart = user.cart
         this.fullName = `${capitalizeFirstLetter(user.first_name)} ${capitalizeFirstLetter(user.last_name)}`
+        this.documents = user.documents
+        this.last_connection = user.last_connection
     }
 }
 

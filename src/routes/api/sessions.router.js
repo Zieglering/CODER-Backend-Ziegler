@@ -12,7 +12,6 @@ import { sendPasswordRecoveryEmail } from '../../utils/sendPasswordRecoveryEmail
 import jwt from 'jsonwebtoken';
 import UserSecureDto from '../../dtos/userSecureDto.js';
 
-
 export const sessionsRouter = Router();
 
 const { admin_email, admin_password, admin_cart, jwt_private_key } = objectConfig;
@@ -86,7 +85,6 @@ sessionsRouter.post('/login', async (req, res) => {
             role: 'admin'
         };
         const token = generateToken({
-            // id: userFound._id,
             email: adminEmail,
             role: 'admin',
             cart: adminCart
@@ -95,7 +93,6 @@ sessionsRouter.post('/login', async (req, res) => {
             maxAge: 60 * 60 * 1000 * 24,
             httpOnly: true,
         }).status(200).send({ status: 'Success', message: `Admin ${email} Logueado con exito` });
-        // return res.status(200).send({ status: 'Success', message: `Admin ${email} Logueado con exito` });
     }
 
     if (!email || !password) return res.status(401).render('login.hbs', ({ status: 'error', error: `Faltan campos, ingresa email y password` }));
@@ -104,6 +101,8 @@ sessionsRouter.post('/login', async (req, res) => {
     if (!userFound) return res.status(400).render('login.hbs', ({ status: 'error', error: `Usuario no encontrado` }));
 
     if (!isValidPassword(password, { password: userFound.password })) return res.status(401).send({ status: 'error', error: 'Password incorrecto' });
+
+    await userService.updateUserConnectionTime({ _id: userFound._id }, { last_connection: new Date() });
 
     const token = generateToken({
         id: userFound._id,
@@ -118,8 +117,12 @@ sessionsRouter.post('/login', async (req, res) => {
     }).send({ status: 'success', message: 'Usuario logueado' });
 });
 
-sessionsRouter.post('/logout', (req, res) => {
+sessionsRouter.post('/logout', passportCall('jwt'), async (req, res) => {
+    const user = req.user
+    const currentUser = await userService.getUserBy( {email:user.email} );
+    const uid = currentUser._id
     try {
+        await userService.updateUserConnectionTime({_id: uid} , { last_connection: new Date() });
         res.clearCookie('token');
         return res.redirect('/login');
     } catch (error) {

@@ -67,7 +67,7 @@ router.get('/user/:uid', passportCall('jwt'), authorizationJwt('admin', 'premium
     const {uid} = req.params
     const user = await userService.getUserBy({_id:uid})
     const secureUser = new UserSecureDto(user);
-    return res.render('user.hbs', {user:secureUser});
+    return res.render('user.hbs', user);
 })
 
 router.get('/products', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'),  async (req, res) => {

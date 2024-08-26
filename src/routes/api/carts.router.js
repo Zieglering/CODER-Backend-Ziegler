@@ -19,7 +19,7 @@ router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user
 router.post('/:cid/purchase', passportCall('jwt'), authorizationJwt('user'), purchase);
 router.post('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('user', 'premium'), addProductToCart);
 router.get('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getCart);
-router.put('/:cid/products/:pid', updateProductFromCart);
+router.put('/:cid/products/:pid', passportCall('jwt'), updateProductFromCart);
 router.put('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), updateCart);
 router.delete('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), deleteProductFromCart);
 router.delete('/:cid', passportCall('jwt'), authorizationJwt('admin'), deleteCart);

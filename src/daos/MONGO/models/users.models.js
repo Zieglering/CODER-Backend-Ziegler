@@ -27,7 +27,12 @@ const userSchema = new Schema({
         type: String,
         emum: ['user', 'premium', 'admin'],
         default: 'user'
-    }
+    },
+    documents: [{
+        name: String,
+        reference: String,
+    }],
+    last_connection: String
 });
 
 userSchema.plugin(mongoosePaginate);

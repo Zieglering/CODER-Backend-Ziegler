@@ -1,9 +1,8 @@
 # CODERHOUSE - Ecommerce App
 
 ## Desafío complementario
-Módulos de Testing para proyecto final.
-Testing de Router de products, carts, y sessions
+Practica de integración
 
-## Como usar testing
-npm run dev para iniciar el servidor
-npm run test para iniciar el test (con el servidor inciado)
+## Como subir archivos
+La página para subir archivos es la de cada user
+después del login entrar a users y luego a un user premium para poder subir archivos
