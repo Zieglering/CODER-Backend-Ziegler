@@ -68,7 +68,7 @@ class UserController {
             const result = await this.userService.updateUserRole(uid, role);
             res.status(200).send({ status: 'success', message: `Usuario actualizado con el nuevo rol ${role}` });
         } catch (error) {
-            res.status(500).send({ status: 'Error', message: error.message });
+            res.status(500).send({ status: 'Error', error: error.message });
         }
     };
 

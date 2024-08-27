@@ -7,6 +7,7 @@ import { logger } from '../utils/logger.js';
 import { cartService } from './service.js';
 import path from 'path';
 import fs from 'fs';
+import __dirname from '../utils/filenameUtils.js';
 
 export default class UserService {
     constructor(userRepository, cartRepository) {
@@ -109,41 +110,31 @@ export default class UserService {
         if (!validRoles.includes(role)) {
             throw new Error('El rol a cambiar no es válido, debe ser user o premium');
         }
-
+    
         const userFound = await this.userRepository.getUserBy({ _id: uid });
         if (!userFound || userFound.role === 'admin') {
             throw new Error('No existe el usuario, o no está autorizado a cambiar este usuario');
         }
-
-        // If changing to a premium user, check for required documents
+    
+        // Buscar en la carpeta de documents si tiene los documentos necesarios para cambiar a premium
         if (role === 'premium') {
-            // Define the user's documents directory
-            const userDocumentsFolder = path.join(__dirname, `uploads/${uid}/documents`);
-
-            // Check if the directory exists
+            const userDocumentsFolder = path.join(__dirname, `public/uploads/${uid}/documents`);
+    
             if (!fs.existsSync(userDocumentsFolder)) {
                 throw new Error('No se encontró la carpeta de documentos del usuario');
             }
-
-            // Read the files in the user's documents folder
+    
             const uploadedFiles = fs.readdirSync(userDocumentsFolder);
-
-            // List of required documents
-            const requiredDocuments = ['idPhoto', 'addressProof', 'accountProof'];
-
-            // Check for each required document
-            const missingDocuments = requiredDocuments.filter(docType => {
-                // Look for a file that starts with the required document type
-                const documentExists = uploadedFiles.some(file => file.startsWith(docType));
-                return !documentExists;  // Add to the list if the document is missing
+            const requiredSuffixes = ['-id', '-addressdocument', '-accountstatusdocument'];
+            const uploadedFilesLowercase = uploadedFiles.map(file => file.toLowerCase());
+            const missingDocuments = requiredSuffixes.filter(suffix => {
+                return !uploadedFilesLowercase.some(file => file.includes(suffix));
             });
-
-            // If there are any missing documents, throw an error
+    
             if (missingDocuments.length > 0) {
                 throw new Error(`Faltan los siguientes documentos requeridos: ${missingDocuments.join(', ')}`);
             }
         }
-
         return await this.userRepository.updateUser({ _id: uid }, { role });
     }
 

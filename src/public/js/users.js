@@ -15,7 +15,6 @@ userDetailsButtons.forEach(button => {
     });
 });
 
-
 roleSwitches.forEach(switchElement => {
     switchElement.addEventListener('change', async (event) => {
         const userId = event.target.getAttribute('data-user-id');
@@ -43,8 +42,8 @@ roleSwitches.forEach(switchElement => {
                 const result = await response.json();
                 console.log(result)
                 Swal.fire({
-                    title: 'Error!',
-                    text: result.error.message,
+                    title: 'No se pudo cambiar el rol',
+                    text: result.error,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
@@ -54,7 +53,7 @@ roleSwitches.forEach(switchElement => {
 
             Swal.fire({
                 title: 'Error!',
-                text: error.message,
+                text: error,
                 icon: 'error',
                 confirmButtonText: 'OK'
             });

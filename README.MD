@@ -4,5 +4,5 @@
 Practica de integración
 
 ## Como subir archivos
-La página para subir archivos es la de cada user
-después del login entrar a users y luego a un user premium para poder subir archivos
+La página para subir archivos es la de detalle de cada user
+para psara a premium un user común tiene que haber subido id, comprobante de direccion, y comprobante de estado de cuenta

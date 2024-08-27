@@ -16,7 +16,7 @@ const {
 } = new UserController();
 
 router.post('/', createUser);
-router.post('/:uid/documents', passportCall('jwt'), authorizationJwt('admin', 'premium'), uploader, uploadDocument)
+router.post('/:uid/documents', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), uploader, uploadDocument)
 router.get('/',  getUsers);
 router.get('/:uid', getUserBy);
 router.put('/:uid', updateUser);

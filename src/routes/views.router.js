@@ -66,7 +66,7 @@ router.get('/users', passportCall('jwt'), authorizationJwt('admin', 'premium'), 
 router.get('/user/:uid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), async (req, res) => {
     const {uid} = req.params
     const user = await userService.getUserBy({_id:uid})
-    const secureUser = new UserSecureDto(user);
+    // const secureUser = new UserSecureDto(user);
     return res.render('user.hbs', user);
 })
 
@@ -138,21 +138,14 @@ router.get('/tickets', passportCall('jwt'), async (req, res) => {
 router.get('/create-products', passportCall('jwt'), authorizationJwt('admin', 'premium'), async (req, res) => {
     const user = req.user;
     const { limit = 10, pageNum = 1, category, status, title, sortByPrice } = req.query;
-
-    // Create a filter object
     let filter = {};
-    
-    // If the user is premium, only show products created by this user
     if (user.role === 'premium') {
         filter.owner = user.email;
     }
-    
-    // Add other query parameters to the filter
     if (category) filter.category = category;
     if (status) filter.status = status;
-    if (title) filter.title = new RegExp(title, 'i'); // Assuming partial title matching
+    if (title) filter.title = new RegExp(title, 'i');
     
-    // Get paginated products based on the filter
     const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } = await productService.getProducts({
         limit, 
         pageNum, 

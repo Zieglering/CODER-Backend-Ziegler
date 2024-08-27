@@ -1,41 +1,3 @@
-// document.addEventListener('DOMContentLoaded', function () {
-//     const volverBtn = document.querySelector('#volverBtn');
-//     volverBtn.addEventListener('click', async () => {
-//         window.location.href = '/products';
-//     });
-
-//     const handleFileUpload = (formId) => {
-//         const form = document.getElementById(formId);
-
-//         form.addEventListener('submit', async (event) => {
-//             event.preventDefault();
-//             const file = new FormData(form);
-//             const uid = document.getElementById('user-details').getAttribute('data-uid');
-//             try {
-//                 const response = await fetch(`/api/users/${uid}/documents`, {
-//                     method: 'POST',
-//                     body: file
-//                 });
-                
-
-//                 if (response.ok) {
-//                     alert('Archivo subido correctamente');
-//                 } else {
-//                     const errorText = await response.text();
-//                     alert('El archivo no se subió: ' + errorText);
-//                 }
-//             } catch (error) {
-//                 console.error('Error al subir el archivo:', error);
-//                 alert('El archivo no se subió');
-//             }
-//         });
-//     };
-
-//     handleFileUpload('uploadProfileFiles');
-//     handleFileUpload('uploadProductsFiles');
-//     handleFileUpload('uploadDocumentsFiles');
-// });
-
 document.addEventListener('DOMContentLoaded', function () {
     const volverBtn = document.querySelector('#volverBtn');
     volverBtn.addEventListener('click', async () => {
@@ -44,20 +6,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const handleFileUpload = (formId, suffix) => {
         const form = document.getElementById(formId);
-
+        
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const formData = new FormData(form);
-
-            formData.append('suffix', suffix);
-            console.log(formData)
-
             const uid = document.getElementById('user-details').getAttribute('data-uid');
+            const formData = new FormData(form);
+            formData.append('suffix', suffix); 
+            
             try {
                 const response = await fetch(`/api/users/${uid}/documents`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'X-Suffix': suffix
+                    }
                 });
+            
                 if (response.ok) {
                     alert('Archivo subido correctamente');
                 } else {
@@ -69,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('El archivo no se subió');
             }
         });
+
     };
 
     handleFileUpload('uploadProfileFiles', 'Profile');
