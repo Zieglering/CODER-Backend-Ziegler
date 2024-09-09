@@ -60,9 +60,28 @@ body, html {
     background-color: #35403A;
     color: #A4A69C;
     border: none;
-    border-radius: 0 0 10px 10px; 
+    border-radius: 10px 10px 10px 10px; 
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.quantityBtn{
+    /* display: block; */
+    /* width: 100%; */
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: #35403A;
+    color: #A4A69C;
+    border: none;
+    border-radius: 10px 10px 10px 10px; 
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.quantityNumber{
+    padding: 10px;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .product-btn:hover {

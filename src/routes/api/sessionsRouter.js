@@ -8,7 +8,7 @@ import { objectConfig } from '../../config/config.js';
 import UserDto from '../../dtos/usersDto.js';
 import { cartService, userService } from '../../service/service.js';
 import { logger } from '../../utils/logger.js';
-import { sendPasswordRecoveryEmail } from '../../utils/sendPasswordRecoveryEmail.js';
+import { sendEmailMessage } from '../../utils/sendEmailMessage.js';
 import jwt from 'jsonwebtoken';
 import UserSecureDto from '../../dtos/userSecureDto.js';
 
@@ -23,7 +23,7 @@ sessionsRouter.get('/githubcallback',
     (req, res) => {
         if (req.user && req.user.token) {
             res.cookie('token', req.user.token, { httpOnly: true });
-            res.redirect('/products');
+            res.redirect('/index');
         } else {
             res.status(401).send('Fallo autenticacion');
         }
@@ -52,13 +52,14 @@ sessionsRouter.post('/register', async (req, res) => {
             id: result._id,
             email,
             role: result.role,
-            cart: result.cart
+            cart: result.cart,
         });
 
-        return res.cookie('token', token, {
-            maxAge: 60 * 60 * 1000 * 24,
-            httpOnly: true,
-        }).send({ status: 'Success', message: 'Usuario registrado' });
+        // return res.cookie('token', token, {
+        //     maxAge: 60 * 60 * 1000 * 24,
+        //     httpOnly: true,
+        // }).send({ status: 'Success', message: 'Usuario registrado' });
+        return res.status(200).send({ status: 'Success', message: 'Usuario registrado' });
 
     } catch (error) {
         logger.error('error:', error);
@@ -66,7 +67,7 @@ sessionsRouter.post('/register', async (req, res) => {
     }
 });
 
-sessionsRouter.post('/login', async (req, res) => {
+sessionsRouter.post('/login', passportCall('jwt'), async (req, res) => {
     const { email, password } = req.body;
     // Admin hardcodeado
     const adminEmail = admin_email;
@@ -108,7 +109,7 @@ sessionsRouter.post('/login', async (req, res) => {
         id: userFound._id,
         email,
         role: userFound.role,
-        cart: userFound.cart
+        cart: userFound.cart,
     });
 
     res.cookie('token', token, {
@@ -118,13 +119,17 @@ sessionsRouter.post('/login', async (req, res) => {
 });
 
 sessionsRouter.post('/logout', passportCall('jwt'), async (req, res) => {
-    const user = req.user
-    const currentUser = await userService.getUserBy( {email:user.email} );
-    const uid = currentUser._id
     try {
-        await userService.updateUserConnectionTime({_id: uid} , { last_connection: new Date() });
+        if (req.user.role === 'admin') {
+            res.clearCookie('token');
+            return res.redirect('/index');
+        }
+        const user = req.user;
+        const currentUser = await userService.getUserBy({ email: user.email });
+        const uid = currentUser._id;
+        await userService.updateUserConnectionTime({ _id: uid }, { last_connection: new Date() });
         res.clearCookie('token');
-        return res.redirect('/login');
+        return res.redirect('/index');
     } catch (error) {
         logger.error('error:', error);
         return res.status(500).send({ status: 'error', error: 'Ocurrió un error, por favor intentalo nuevamente' });
@@ -141,7 +146,7 @@ sessionsRouter.post('/send-password-reset-email', async (req, res) => {
 
         const token = generateToken({ id: user._id }, '1h');
 
-        sendPasswordRecoveryEmail({
+        sendEmailMessage({
             email: user.email,
             subject: 'Recuperar contraseña',
             html: `
@@ -187,9 +192,9 @@ sessionsRouter.post('/reset-password', passportCall('jwt'), async (req, res) => 
 
 sessionsRouter.get('/current', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), (req, res) => {
     try {
-        if (req.user.role === 'admin') return res.status(200).send({ status: 'success', payload: `${ req.user.role }`});
-        if (req.user.role === 'premium') return res.status(200).send({ status: 'success', payload: `${ req.user.role }`});
-        if (req.user.role === 'user') return res.status(200).send({ status: 'success', payload: `${ req.user.role }`});
+        if (req.user.role === 'admin') return res.status(200).send({ status: 'success', payload: `${req.user.role}` });
+        if (req.user.role === 'premium') return res.status(200).send({ status: 'success', payload: `${req.user.role}` });
+        if (req.user.role === 'user') return res.status(200).send({ status: 'success', payload: `${req.user.role}` });
 
     } catch (error) {
         res.status(500).send({ status: 'error', error: error.message });

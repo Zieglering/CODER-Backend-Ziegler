@@ -7,15 +7,7 @@ class TicketsDaoMongo {
   }
 
   create = async (ticketData) => {
-    
-    try {
-      const result = await ticketModel.create(ticketData);
-      return result;
-  } catch (error) {
-    
-      logger.error('Error creating ticket:', error);
-      throw error;
-  }
+    return await ticketModel.create(ticketData);
   };
 
   getBy = async (filter) => {

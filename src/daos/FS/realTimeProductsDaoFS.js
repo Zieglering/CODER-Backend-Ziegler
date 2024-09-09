@@ -77,7 +77,7 @@ class realTimeProductsDaoFS {
     };
 
     getAll = async () => {
-        return  await this.readProductsJson();
+        return await this.readProductsJson();
     };
 
     getBy = async (filter) => {
@@ -120,7 +120,7 @@ class realTimeProductsDaoFS {
         if (productToDeleteIndex === -1) {
             return `No existe el producto con id: ${productId}`;
         }
-        
+
         logger.info(`EL producto ${productsData[productToDeleteIndex].title} con el id ${productId} fue eliminado`);
         productsData.splice(productToDeleteIndex, 1);
         this.writeProductJson(productsData);

@@ -25,7 +25,7 @@ class ProductController {
             let nextLink = null;
 
             if (hasPrevPage) {
-                prevLink = `/products?pageNum=${prevPage}`;
+                prevLink = `/index?pageNum=${prevPage}`;
                 if (limit) prevLink += `&limit=${limit}`;
                 if (title) prevLink += `&product=${title}`;
                 if (category) prevLink += `&category=${category}`;
@@ -34,7 +34,7 @@ class ProductController {
             }
 
             if (hasNextPage) {
-                nextLink = `/products?pageNum=${nextPage}`;
+                nextLink = `/index?pageNum=${nextPage}`;
                 if (limit) nextLink += `&limit=${limit}`;
                 if (title) nextLink += `&product=${title}`;
                 if (category) nextLink += `&category=${category}`;
@@ -57,7 +57,7 @@ class ProductController {
                 }
             });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error });
+            res.status(500).send({ status: 'error', error: `Error al buscar los productos: ${error.message}` });
         }
     };
 
@@ -71,7 +71,7 @@ class ProductController {
             res.status(200).send({ status: 'success', payload: productFound });
 
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al buscar el producto: ${error.message}` });
         }
     };
 
@@ -82,33 +82,33 @@ class ProductController {
         const productFound = await productService.getProduct({ _id: pid });
         try {
             if (!title || !description || !code || !price || !stock || !category) {
-                return res.status(400).send({ status: 'error', error: 'faltan campos' });
+                return res.status(400).send({ status: 'error', error: `Error, faltan campos: ${error.message}` });
             }
 
-            if (!productFound) return res.status(400).send({ status: 'error', error: `No existe el producto con el id ${pid}` });
+            if (!productFound) return res.status(400).send({ status: 'error', error: `Error, no existe el producto: ${error.message}` });
 
             const updatedProduct = await productService.updateProduct(pid, { title, description, code, price, status, stock, category, thumbnails });
             res.status(201).send({ status: 'success', payload: updatedProduct });
 
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error });
+            res.status(500).send({ status: 'error', error: `Error al intentar actualizar el producto: ${error.message}` });
         }
     };
 
     deleteProduct = async (req, res) => {
         const { pid } = req.params;
-        const user = req.user
+        const user = req.user;
 
         try {
             const productFound = await productService.getProduct({ _id: pid });
             if (!productFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe ningún producto con el id ${pid}` });
             if (user.role === 'premium' && productFound.owner !== user.email) return res.status(401).send({ status: 'error', error: `el producto ${productFound.title} no le pertenece a ${user.email}, por lo tanto no puede borrarlo` });
-            
+
             await productService.deleteProduct(pid);
             res.status(200).send({ status: 'success', payload: productFound });
 
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al borrar el producto: ${error.message}` });
         }
     };
 }

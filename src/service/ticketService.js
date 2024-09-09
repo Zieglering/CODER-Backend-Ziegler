@@ -1,10 +1,17 @@
+import { logger } from "../utils/logger.js";
+
 export default class TicketService {
     constructor(ticketRepository) {
         this.ticketRepository = ticketRepository;
     }
 
-    async getAll() {
-        return await this.ticketRepository.getAll();
+    async createTicket(ticketData) {
+        try {
+            return await this.ticketRepository.createTicket(ticketData);
+
+        } catch (error) {
+            logger.error(`Error: ${error}`);
+        }
     }
 
     async getTickets(filter) {
@@ -16,11 +23,16 @@ export default class TicketService {
     }
 
     async getTicket(filter) {
-        const ticket = await this.ticketRepository.getTicket(filter);
-        if (!ticket) {
-            throw new Error(`¡Error! No existe el ticket con id ${filter._id}`);
+        try {
+            const ticket = await this.ticketRepository.getTicket(filter);
+            if (!ticket) {
+                throw new Error(`¡Error! No existe el ticket con ${JSON.stringify(filter)}`);
+            }
+            return ticket;
+            
+        } catch (error) {
+            logger.error(`No existe el ticket: ${error}`)
         }
-        return ticket;
     }
 
     async deleteTicket(tid) {

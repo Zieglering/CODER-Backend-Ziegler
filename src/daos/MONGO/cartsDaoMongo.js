@@ -1,3 +1,4 @@
+import { logger } from "../../utils/logger.js";
 import cartsModel from "./models/carts.model.js";
 
 class CartsDaoMongo {
@@ -6,77 +7,70 @@ class CartsDaoMongo {
     }
 
     create = async () => {
-        const cart = {
-            products: []
-        };
-        const createdCart = await this.cartsModel.create(cart);
-        return createdCart;
+        const cart = { products: [] };
+        return await this.cartsModel.create(cart);
     };
 
-    addProductToCart = async (cartId, product, quantity) => {
-        const cartExists = this.cartsModel.where({ _id: cartId, 'products.product': product });
-        const productExists = await cartExists.find();
+    addProductToCart = async (cartId, productId, quantity) => {
+        const cartExists = this.cartsModel.where({ _id: cartId, 'products.product': productId });
+        const productExists = await cartExists.findOne().lean();
 
-        if (productExists.length === 0) {
-            const addNewProduct = await this.cartsModel.findOneAndUpdate(
+        if (!productExists) {
+            const updatedCart = await this.cartsModel.findOneAndUpdate(
                 { _id: cartId },
-                { $addToSet: { products: { product: product, quantity: quantity } } },
+                { $addToSet: { products: { product: productId, quantity } } },
                 { new: true, upsert: true }
             );
-            return { status: 'success', payload: addNewProduct };
+            return updatedCart;
 
         } else {
-            const incrementQuantity = await this.cartsModel.findOneAndUpdate(
-                { _id: cartId, 'products.product': product },
+            const updatedCart = await this.cartsModel.findOneAndUpdate(
+                { _id: cartId, 'products.product': productId },
                 { $inc: { 'products.$.quantity': quantity } },
                 { new: true }
             );
-            return { status: 'success', payload: incrementQuantity };
+            logger.info(`cartExists: ${cartExists}`)
+            logger.info(`productExists: ${productExists}`)
+            logger.info(`updated cart: ${updatedCart}`)
+            return updatedCart;
         }
     };
 
     getBy = async (filter) => {
-        return await this.cartsModel.findOne(filter).lean()
+        return await this.cartsModel.findOne(filter).lean();
     };
 
-    updateProductFromCart = async (cartId, product, quantity) => {
-        const cartExists = this.cartsModel.where({ _id: cartId, 'products.product': product });
+    updateProductFromCart = async (cartId, productId, quantity) => {
+        const cartExists = this.cartsModel.where({ _id: cartId, 'products.product': productId });
         const productExists = await cartExists.find();
 
-        if (productExists.length === 0) {
-            return { status: 'success', payload: `El producto no existe en el carrito ${cartId}` };
+        if (!productExists) {
+            throw new Error(`El producto no existe en el carrito ${cartId}`);
         }
-        else {
-            const updatedProduct = await this.cartsModel.findOneAndUpdate(
-                { _id: cartId, 'products.product': product },
-                { $set: { 'products.$.quantity': quantity } },
-                { new: true }
-            );
-            return { status: 'success', payload: updatedProduct };
-        }
-    };
 
-    update = async (cid, products) => {
-        const result = await this.cartsModel.findOneAndUpdate(
-            { _id: cid },
-            { $set: { products: products } },
+        const updatedCart = await this.cartsModel.findOneAndUpdate(
+            { _id: cartId, 'products.product': productId },
+            { $set: { 'products.$.quantity': quantity } },
             { new: true }
         );
-        return result;
+        return updatedCart;
     };
 
-    deleteProductFromCart = async (cid, pid) => await cartsModel.findOneAndUpdate(
-        { _id: cid },
-        { $pull: { products: { product: pid, quantity: 1 } } },
+    update = async (cartId, products) => {
+        return await this.cartsModel.findOneAndUpdate(
+            { _id: cartId },
+            { $set: { products } },
+            { new: true }
+        );
+    };
+
+    deleteProductFromCart = async (cartId, productId) => await this.cartsModel.findOneAndUpdate(
+        { _id: cartId },
+        { $pull: { products: { product: productId } } },
         { new: true }
     );
 
-    delete = async (cid) => cartsModel.findOneAndDelete(
-        { _id: cid },
-        { $set: { products: [] } },
-        { new: true }
-    );
+    delete = async (cartId) => await this.cartsModel.findOneAndDelete({ _id: cartId });
 }
-
 
 export default CartsDaoMongo;

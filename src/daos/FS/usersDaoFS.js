@@ -43,7 +43,7 @@ class UsersDaoFS {
                     mandatoryDataCheck.push(prop);
                 }
             }
-            
+
             if (!newUser.email || !newUser.password) {
                 if (mandatoryDataCheck.length > 1)
                     throw new Error(`¡ERROR! debe llenar todods los campos\nFaltaron agregar ${mandatoryDataCheck.join(', ')}`);
@@ -116,7 +116,7 @@ class UsersDaoFS {
         if (userToDeleteIndex === -1) {
             return `No existe el producto con id: ${userId}`;
         }
-        
+
         logger.info(`EL usuario ${userData[userToDeleteIndex].email} con el id ${userId} fue eliminado`);
         userData.splice(userToDeleteIndex, 1);
         this.writeUserJson(userData);

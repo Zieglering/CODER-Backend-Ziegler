@@ -23,7 +23,6 @@ export default class ChatService {
     }
 
     async updateMessage(id, update) {
-        const message = await this.getMessage({ _id: id });
         if (!update.message) {
             throw new Error('Sin cambios');
         }
@@ -31,7 +30,6 @@ export default class ChatService {
     }
 
     async deleteMessage(id) {
-        const message = await this.getMessage({ _id: id });
         return await this.chatRepository.deleteMessage(id);
     }
 }

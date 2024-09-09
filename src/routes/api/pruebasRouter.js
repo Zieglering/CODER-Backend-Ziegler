@@ -15,7 +15,6 @@ router.get('/loggerTest', async (req, res) => {
     res.send({message: "Prueba Logger"})
 })
 
-
 router.get('/current', passportCall('jwt'), authorizationJwt('user'), async (req, res) => {
     const {uid} = req.params
     const user = await userService.getUsers({_id: uid});
@@ -32,13 +31,6 @@ router.get('/session', (req, res) => {
         req.session.counter = 1;
         res.send('Bienvenidos');
     }
-});
-
-router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) return res.send({ status: 'error', error: err });
-        else return res.send('logout');
-    });
 });
 
 router.get('/setCookie', (req, res) => {

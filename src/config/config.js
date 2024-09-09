@@ -1,13 +1,10 @@
 import dotenv from 'dotenv';
 import { program } from '../utils/commander.js';
 import handlebars from "express-handlebars";
-import handlebarsHelpers from "handlebars-helpers"
-
+import handlebarsHelpers from "handlebars-helpers";
 
 const { mode } = program.opts();
-dotenv.config({
-  path: mode === 'production' ? './.env.production' : './.env.development'
-});
+dotenv.config({ path: mode === 'production' ? './.env.production' : './.env.development' });
 
 export const objectConfig = {
   port: process.env.PORT || 8080,
@@ -27,6 +24,6 @@ export const objectConfig = {
 };
 
 export const handlebarsConfig = handlebars.create({
-    extname: '.hbs',
-    helpers: handlebarsHelpers()
-})
+  extname: '.hbs',
+  helpers: handlebarsHelpers()
+});

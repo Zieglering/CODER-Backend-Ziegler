@@ -1,18 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
     const volverBtn = document.querySelector('#volverBtn');
     volverBtn.addEventListener('click', async () => {
-        window.location.href = '/products';
+        window.location.href = '/index';
     });
 
     const handleFileUpload = (formId, suffix) => {
         const form = document.getElementById(formId);
-        
+
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             const uid = document.getElementById('user-details').getAttribute('data-uid');
             const formData = new FormData(form);
-            formData.append('suffix', suffix); 
-            
+            formData.append('suffix', suffix);
+
             try {
                 const response = await fetch(`/api/users/${uid}/documents`, {
                     method: 'POST',
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         'X-Suffix': suffix
                     }
                 });
-            
+
                 if (response.ok) {
                     alert('Archivo subido correctamente');
                 } else {
@@ -37,8 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     handleFileUpload('uploadProfileFiles', 'Profile');
-    handleFileUpload('uploadProductsFiles', 'Product');
-    handleFileUpload('uploadDocumentsFiles', 'Document');
     handleFileUpload('uploadId', 'Id');
     handleFileUpload('uploadAddressDocument', 'AddressDocument');
     handleFileUpload('uploadAccountStatusDocument', 'AccountStatusDocument');

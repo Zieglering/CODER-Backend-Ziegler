@@ -46,16 +46,16 @@ class ProductsDaoMemory {
     getBy(filter) {
         try {
             const foundProduct = this.#products.find(prod => prod.filter === filter);
-    
-            if(foundProduct) return foundProduct;
+
+            if (foundProduct) return foundProduct;
             return [];
         } catch (error) {
-            return error    
+            return error;
         }
     }
 
-    update(filter) {}
-    delete(filter) {}
+    update(filter) { }
+    delete(filter) { }
 
     getNextId() {
         if (this.#products.length === 0) {

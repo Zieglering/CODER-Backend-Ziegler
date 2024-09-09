@@ -1,17 +1,16 @@
 import { Router } from "express";
-import viewsRouter from "./views.router.js";
-import { sessionsRouter } from "./api/sessions.router.js";
-import productsRouter from "./api/products.router.js";
-import usersRouter from "./api/users.router.js";
-import cartsRouter from "./api/carts.router.js";
-import realtimeproductsRouter from "./api/realtimeproducts.router.js";
-import chatRouter from "./api/chat.router.js";
-import apiDocsRouter from "./api/apiDocs.router.js";
-import pruebasRouter from "./api/pruebas.router.js";
-import notFoundRouter from "./api/notFound.router.js";
+import viewsRouter from "./viewsRouter.js";
+import { sessionsRouter } from "./api/sessionsRouter.js";
+import productsRouter from "./api/productsRouter.js";
+import usersRouter from "./api/usersRouter.js";
+import cartsRouter from "./api/cartsRouter.js";
+import realtimeproductsRouter from "./api/realtimeproductsRouter.js";
+import chatRouter from "./api/chatsRouter.js";
+import apiDocsRouter from "./api/apiDocsRouter.js";
+import pruebasRouter from "./api/pruebasRouter.js";
+import notFoundRouter from "./api/notFoundRouter.js";
 
-
-const router = Router()
+const router = Router();
 
 router.use("/", viewsRouter);
 router.use("/api/sessions", sessionsRouter);
@@ -22,6 +21,6 @@ router.use("/realtimeproducts", realtimeproductsRouter);
 router.use("/chat", chatRouter);
 router.use("/apidocs", apiDocsRouter);
 router.use("/pruebas", pruebasRouter);
-router.use("*", notFoundRouter)
+router.use("*", notFoundRouter);
 
-export default router
+export default router;

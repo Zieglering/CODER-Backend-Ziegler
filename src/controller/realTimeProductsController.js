@@ -11,7 +11,7 @@ class RealTimeProductController {
             const newProduct = await this.realTimeProductsService.create(title, description, code, price, status, stock, category, thumbnails);
             res.status(201).send({ status: 'success', payload: newProduct });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al crear el producto: ${error.message}` });
         }
     };
 
@@ -20,7 +20,7 @@ class RealTimeProductController {
             const products = await this.realTimeProductsService.getProducts();
             res.status(200).send({ status: 'success', payload: products });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al buscar los productos: ${error.message}` });
         }
     };
 
@@ -30,7 +30,7 @@ class RealTimeProductController {
             const productFound = await this.realTimeProductsService.getBy({ _id: pid });
             res.status(200).send({ status: 'success', payload: productFound });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al buscar el producto: ${error.message}` });
         }
     };
 
@@ -41,7 +41,7 @@ class RealTimeProductController {
             const updatedProduct = await this.realTimeProductsService.update(pid, { title, description, code, price, status, stock, category, thumbnails });
             res.status(201).send({ status: 'success', payload: updatedProduct });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al actualizar el producto: ${error.message}` });
         }
     };
 
@@ -51,7 +51,7 @@ class RealTimeProductController {
             await this.realTimeProductsService.delete(pid);
             res.status(200).send({ status: 'success', payload: `El producto con id ${pid} ha sido eliminado` });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al borrar el producto: ${error.message}` });
         }
     };
 }

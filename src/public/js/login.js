@@ -23,7 +23,7 @@ loginForm.addEventListener('submit', async (evt) => {
             body: JSON.stringify(data)
         });
         if (response.ok) {
-            window.location.href = '/products';
+            window.location.href = '/index';
 
         } else {
             const errorText = await response.json();

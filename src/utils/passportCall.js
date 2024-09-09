@@ -5,8 +5,10 @@ export const passportCall = (strategy) => {
         passport.authenticate(strategy, function (err, user, info) {
             if (err) return next(err);
             if (!user) {
-                return res.status(401).send({ error: info.message ? info.message : info.toString() });
+                req.isAuthenticated = false;
+                return next();
             }
+            req.isAuthenticated = true;
             req.user = user;
             next();
         })(req, res, next);

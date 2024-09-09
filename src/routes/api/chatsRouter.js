@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import ChatController from '../../controller/chats.controller.js';
-
+import ChatController from '../../controller/chatsController.js';
 
 const router = Router();
 const {
@@ -9,7 +8,7 @@ const {
     getMessageBy,
     updateMessage,
     deleteMessage
-} = new ChatController;
+} = new ChatController();
 
 router.post('/', createMessage);
 router.get('/', getMessages);

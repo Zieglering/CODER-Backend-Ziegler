@@ -4,11 +4,11 @@
     <div class="d-flex flex-row-reverse bd-highlight">
       <button id="volverBtn" class="product-btn btn btn-secondary btn-lg">Volver</button>
     </div>
-    <div id="user-details" data-uid="{{this._id}}">
-      <p>Nombre: {{this.fullName}}</p>
-      <p>Edad: {{this.age}}</p>
-      <p>Email: {{this.email}}</p>
-      <p>Rol: <span id="role-{{this._id}}">{{this.role}}</span></p>
+    <div id="user-details" data-uid="{{user._id}}">
+      <p>Nombre: {{user.fullName}}</p>
+      <p>Edad: {{user.age}}</p>
+      <p>Email: {{user.email}}</p>
+      <p>Rol: <span id="role-{{user._id}}">{{user.role}}</span></p>
     </div>
   </div>
 </section>
@@ -19,43 +19,28 @@
     <button type="submit">Subir Foto de Perfil</button>
 </form>
 </div>
-
-<form id="uploadProductsFiles" method="POST" enctype="multipart/form-data" class="form-group w-100">
-  <div class="container">
-    <label for="products">Subir Imagen de Producto</label>
-    <input type="file" name="products" class="form-control">
-    <button type="submit">Subir Imagen de Producto</button>
-</form>
-</div>
-<div class="container">
-  <form id="uploadDocumentsFiles" method="POST" enctype="multipart/form-data" class="form-group w-100">
-    <label for="documents">Subir Documentos Personales</label>
-    <input type="file" name="documents" class="form-control">
-    <button type="submit">Subir Documentos Personales</button>
-  </form>
-</div>
 </section>
 <section>
   <div class="container">
-  <form id="uploadId" method="POST" enctype="multipart/form-data" class="form-group w-100">
-    <label for="documents">Subir Id</label>
-    <input type="file" name="documents" class="form-control">
-    <button type="submit">Subir Id</button>
-  </form>
-</div>
+    <form id="uploadId" method="POST" enctype="multipart/form-data" class="form-group w-100">
+      <label for="documents">Subir Id</label>
+      <input type="file" name="documents" class="form-control">
+      <button type="submit">Subir Id</button>
+    </form>
+  </div>
   <div class="container">
-  <form id="uploadAddressDocument" method="POST" enctype="multipart/form-data" class="form-group w-100">
-    <label for="documents">Subir Comprobante de Dirección</label>
-    <input type="file" name="documents" class="form-control">
-    <button type="submit">Subir Comprobante de Dirección</button>
-  </form>
-</div>
+    <form id="uploadAddressDocument" method="POST" enctype="multipart/form-data" class="form-group w-100">
+      <label for="documents">Subir Comprobante de Dirección</label>
+      <input type="file" name="documents" class="form-control">
+      <button type="submit">Subir Comprobante de Dirección</button>
+    </form>
+  </div>
   <div class="container">
-  <form id="uploadAccountStatusDocument" method="POST" enctype="multipart/form-data" class="form-group w-100">
-    <label for="documents">Subir Comprobante de Estado de Cuenta</label>
-    <input type="file" name="documents" class="form-control">
-    <button type="submit">Subir Comprobante de Estado de Cuenta</button>
-  </form>
-</div>
+    <form id="uploadAccountStatusDocument" method="POST" enctype="multipart/form-data" class="form-group w-100">
+      <label for="documents">Subir Comprobante de Estado de Cuenta</label>
+      <input type="file" name="documents" class="form-control">
+      <button type="submit">Subir Comprobante de Estado de Cuenta</button>
+    </form>
+  </div>
 </section>
 <script src="/js/user.js"></script>

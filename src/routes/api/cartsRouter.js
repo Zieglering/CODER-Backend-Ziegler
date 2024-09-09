@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import CartController from '../../controller/carts.controller.js';
+import CartController from '../../controller/cartsController.js';
 import { authorizationJwt } from '../../utils/authorizationJwt.js';
 import { passportCall } from '../../utils/passportCall.js';
 
@@ -17,9 +17,9 @@ const {
 
 router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), createCart);
 router.post('/:cid/purchase', passportCall('jwt'), authorizationJwt('user'), purchase);
-router.post('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('user', 'premium'), addProductToCart);
+router.post('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('premium', 'user'), addProductToCart);
 router.get('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getCart);
-router.put('/:cid/products/:pid', passportCall('jwt'), updateProductFromCart);
+router.put('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('premium', 'user'), updateProductFromCart);
 router.put('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), updateCart);
 router.delete('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), deleteProductFromCart);
 router.delete('/:cid', passportCall('jwt'), authorizationJwt('admin'), deleteCart);

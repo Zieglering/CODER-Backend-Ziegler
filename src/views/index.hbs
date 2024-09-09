@@ -1,18 +1,14 @@
 <main class="main">
-  <h1 id="userEmail">Bienvenido {{email}} - Rol: {{role}}</h1>
-  <h2 id="cartID">CartID:{{cart}}</h2>
-  <div class="d-flex justify-content">
-    <button id="viewCartBtn" class="btn btn-outline-secondary me-2">Ver Carrito</button>
-    <button id="logOutBtn" class="btn btn-outline-danger">Logout</button>
-  </div>
-  {{#if (or (eq role "premium") (eq role "admin"))}}
-  <div class="d-flex justify-content mt-2">
-    <a href="/create-products"><button id="createProductBtn" class="btn btn-outline-success">Crear
-        Producto</button></a>
-    <a href="/apidocs"><button id="apiDocsBtn" class="btn btn-outline-info">API Docs</button></a>
-    <a href="/users"><button id="usuariosBtn" class="btn btn-outline-info">Usuarios</button></a>
-  </div>
-  {{/if}}
+  <section data-authenticated="{{isAuthenticated}}">
+    {{#if isAuthenticated}}
+    <h1 id="userEmail">Bienvenido {{email}} - Rol: {{role}}</h1>
+    <h2 id="cartID">CartID: {{cart}}</h2>
+    {{else}}
+    <h2>Bienvenido Invitado!</h2>
+    <h3>Puedes ver nuestros productos</h3>
+    <h4>Para acceder a todos nuestros servicios create una cuenta o logueate si ya tienes una</h4>
+    {{/if}}
+  </section>
 
   <section class="container">
     <h1>Nuestros cafés</h1>
@@ -25,8 +21,7 @@
       <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
         <li><a class="dropdown-item filter-link" data-filter="category" data-value="cafe" href="#">Café</a></li>
         <li><a class="dropdown-item filter-link" data-filter="category" data-value="te" href="#">Té</a></li>
-        <li><a class="dropdown-item filter-link" data-filter="category" data-value="comestibles"
-            href="#">Comestibles</a></li>
+        <li><a class="dropdown-item filter-link" data-filter="category" data-value="comestibles" href="#">Comestibles</a></li>
         <li><a class="dropdown-item filter-link" data-filter="category" data-value="" href="#">Todos</a></li>
       </ul>
     </div>
@@ -34,7 +29,7 @@
     <div class="my-3">
       <h2>Búsqueda de producto por su nombre</h2>
       <p>(Presiona enter para buscar en todas las páginas)</p>
-      <form id="searchForm" class="d-flex" action="/products" method="get">
+      <form id="searchForm" class="d-flex" action="/index" method="get">
         <input id="searchInput" class="form-control me-2" type="text" name="product" placeholder="Busca tu producto"
           autocomplete="off" />
       </form>
@@ -80,8 +75,11 @@
                 <h2 class="product-title">{{this.title}}</h2>
                 <h3 class="product-price">${{this.price}}</h3>
               </div>
-              <a href="/product/{{this._id}}"><button class="product-btn" data-product-id="{{this._id}}"
-                  data-cart-id="{{../cart}}">Ver más</button></a>
+              <button class="product-btn" data-product-id="{{this._id}}" data-cart-id="{{../cart}}"
+                data-user-email="{{email}}">
+                Ver más
+              </button>
+
             </div>
             {{/each}}
           </div>

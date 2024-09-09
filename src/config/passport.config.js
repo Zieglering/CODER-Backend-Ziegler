@@ -5,12 +5,13 @@ import UsersDaoMongo from '../daos/MONGO/usersDaoMongo.js';
 import CartsDaoMongo from '../daos/MONGO/cartsDaoMongo.js';
 import { PRIVATE_KEY, generateToken } from '../utils/jsonwebtoken.js';
 import { objectConfig } from './config.js';
+import { cartService, userService } from '../service/service.js';
 
 const { github_CallbackURL, github_ClientSecret, github_ClientID } = objectConfig;
-const userService = new UsersDaoMongo();
+// const userService = new UsersDaoMongo();
+// const cartsService = new CartsDaoMongo;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
-const cartsService = new CartsDaoMongo;
 
 export const initializePassport = () => {
 
@@ -40,18 +41,18 @@ export const initializePassport = () => {
         callbackURL: github_CallbackURL
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            let user = await userService.getBy({ email: profile._json.login });
-            const newCart = await cartsService.create();
+            let user = await userService.getUserBy({ email: profile._json.login });
+            const newCart = await cartService.createCart();
             if (!user) {
                 let newUser = {
                     first_name: profile._json.name,
                     last_name: profile._json.name,
                     email: profile._json.login,
-                    age: null,
+                    age: profile._json.age || null,
                     password: '',
                     cart: newCart._id
                 };
-                let result = await userService.create(newUser);
+                let result = await userService.createUser(newUser);
                 user = result;
             }
             const token = generateToken({ id: user._id, email: user.email, role: user.role, cart: newCart._id });

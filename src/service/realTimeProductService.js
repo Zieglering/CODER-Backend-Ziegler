@@ -9,7 +9,7 @@ export default class RealTimeProductsService {
 
     async create(title, description, code, price, status, stock, category, thumbnails) {
         const products = await this.getAll();
-        
+
         if (!title || !description || !code || !price || !stock || !category) {
             throw new Error('Faltan campos');
         }

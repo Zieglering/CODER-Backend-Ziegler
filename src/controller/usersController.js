@@ -1,5 +1,5 @@
 import { userService, cartService } from '../service/service.js';
-import { logger } from '../utils/logger.js';
+import UserSecureDto from '../dtos/userSecureDto.js';
 
 class UserController {
     constructor() {
@@ -7,44 +7,45 @@ class UserController {
         this.cartService = cartService;
     }
 
-    getUsers = async (req, res) => {
-        try {
-            const users = await this.userService.getUsers();
-            res.send({ status: 'success', payload: users.docs });
-        } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
-        }
-    };
-
-    getUserBy = async (req, res) => {
-        const { uid } = req.params;
-        try {
-            const userFound = await this.userService.getUserBy({ _id: uid });
-            res.send({ status: 'success', payload: userFound });
-        } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
-        }
-    };
-
     createUser = async (req, res) => {
         const { body } = req;
         try {
             const result = await this.userService.createUser(body);
             res.send({ status: 'success', payload: result });
         } catch (error) {
-            res.status(500).send({ status: 'error', error: error.message });
+            res.status(500).send({ status: 'error', error: `Error al crear el usuario: ${error.message}` });
+        }
+    };
+
+    getUsers = async (req, res) => {
+        try {
+            const usersFound = await this.userService.getUsers();
+            const secureUsers = await usersFound.docs.map(user => new UserSecureDto(user));
+            res.send({ status: 'success', payload: { users: secureUsers } });
+        } catch (error) {
+            res.status(500).send({ status: 'error', error: `Error al buscar los usuarios: ${error.message}` });
+        }
+    };
+
+    getUserBy = async (req, res) => {
+        const filter = req.query;
+        try {
+            const userFound = await this.userService.getUserBy(filter);
+            res.send({ status: 'success', payload: userFound });
+        } catch (error) {
+            res.status(500).send({ status: 'error', error: `Error al buscar el usuario: ${error.message}` });
         }
     };
 
     uploadDocument = async (req, res) => {
         const { uid } = req.params;
         const files = req.files;
-    
+
         try {
             const uploadedFile = await userService.uploadDocument(uid, files);
             res.status(200).send({ status: 'success', payload: `Archivo subido: ${uploadedFile}` });
         } catch (error) {
-            res.status(500).send({ status: 'Error', message: error.message });
+            res.status(500).send({ status: 'Error', message: `Error al subir el documento del usuario: ${error.message}` });
         }
     };
 
@@ -56,7 +57,7 @@ class UserController {
             const result = await this.userService.updateUser(uid, { first_name, age, last_name, password, role });
             res.status(200).send({ status: 'success', message: `Usuario actualizado ${result}` });
         } catch (error) {
-            res.status(500).send({ status: 'Error', message: error.message });
+            res.status(500).send({ status: 'Error', message: `Error al actualizar el usuario: ${error.message}` });
         }
     };
 
@@ -68,7 +69,7 @@ class UserController {
             const result = await this.userService.updateUserRole(uid, role);
             res.status(200).send({ status: 'success', message: `Usuario actualizado con el nuevo rol ${role}` });
         } catch (error) {
-            res.status(500).send({ status: 'Error', error: error.message });
+            res.status(500).send({ status: 'Error', error: `Error al actualizar el rol del usuario: ${error.message}` });
         }
     };
 
@@ -80,7 +81,7 @@ class UserController {
             const result = await this.userService.updateUserConnectionTime(uid, last_connection);
             res.status(200).send({ status: 'success', message: `Usuario conectado: ${last_connection}` });
         } catch (error) {
-            res.status(500).send({ status: 'Error', message: error.message });
+            res.status(500).send({ status: 'Error', message: `Error al actualizar el tiempo de conección el usuario: ${error.message}` });
         }
     };
 
@@ -93,7 +94,7 @@ class UserController {
             const result = await this.userService.deleteUser({ _id: uid });
             res.send({ status: 'success', payload: `user: ${result} deleted` });
         } catch (error) {
-            res.status(500).send({ status: 'Error', message: error.message });
+            res.status(500).send({ status: 'Error', message: `Error al borrar el usuario: ${error.message}` });
         }
     };
 }

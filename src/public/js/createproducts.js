@@ -15,7 +15,7 @@ const statusCheck = () => {
 }
 
 volverBtn.addEventListener('click', async () => {
-    window.location.href = '/products';
+    window.location.href = '/index';
 });
 
 createProductForm.addEventListener("submit", async (evt) => {

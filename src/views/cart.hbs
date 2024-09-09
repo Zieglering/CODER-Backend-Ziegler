@@ -2,28 +2,37 @@
   <h1 id="cartID">Carrito: {{cart._id}}</h1>
   <div>
     {{#each cart.products}}
-      <div class="container">
-        <div class="product-card">
-          <div>
-            <img class="product-image" src={{product.thumbnails}} alt="alt" />
+    <div class="container">
+      <div class="product-card">
+        <div>
+          <img class="product-image" src={{product.thumbnails}} alt="alt" />
+        </div>
+        <div class="product-info">
+          <h3 id="productli" class="product-title">{{product.title}}</h3>
+          <div class="quantity-controls">
+            <h4 id="productli">Cantidad: </h4>
+            <div class="quantity-container">
+              <button class="decreaseQuantityBtn qty-btn" data-product-id="{{product._id}}">-</button>
+              <input inputmode="numeric" class="productQuantity" data-product-id="{{product._id}}" value="{{quantity}}"
+                min="1">
+              <button class="increaseQuantityBtn qty-btn" data-product-id="{{product._id}}">+</button>
+            </div>
           </div>
-          <div class="product-info">
-            <h3 id="productli" class="product-title">{{product.title}}</h3>
-            <h4 id="productli">Cantidad: {{quantity}}</h4>
-            <h3 id="productli" class="product-price">${{product.price}}</h3>
-            <h3 id="productli" class="product-price">Stock: {{product.stock}}</h3>
-            <input type="hidden" id="productData" class="product-id" value="{{product}}">
-          </div>
-          <div>
-            <button id="removeProductFromCartBtn" class="removeProductFromCartBtn btn btn-danger h-100">Remove</button>
-          </div>
+          <h3 id="productli" class="product-price" data-product-id="{{product._id}}">${{product.price}}</h3>
+          <h3 id="productli" class="product-price">Stock: {{product.stock}}</h3>
+          <input type="hidden" id="productData" class="product-id" value="{{product}}">
+        </div>
+        <div>
+          <button id="removeProductFromCartBtn" class="removeProductFromCartBtn btn btn-danger h-100"
+            data-product-title="{{product.title}}" data-product-id="{{product._id}}">Remove</button>
         </div>
       </div>
+    </div>
     {{/each}}
   </div>
-  
+
   <div class="total-amount">
-    <h3>Total: ${{cart.totalAmount}}</h3>
+    <h3 id="totalAmount">Total: ${{cart.totalAmount}}</h3>
   </div>
 
   <button id="volverBtn" class="product-btn">Volver</button>

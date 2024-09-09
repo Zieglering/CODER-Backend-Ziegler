@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import ProductController from '../../controller/products.controller.js';
+import ProductController from '../../controller/productsController.js';
 import { passportCall } from '../../utils/passportCall.js';
 import { authorizationJwt } from '../../utils/authorizationJwt.js';
 
@@ -12,10 +12,10 @@ const {
     deleteProduct
 } = new ProductController();
 
-router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium'),createProduct);
+router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium'), createProduct);
 router.get('/', passportCall('jwt'), getProducts);
-router.get('/:pid', getProductBy);
-router.put('/:pid',passportCall('jwt'), authorizationJwt('admin', 'premium'), updateProduct);
+router.get('/:pid', passportCall('jwt'), getProductBy);
+router.put('/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium'), updateProduct);
 router.delete('/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium'), deleteProduct);
 
 export default router;

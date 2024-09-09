@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         const folder = folders[file.fieldname];
         const uploadFolder = `src/public/uploads/${req.params.uid}/${folder}`;
-        
+
         ensureDirectoryExists(uploadFolder);
 
         callback(null, uploadFolder);

@@ -6,7 +6,7 @@
     <div>
       <div class="product-card">
         <div class="product-image">
-          <img src={{product.thumbnails}} alt="/images/IMG_placeholder.jpg" />
+          <img src={{product.thumbnails}} alt="Product-Image" />
         </div>
         <div class="product-info">
           <h2>Producto: {{product.title}}</h2>
@@ -17,6 +17,18 @@
           <p>Categoría: {{product.category}}</p>
           <p>Código: {{product.code}}</p>
           <p>Owner: {{product.owner}}</p>
+          <div class="product-card">
+            <div>
+              <h3>Cantidad:</h3>
+            </div>
+            <div class="quantity-controls">
+              {{!-- <h2>Cantidad: </h2> --}}
+              <button id="decreaseQuantityBtn" class="quantityBtn">-</button>
+              <span id="productQuantity" class="quantityNumber">1</span>
+              <button id="increaseQuantityBtn" class="quantityBtn">+</button>
+            </div>
+
+          </div>
           <button id="addToCartBtn" class="product-btn" data-product-id="{{product._id}}"
             data-product-title="{{product.title}}" data-cart-id="{{cartId}}">Agregar al carrito</button>
         </div>

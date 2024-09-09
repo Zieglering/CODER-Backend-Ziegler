@@ -5,20 +5,29 @@ const roleSwitches = document.querySelectorAll('.role-switch');
 
 
 volverBtn.addEventListener('click', async () => {
-    window.location.href = '/products';
+    window.location.href = '/index';
 });
 
 userDetailsButtons.forEach(button => {
-    button.addEventListener('click', (event) => {
-        const userId = event.target.getAttribute('data-user-id');
-        window.location.href = `/user/${userId}`;
+    button.addEventListener('click', async (evt) => {
+        const email = evt.target.getAttribute('data-user-email');
+        const response = await fetch(`/api/users?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+        const user = result.payload[0];
+        
+        if (user) {
+            const userId = user._id;            
+            window.location.href = `/user/${userId}`;
+        } else {
+            console.log('User not found');
+        }
     });
 });
 
 roleSwitches.forEach(switchElement => {
-    switchElement.addEventListener('change', async (event) => {
-        const userId = event.target.getAttribute('data-user-id');
-        const newRole = event.target.checked ? 'premium' : 'user';
+    switchElement.addEventListener('change', async (evt) => {
+        const userId = evt.target.getAttribute('data-user-id');
+        const newRole = evt.target.checked ? 'premium' : 'user';
         
         try {
             const response = await fetch(`/api/users/premium/${userId}`, {
@@ -30,8 +39,7 @@ roleSwitches.forEach(switchElement => {
             });
 
             if (response.ok) {
-                console.log(response)
-                document.getElementById(`role-${userId}`).textContent = newRole;
+                document.querySelector(`#role-${userId}`).textContent = newRole;
                 Swal.fire({
                     title: 'Rol actualizado',
                     text: `El rol del usuario ha sido cambiado a ${newRole}`,
@@ -40,14 +48,13 @@ roleSwitches.forEach(switchElement => {
                 });
             } else {
                 const result = await response.json();
-                console.log(result)
                 Swal.fire({
                     title: 'No se pudo cambiar el rol',
                     text: result.error,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
-                event.target.checked = !event.target.checked;
+                evt.target.checked = !evt.target.checked;
             }
         } catch (error) {
 
@@ -57,15 +64,15 @@ roleSwitches.forEach(switchElement => {
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
-            event.target.checked = !event.target.checked;
+            evt.target.checked = !evt.target.checked;
         }
     });
 });
 
 
 deleteButtons.forEach(button => {
-    button.addEventListener('click', async (event) => {
-        const userId = event.target.getAttribute('data-user-id');
+    button.addEventListener('click', async (evt) => {
+        const userId = evt.target.getAttribute('data-user-id');
 
         const result = await Swal.fire({
             title: '¿Estás seguro que queres borrar este usuario?',
@@ -94,7 +101,7 @@ deleteButtons.forEach(button => {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        event.target.closest('.user-details').remove();
+                        evt.target.closest('.user-details').remove();
                     });
                 } else {
                     const result = await response.json();

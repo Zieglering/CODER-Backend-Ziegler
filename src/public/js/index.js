@@ -1,10 +1,38 @@
-const logOutBtn = document.querySelector('#logOutBtn');
-const viewCartBtn = document.querySelector('#viewCartBtn');
 const cartIDElement = document.querySelector('#cartID');
 const searchInput = document.querySelector('#searchInput');
 const filterLinks = document.querySelectorAll('.filter-link');
 const searchForm = document.querySelector('#searchForm');
-const createProductBtn = document.querySelector('#createProductBtn');
+
+const productButtons = document.querySelectorAll(".product-btn");
+
+const isAuthenticated = document.querySelector('section').dataset.authenticated === "true";
+
+productButtons.forEach(button => {
+    button.addEventListener("click", function () {
+        console.log(`Auth: ${isAuthenticated}`);
+        console.log(`Dataset: ${document.querySelector('section').dataset.authenticated}`);
+        if (!isAuthenticated) {
+            Swal.fire({
+                title: 'Logueate',
+                text: 'Debe estar logueado para realizar esa operación',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ir a Login',
+                cancelButtonText: 'Continuar Navegando',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/login`;
+                }
+            });
+            return;
+        }
+
+        const productId = button.getAttribute("data-product-id");
+        window.location.href = `/product/${productId}`;
+    });
+});
+
+
 
 function updateUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -18,42 +46,6 @@ function updateUrl() {
 
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     window.location.href = newUrl;
-}
-
-logOutBtn.addEventListener('click', async (evt) => {
-    evt.preventDefault();
-    try {
-        const response = await fetch('/api/sessions/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (response.ok) {
-            window.location.href = '/login';
-        } else {
-            console.error('Error al hacer logout');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
-
-viewCartBtn.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    const cartID = cartIDElement.textContent.split(':')[1].trim();
-    if (cartID) {
-        window.location.href = `/cart/${cartID}`;
-    } else {
-        console.error('Cart ID no encontrado');
-    }
-});
-
-if (createProductBtn) {
-    createProductBtn.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        window.location.href = '/create-products';
-    });
 }
 
 function removeDiacritics(text) {

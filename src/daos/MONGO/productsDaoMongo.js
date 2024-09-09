@@ -10,6 +10,7 @@ class ProductsDaoMongo {
     };
 
     getAll = async ({ limit = 10, pageNum = 1, filter = {}, sortByPrice, category, status, title } = {}) => {
+        const query = { ...filter };
         if (category) query.category = category;
         if (status) query.status = status;
         if (title) query.$text = { $search: title, $diacriticSensitive: false };
@@ -17,7 +18,7 @@ class ProductsDaoMongo {
         let toSortedByPrice = {};
         if (sortByPrice) toSortedByPrice = { price: parseInt(sortByPrice) };
 
-        return await this.productsModel.paginate(filter, { limit: limit, page: pageNum, lean: true, sort: toSortedByPrice });
+        return await this.productsModel.paginate(query, { limit: limit, page: pageNum, lean: true, sort: toSortedByPrice });
     };
 
     getBy = async (filter) => {
