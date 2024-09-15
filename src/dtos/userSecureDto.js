@@ -4,7 +4,10 @@ function capitalizeFirstLetter(string) {
 
 class UserSecureDto {
     constructor(user) {
+        this.first_name = capitalizeFirstLetter(user.first_name)
+        this.last_name = capitalizeFirstLetter(user.last_name)
         this.fullName = `${capitalizeFirstLetter(user.first_name)} ${capitalizeFirstLetter(user.last_name)}`
+        this.age = user.age
         this.email = user.email
         this.role = user.role
     }

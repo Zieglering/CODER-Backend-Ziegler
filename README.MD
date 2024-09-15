@@ -1,7 +1,7 @@
 # CODERHOUSE - Ecommerce App
 
 ## Entrega final Programación Backend
-Practica de integración
+Entrega final del backend de un coffee house store
 
 ## Cómo usar la aplicación
 1 - clonar la app de github

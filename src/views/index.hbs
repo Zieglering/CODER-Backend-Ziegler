@@ -1,106 +1,99 @@
-<main class="main">
-  <section data-authenticated="{{isAuthenticated}}">
+<main class="main text-center">
+  <section data-authenticated="{{isAuthenticated}}" class="py-5">
     {{#if isAuthenticated}}
-    <h1 id="userEmail">Bienvenido {{email}} - Rol: {{role}}</h1>
+    <h1 id="userEmail" class="section-title">Bienvenido {{email}} - Rol: {{role}}</h1>
     <h2 id="cartID">CartID: {{cart}}</h2>
     {{else}}
     <h2>Bienvenido Invitado!</h2>
     <h3>Puedes ver nuestros productos</h3>
-    <h4>Para acceder a todos nuestros servicios create una cuenta o logueate si ya tienes una</h4>
+    <h4>Para acceder a todos nuestros servicios, crea una cuenta o inicia sesión</h4>
     {{/if}}
   </section>
 
-  <section class="container">
-    <h1>Nuestros cafés</h1>
-    <div class="dropdown my-3">
-      <h2>Categorias</h2>
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Categorías
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-        <li><a class="dropdown-item filter-link" data-filter="category" data-value="cafe" href="#">Café</a></li>
-        <li><a class="dropdown-item filter-link" data-filter="category" data-value="te" href="#">Té</a></li>
-        <li><a class="dropdown-item filter-link" data-filter="category" data-value="comestibles" href="#">Comestibles</a></li>
-        <li><a class="dropdown-item filter-link" data-filter="category" data-value="" href="#">Todos</a></li>
-      </ul>
+  <section class="container py-4">
+    <h1 class="section-title"></h1>
+    <hr class="divider">
+    
+      <div class="mx-3"></div>
+        <form id="searchForm" class="d-flex" action="/index" method="get">
+          <input id="searchInput" class="form-control" type="text" name="product" placeholder="Buscar producto" autocomplete="off" />
+        </form>
+      </div>
+    <div class="filter-section d-flex justify-content-center align-items-center my-4">
+
+      <div class="dropdown mx-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          Categorías
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+          <li><a class="dropdown-item filter-link" data-filter="category" data-value="cafe" href="#">Café</a></li>
+          <li><a class="dropdown-item filter-link" data-filter="category" data-value="te" href="#">Té</a></li>
+          <li><a class="dropdown-item filter-link" data-filter="category" data-value="comestibles" href="#">Comestibles</a></li>
+          <li><a class="dropdown-item filter-link" data-filter="category" data-value="" href="#">Todos</a></li>
+        </ul>
+      </div>
+      
+      <div class="dropdown mx-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="priceDropdown" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          Ordenar por precio
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="priceDropdown">
+          <li><a class="dropdown-item filter-link" data-filter="sortByPrice" data-value="1" href="#">Ascendente</a></li>
+          <li><a class="dropdown-item filter-link" data-filter="sortByPrice" data-value="-1" href="#">Descendente</a></li>
+        </ul>
+      </div>
     </div>
 
-    <div class="my-3">
-      <h2>Búsqueda de producto por su nombre</h2>
-      <p>(Presiona enter para buscar en todas las páginas)</p>
-      <form id="searchForm" class="d-flex" action="/index" method="get">
-        <input id="searchInput" class="form-control me-2" type="text" name="product" placeholder="Busca tu producto"
-          autocomplete="off" />
-      </form>
-    </div>
+    {{#if (or (eq role 'premium') (eq role 'admin'))}}
+      <div class="dropdown mx-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          Disponibilidad
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+          <li><a class="dropdown-item filter-link" data-filter="status" data-value="true" href="#">Disponibles</a></li>
+          <li><a class="dropdown-item filter-link" data-filter="status" data-value="false" href="#">No disponibles</a></li>
+        </ul>
+      </div>
+      {{/if}}
 
-    <div class="dropdown my-3">
-      <h2>Disponibilidad</h2>
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Disponibilidad
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-        <li><a class="dropdown-item filter-link" data-filter="status" data-value="true" href="#">Disponibles</a></li>
-        <li><a class="dropdown-item filter-link" data-filter="status" data-value="false" href="#">No disponibles</a>
-        </li>
-      </ul>
-    </div>
-
-    <div class="dropdown my-3">
-      <h2>Ordenar por precio</h2>
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="priceDropdown" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Ordenar por precio
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="priceDropdown">
-        <li><a class="dropdown-item filter-link" data-filter="sortByPrice" data-value="1" href="#">Ordenar
-            ascendente</a></li>
-        <li><a class="dropdown-item filter-link" data-filter="sortByPrice" data-value="-1" href="#">Ordenar
-            descendente</a></li>
-      </ul>
-    </div>
     <section>
-      <div>
-        <h2>Productos</h2>
-        <div>
-          <div class="product-grid">
-            {{#each products}}
-            <div class="product-card">
-              <div class="product-image">
-                <img src="/images/IMG_placeholder.jpg" alt="Product" />
-              </div>
-              <div class="product-info">
-                <h2 class="product-title">{{this.title}}</h2>
-                <h3 class="product-price">${{this.price}}</h3>
-              </div>
-              <button class="product-btn" data-product-id="{{this._id}}" data-cart-id="{{../cart}}"
-                data-user-email="{{email}}">
-                Ver más
-              </button>
-
-            </div>
-            {{/each}}
+      <h2 class="my-4">Nuestros cafés</h2>
+      <div class="product-grid">
+        {{#each products}}
+        <div class="product-card">
+          <div class="product-image">
+            <img src="/images/IMG_placeholder.jpg" alt="Product" />
           </div>
+          <div class="product-info">
+            <h2 class="product-title">{{this.title}}</h2>
+            <h3 class="product-price">${{this.price}}</h3>
+          </div>
+          <button class="product-btn" data-product-id="{{this._id}}" data-cart-id="{{../cart}}"
+            data-user-email="{{email}}">
+            Ver más
+          </button>
         </div>
+        {{/each}}
       </div>
     </section>
   </section>
-  <section class="container-center">
-    <div class="div-flex">
-      <div class="div-center">
-        {{#if hasPrevPage}}
-        <a href="{{prevLink}}">Anterior</a>
-        {{/if}}
-        <p>{{page}}</p>
-        {{#if hasNextPage}}
-        <a href="{{nextLink}}">Siguiente</a>
-        {{/if}}
-      </div>
+
+  <section class="container-center py-4">
+    <div class="d-flex justify-content-center align-items-center">
+      {{#if hasPrevPage}}
+      <a href="{{prevLink}}">Anterior</a>
+      {{/if}}
+      <p class="mx-2">{{page}}</p>
+      {{#if hasNextPage}}
+      <a href="{{nextLink}}">Siguiente</a>
+      {{/if}}
     </div>
   </section>
 </main>
 
+<link rel="stylesheet" href="/css/main.css" />
 <link rel="stylesheet" href="/css/index.css" />
-<script async src="/js/index.js"></script>
+<script src="/js/index.js"></script>

@@ -1,5 +1,6 @@
 const registerBtn = document.querySelector('#registerBtn');
-const forgotPasswordBtn = document.querySelector('#forgotPasswordBtn')
+const forgotPasswordBtn = document.querySelector('#forgotPasswordBtn');
+const githubLoginBtn = document.querySelector('#githubLoginBtn');
 
 registerBtn.addEventListener('click', (evt) => {
     evt.preventDefault();
@@ -35,11 +36,9 @@ loginForm.addEventListener('submit', async (evt) => {
             });
         }
     } catch (error) {
-        
-        console.error('Error:', error);
         Swal.fire({
             title: 'Error!',
-            text: 'Ocurrió un error, porfavor intentalo nuevamente.',
+            text: `Ocurrió un error, porfavor intentalo nuevamente: ${error.message}`,
             icon: 'error',
             confirmButtonText: 'OK'
         });
@@ -49,4 +48,9 @@ loginForm.addEventListener('submit', async (evt) => {
 forgotPasswordBtn.addEventListener('click', (evt) => {
     evt.preventDefault();
     window.location.href = '/password-recovery';
+});
+
+githubLoginBtn.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    window.location.href = '/api/sessions/github';
 });

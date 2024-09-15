@@ -3,65 +3,89 @@
   <div class="contenedor">
     <div class="box">
       <form id="createProductForm">
-        <h4>Agregar Producto Nuevo:</h4>
+        <h4>Agregar o modificar Producto:</h4>
         <div>
-          <label for="title">title<br /><input type="text" name="title" id="title" placeholder="title"
+          <label for="title">Título<br /><input type="text" name="title" id="title" placeholder="Título"
               value="Producto Prueba 01" /></label>
         </div>
         <div>
-          <label for="description">description<br /><input type="text" name="description" id="description"
-              placeholder="description" value="Descripción Prueba 01" /></label>
+          <label for="description">Descripción<br /><input type="text" name="description" id="description"
+              placeholder="Descripción" value="Descripción Prueba 01" /></label>
         </div>
         <div>
-          <label for="code">code<br /><input type="text" name="code" id="code" placeholder="code"
+          <label for="code">Código<br /><input type="text" name="code" id="code" placeholder="Código"
               value="Código Prueba 01" /></label>
         </div>
         <div>
-          <label for="price">price<br /><input type="text" name="price" id="price" placeholder="price"
+          <label for="price">Precio<br /><input type="number" name="price" id="price" placeholder="Precio"
               value="999" /></label>
         </div>
         <div>
-          <label for="status">status<br /><input type="checkbox" name="status" id="status" placeholder="status"
+          <label for="status">Disponible<br /><input type="checkbox" name="status" id="status"
               checked="checked" /></label>
         </div>
         <div>
-          <label for="stock">stock<br /><input type="text" name="stock" id="stock" placeholder="stock"
+          <label for="stock">Stock<br /><input type="number" name="stock" id="stock" placeholder="Stock"
               value="999" /></label>
         </div>
         <div>
-          <label for="category">category<br /><input type="text" name="category" id="category" placeholder="category"
+          <label for="category">Categoría<br /><input type="text" name="category" id="category" placeholder="Categoría"
               value="Categoría Prueba 01" /></label>
         </div>
         <div>
-          <label for="thumbnails">thumbnails<br /><input type="text" name="thumbnails" id="thumbnails"
-              placeholder="thumbnails" value="/rutade/thumbnails" /></label>
+          <label for="thumbnails">Thumbnails<br /><input type="text" name="thumbnails" id="thumbnails"
+              placeholder="Ruta de Thumbnails" value="/rutade/thumbnails" /></label>
+        </div>
+        <div>
+          <label for="owner">Owner<br />
+            <input type="hidden" id="user-data" value="{{user.role}}:{{user.email}}" />
+            <input class="btn btn-secondary btn-lg disabled w-100 mt-3" type="text" name="owner" id="owner" placeholder="{{user.role}}" value="{{user.email}}" role="button"
+            aria-disabled="true" /></label>
         </div>
         <button type="submit">Agregar Producto</button>
       </form>
     </div>
-    <div class="box">
+     <div class="box">
       <h2>Productos</h2>
       <ul id="listProducts">
-        <div>
-          <div class="product-grid">
-            {{#each products}}
-            <div class="product-card">
-              <div class="product-image">
-                <img src="/images/IMG_placeholder.jpg" alt="Product" />
-              </div>
-              <div class="product-info">
-                <h2 class="product-title">{{this.title}}</h2>
-                <h3 class="product-price">${{this.price}}</h3>
-              </div>
-              <a href="/product/{{this._id}}"><button class="product-btn" data-product-id="{{this._id}}"
-                  data-cart-id="{{../cart}}">Ver más</button></a>
+        {{#each products}}
+        <li class="product-item">
+          <div class="product-card">
+            <div class="product-image">
+              <img src="{{this.thumbnails}}" alt="{{this.title}}" />
             </div>
-            {{/each}}
+            <div class="product-info">
+              <h3 class="product-title">{{this.title}}</h3>
+              <h4 class="product-price">${{this.price}}</h4>
+            </div>
+            <div class="product-actions">
+              <button class="btnDelete" data-id="{{this._id}}">Borrar</button>
+              <button class="btnUpdate" data-id="{{this._id}}">Actualizar</button>
+            </div>
           </div>
-        </div>
+        </li>
+        {{/each}}
       </ul>
+      <div class="pagination">
+        {{#if hasPrevPage}}
+          <a href="{{prevLink}}">Previous</a>
+        {{else}}
+          <span>Previous</span>
+        {{/if}}
+        
+        {{#each pages}}
+          <a href="{{this.url}}" class="{{#if (isEqual this.page page)}}active{{/if}}">{{this.page}}</a>
+        {{/each}}
+        
+        {{#if hasNextPage}}
+          <a href="{{nextLink}}">Next</a>
+        {{else}}
+          <span>Next</span>
+        {{/if}}
+      </div>
     </div>
   </div>
 </main>
+<link rel="stylesheet" href="/css/realTimeProducts.css" />
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realtimeproducts.js"></script>

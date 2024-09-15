@@ -1,4 +1,3 @@
-const cartIDElement = document.querySelector('#cartID');
 const searchInput = document.querySelector('#searchInput');
 const filterLinks = document.querySelectorAll('.filter-link');
 const searchForm = document.querySelector('#searchForm');
@@ -9,8 +8,7 @@ const isAuthenticated = document.querySelector('section').dataset.authenticated 
 
 productButtons.forEach(button => {
     button.addEventListener("click", function () {
-        console.log(`Auth: ${isAuthenticated}`);
-        console.log(`Dataset: ${document.querySelector('section').dataset.authenticated}`);
+        
         if (!isAuthenticated) {
             Swal.fire({
                 title: 'Logueate',

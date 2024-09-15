@@ -2,7 +2,6 @@ body,
 html {
   width: 100%;
   height: 100%;
- 
   /* background-color: rgb(233, 235, 233); */
 }
 /* .contenedor {
@@ -25,6 +24,14 @@ html {
   border-radius: 50%;
 }
 
+.dropdown-user{
+  background-color: #3262;
+}
+
+.dropdown-item{
+  font-weight: normal;
+}
+
 .profile-pic img{
   width: 100%;
   height: auto;
@@ -42,4 +49,24 @@ html {
 .toggle-change::after {
  border-top: 0;
  border-bottom: 0.3em solid;
+}
+
+a:link {
+  color: #644216;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #b65923;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #232625;
+  text-decoration: none;
+}
+
+a:active {
+  color: #a4a69c;
+  text-decoration: none;
 }

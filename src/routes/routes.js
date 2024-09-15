@@ -9,6 +9,7 @@ import chatRouter from "./api/chatsRouter.js";
 import apiDocsRouter from "./api/apiDocsRouter.js";
 import pruebasRouter from "./api/pruebasRouter.js";
 import notFoundRouter from "./api/notFoundRouter.js";
+import ticketsRouter from "./api/ticketsRouter.js"
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.use("/api/users", usersRouter);
 router.use("/api/carts", cartsRouter);
 router.use("/realtimeproducts", realtimeproductsRouter);
 router.use("/chat", chatRouter);
+router.use("/tickets", ticketsRouter);
 router.use("/apidocs", apiDocsRouter);
 router.use("/pruebas", pruebasRouter);
 router.use("*", notFoundRouter);

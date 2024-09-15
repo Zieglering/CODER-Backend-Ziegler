@@ -19,7 +19,7 @@ router.post('/', createUser);
 router.post('/:uid/documents', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), uploader, uploadDocument);
 router.get('/', passportCall('jwt'), authorizationJwt('admin', 'premium'), getUsers);
 router.get('/:uid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getUserBy);
-router.put('/:uid', passportCall('jwt'), authorizationJwt('admin', 'premium'), updateUser);
+router.put('/:uid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), updateUser);
 router.put('/premium/:uid', passportCall('jwt'), authorizationJwt('admin', 'premium'), updateRole);
 router.delete('/:uid', passportCall('jwt'), authorizationJwt('admin'), deleteUser);
 

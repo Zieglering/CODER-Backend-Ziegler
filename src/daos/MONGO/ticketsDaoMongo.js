@@ -11,11 +11,15 @@ class TicketsDaoMongo {
   };
 
   getBy = async (filter) => {
-    return ticketModel.findOne(filter).lean();
+    return ticketModel.find(filter).lean();
   };
   getAll = async (filter) => {
     return ticketModel.find(filter).lean();
   };
+
+  update = async (ticketId, updatedTicket) => {
+    return await this.productsModel.findByIdAndUpdate(ticketId, updatedTicket, { new: true });
+};
 
   delete = async (filter) => {
     return await ticketModel.deleteOne(filter);

@@ -1,15 +1,11 @@
 import passport from 'passport';
 import jwt from 'passport-jwt';
 import GithubStrategy from 'passport-github2';
-import UsersDaoMongo from '../daos/MONGO/usersDaoMongo.js';
-import CartsDaoMongo from '../daos/MONGO/cartsDaoMongo.js';
 import { PRIVATE_KEY, generateToken } from '../utils/jsonwebtoken.js';
 import { objectConfig } from './config.js';
 import { cartService, userService } from '../service/service.js';
 
 const { github_CallbackURL, github_ClientSecret, github_ClientID } = objectConfig;
-// const userService = new UsersDaoMongo();
-// const cartsService = new CartsDaoMongo;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 
@@ -24,7 +20,7 @@ export const initializePassport = () => {
     };
 
     passport.use('jwt', new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]) || ExtractJWT.fromAuthHeaderAsBearerToken(),
         secretOrKey: PRIVATE_KEY
     }, async (jwt_payload, done) => {
         try {
@@ -41,14 +37,18 @@ export const initializePassport = () => {
         callbackURL: github_CallbackURL
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            let user = await userService.getUserBy({ email: profile._json.login });
+            let email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+            if (!email) {
+                email = `${profile.username}@github.com`;
+            }
+            let user = await userService.getUserBy({ email });
             const newCart = await cartService.createCart();
             if (!user) {
                 let newUser = {
-                    first_name: profile._json.name,
-                    last_name: profile._json.name,
-                    email: profile._json.login,
-                    age: profile._json.age || null,
+                    first_name: profile._json.name || profile.username,
+                    last_name: profile._json.name || profile.username,
+                    email,
+                    age: null,
                     password: '',
                     cart: newCart._id
                 };

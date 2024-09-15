@@ -7,17 +7,16 @@
   </div>
   <div class="container mt-2">
     {{#each users}}
-    <div class="user-details">
+    <div id="user-details" class="user-details" data-user-id="{{user.id}}">
       <p>Email: {{this.email}}</p>
       <p>Rol: <span id="role-{{this.id}}">{{this.role}}</span></p>
-      <p>Nombre: {{this.fullName}}</p>
+      <p>Nombre: {{this.first_name}} {{this.last_name}}</p>
       <div class="form-check form-switch">
         <input class="form-check-input role-switch" type="checkbox" data-user-id="{{this._id}}" {{#if (eq
           this.role 'premium' )}}checked{{/if}}>
         <label class="form-check-label" for="flexSwitchCheckChecked">Premium user</label>
       </div>
       <div class="container mt-2">
-        <button class="product-btn btn btn-outline-dark mt-3 user-details-btn" data-user-id="{{this.id}}">Detalles del Usuario</button>
         <button type="submit" class="btn btn-outline-danger mt-3" data-user-id="{{this.id}}">Borrar Usuario</button>
       </div>
       <hr />
@@ -34,5 +33,5 @@
     </center>
   </div>
   </div>
-  <script src="/js/users.js"></script>
 </section>
+<script async src="/js/users.js"></script>

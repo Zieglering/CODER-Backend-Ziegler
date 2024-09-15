@@ -29,9 +29,6 @@ class CartsDaoMongo {
                 { $inc: { 'products.$.quantity': quantity } },
                 { new: true }
             );
-            logger.info(`cartExists: ${cartExists}`)
-            logger.info(`productExists: ${productExists}`)
-            logger.info(`updated cart: ${updatedCart}`)
             return updatedCart;
         }
     };

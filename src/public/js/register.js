@@ -36,7 +36,7 @@ registerForm.addEventListener('submit', async (evt) => {
             console.error('Error:', error);
             Swal.fire({
               title: 'Error!',
-              text: 'Ocurrió un error, porfavor intentalo nuevamente.',
+              text: `Ocurrió un error, porfavor intentalo nuevamente: ${error.message}`,
               icon: 'error',
               confirmButtonText: 'OK'
             });

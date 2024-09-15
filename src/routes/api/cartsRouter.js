@@ -8,7 +8,7 @@ const {
     createCart,
     purchase,
     addProductToCart,
-    getCart,
+    getCartBy,
     updateProductFromCart,
     updateCart,
     deleteProductFromCart,
@@ -16,9 +16,9 @@ const {
 } = new CartController();
 
 router.post('/', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), createCart);
-router.post('/:cid/purchase', passportCall('jwt'), authorizationJwt('user'), purchase);
+router.post('/:cid/purchase', passportCall('jwt'), authorizationJwt('premium', 'user'), purchase);
 router.post('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('premium', 'user'), addProductToCart);
-router.get('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getCart);
+router.get('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getCartBy);
 router.put('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('premium', 'user'), updateProductFromCart);
 router.put('/:cid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), updateCart);
 router.delete('/:cid/products/:pid', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), deleteProductFromCart);

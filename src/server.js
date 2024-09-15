@@ -14,8 +14,10 @@ import { realTimeProducts } from "./utils/realTimeProductsSocketIO.js";
 import { handleErrors } from "./middlewares/errors/errors.middleware.js";
 import { addLogger, logger } from "./utils/logger.js";
 import { connectMongoDb } from "./config/mongoDB.config.js";
-import { InactiveUsersCheck } from "./middlewares/removeInactiveUsers.js";
+import { inactiveUserChildProcess } from "./utils/inactiveUsersChildProcess.js";
 import { startServer } from "./config/startServer.js";
+import './utils/globalErrorHandlers.js';
+
 
 dotenv.config();
 const app = express();
@@ -44,15 +46,7 @@ app.use(handleErrors);
 startServer(httpServer, port);
 
 // borrado de usuarios inactivos
-InactiveUsersCheck();
+inactiveUserChildProcess();
 
 realTimeProducts(io);
 chatSocketIO(io);
-
-process.on('unhandledRejection', (reason, promise) => {
-    logger.error(`Unhandled Rejection at: ${promise} reason: ${reason}`);
-});
-
-process.on('uncaughtException', (error) => {
-    logger.error(`Uncaught Exception: ${error.message}`);
-});

@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import ChatController from '../../controller/chatsController.js';
+import { passportCall } from '../../utils/passportCall.js';
+import { authorizationJwt } from '../../utils/authorizationJwt.js';
 
 const router = Router();
 const {
@@ -10,10 +12,10 @@ const {
     deleteMessage
 } = new ChatController();
 
-router.post('/', createMessage);
-router.get('/', getMessages);
-router.get('/:id', getMessageBy);
-router.get('/:id', updateMessage);
-router.get('/:id', deleteMessage);
+router.post('/', passportCall('jwt'), authorizationJwt('premium', 'user'), createMessage);
+router.get('/', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getMessages);
+router.get('/:id', passportCall('jwt'), authorizationJwt('admin', 'premium', 'user'), getMessageBy);
+router.get('/:id', passportCall('jwt'), authorizationJwt('premium', 'user'), updateMessage);
+router.get('/:id', passportCall('jwt'), authorizationJwt('premium', 'user'), deleteMessage);
 
 export default router;

@@ -8,7 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
         evt.preventDefault();
         const newPassword = newPasswordInput.value;
         const newPasswordRetype = newPasswordRetypeInput.value;
-        console.log(newPassword)
+
+        if (newPassword !== newPasswordRetype) {
+            Swal.fire({
+                title: 'Error!',
+                text: `Las contraseñas no coinciden`,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
 
         try {
             const response = await fetch('/api/sessions/reset-password', {
@@ -21,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             const data = await response.json();
-            console.log(data)
-
             if (data.status === 'success') {
                 Swal.fire({
                     title: 'Contraseña Actualizada!',
@@ -37,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 Swal.fire({
                     title: 'Error!',
-                    text: data.error,
+                    text: data.message,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
@@ -46,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             Swal.fire({
                 title: 'Error!',
-                text: 'Hubo un error al actualizar la contraseña: ' + error,
+                text: 'Hubo un error al actualizar la contraseña: ' + error.message,
                 icon: 'error',
                 confirmButtonText: 'OK'
             });

@@ -28,17 +28,17 @@ switch (objectConfig.persistence) {
     default:
         const { default: UsersDaoMongo } = await import('./MONGO/usersDaoMongo.js');
         const { default: ProductsDaoMongo } = await import('./MONGO/productsDaoMongo.js');
+        const { default: RealTimeProductsDaoMongo } = await import('./MONGO/realTimeProductsDaoMongo.js');
         const { default: CartsDaoMongo } = await import('./MONGO/cartsDaoMongo.js');
         const { default: TicketsDaoMongo } = await import('./MONGO/ticketsDaoMongo.js');
         const { default: ChatsDaoMongo } = await import('./MONGO/chatsDaoMongo.js');
-        const { default: RealtimeProductsDaoFS } = await import('./FS/realTimeProductsDaoFS.js');
 
 
         UsersDao = UsersDaoMongo;
         ProductsDao = ProductsDaoMongo;
+        RealtimeProductsDao = RealTimeProductsDaoMongo;
         CartsDao = CartsDaoMongo;
         TicketsDao = TicketsDaoMongo;
         ChatsDao = ChatsDaoMongo;
-        RealtimeProductsDao = RealtimeProductsDaoFS;
         break;
 }

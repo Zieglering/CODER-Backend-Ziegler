@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
-            console.log('Success:', data);
-
             if (data.status === 'success') {
                 Swal.fire({
                     title: 'Email Enviado!',

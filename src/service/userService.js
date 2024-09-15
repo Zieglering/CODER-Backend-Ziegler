@@ -15,7 +15,9 @@ export default class UserService {
 
     async createUser(newUser) {
         const { first_name, last_name, email, age, password, cart } = newUser;
-        if (!first_name || !last_name || !email || !password) {
+        const isOAuthUser = !password;
+
+        if (!first_name || !last_name || !email || (!isOAuthUser && !password)) {
             throw CustomError.createError({
                 name: 'Error al crear el usuario',
                 cause: generateInvalidUserError({ first_name, last_name, email, password }),
@@ -41,7 +43,6 @@ export default class UserService {
     }
 
     async getUserBy(filter) {
-        logger.info(JSON.stringify(filter))
         return await this.userRepository.getUserBy(filter);
     }
 
@@ -117,14 +118,13 @@ export default class UserService {
             const userDocumentsFolder = path.join(__dirname, `public/uploads/${userId}/documents`);
 
             if (!fs.existsSync(userDocumentsFolder)) {
-                throw new Error('No se encontró la carpeta de documentos del usuario');
+                throw new Error('No se encontró la carpeta de documentos del usuario, probablemente el usuario no subió ningún documento');
             }
 
             const uploadedFiles = fs.readdirSync(userDocumentsFolder);
-            const requiredSuffixes = ['-id', '-addressdocument', '-accountstatusdocument'];
-            const uploadedFilesLowercase = uploadedFiles.map(file => file.toLowerCase());
+            const requiredSuffixes = ['-Id', '-AddressDocument', '-AccountStatusDocument'];
             const missingDocuments = requiredSuffixes.filter(suffix => {
-                return !uploadedFilesLowercase.some(file => file.includes(suffix));
+                return !uploadedFiles.some(file => file.includes(suffix));
             });
 
             if (missingDocuments.length > 0) {

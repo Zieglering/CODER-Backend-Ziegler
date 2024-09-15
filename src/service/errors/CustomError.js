@@ -7,4 +7,3 @@ export class CustomError {
         throw error;
     }
 }
-

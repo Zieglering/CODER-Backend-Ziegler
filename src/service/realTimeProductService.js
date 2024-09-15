@@ -1,23 +1,22 @@
+import { logger } from "../utils/logger.js";
+import { sendEmailMessage } from '../utils/sendEmailMessage.js';
+
+
 export default class RealTimeProductsService {
-    constructor(productRepository) {
+    constructor(productRepository, userService) {
         this.productRepository = productRepository;
+        this.userService = userService;
     }
 
-    async getAll() {
-        return await this.productRepository.getAll();
-    }
-
-    async create(title, description, code, price, status, stock, category, thumbnails) {
-        const products = await this.getAll();
-
+    async createProduct(title, description, code, price, status = true, stock, category, thumbnails, user) {
         if (!title || !description || !code || !price || !stock || !category) {
             throw new Error('Faltan campos');
         }
-
-        if (products.find((prod) => prod.code === code)) {
+        const products = await this.productRepository.getProducts();
+        const productWithSameCode = products.docs.find((prod) => prod.code === code);
+        if (productWithSameCode) {
             throw new Error(`No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código`);
         }
-
         const newProduct = {
             title,
             description,
@@ -29,33 +28,43 @@ export default class RealTimeProductsService {
             thumbnails
         };
 
-        return await this.productRepository.create(newProduct);
+        newProduct.owner = user.role === 'premium' ? user.email : 'admin';
+        return await this.productRepository.createProduct(newProduct);
     }
+
 
     async getProducts() {
-        return await this.productRepository.getAll();
+        return await this.productRepository.getProducts();
     }
 
-    async getBy(filter) {
-        const product = await this.productRepository.getBy(filter);
+    async getProductBy(filter) {
+        const product = await this.productRepository.getProductBy(filter);
         if (!product) {
             throw new Error(`¡ERROR! No existe ningún producto con el id ${filter._id}`);
         }
         return product;
     }
 
-    async update(id, updateData) {
-        const product = await this.getBy({ _id: id });
+    async updateProduct(productId, productToUpdate) {
+        return await this.productRepository.updateProduct(productId, productToUpdate);
 
-        if (!updateData.title || !updateData.description || !updateData.code || !updateData.price || !updateData.stock || !updateData.category) {
-            throw new Error('faltan campos');
+    }
+
+    async deleteProduct(productId) {
+        const deletedProduct = await this.productRepository.getProductBy({ _id: productId });
+        const productOwner = deletedProduct.owner;
+        const user = await this.userService.getUserBy({ email: productOwner });
+
+        if (user.role === 'premium') {
+            sendEmailMessage({
+                email: user.email,
+                subject: 'Producto eliminado de la base de datos',
+                html: `
+                    <h1>Hola! ${user.first_name} ${user.last_name}</h1>
+                    <h2>Tu producto ${deletedProduct.title} fue eliminado de la base de datos</h2>
+                `
+            });
         }
-
-        return await this.productRepository.update(id, updateData);
-    }
-
-    async delete(id) {
-        const product = await this.getBy({ _id: id });
-        return await this.productRepository.delete(id);
-    }
+        return await this.productRepository.deleteProduct(productId);
+    };
 }

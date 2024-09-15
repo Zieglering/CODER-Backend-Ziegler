@@ -55,7 +55,7 @@ addToCartBtn.addEventListener('click', async () => {
         console.error('Error al agregar el producto al carrito:', error);
         Swal.fire({
             title: 'Error',
-            text: 'Ocurrió un error al agregar el producto al carrito',
+            text: `Ocurrió un error al agregar el producto al carrito: ${error.message}`,
             icon: 'error',
             confirmButtonText: 'OK'
         });

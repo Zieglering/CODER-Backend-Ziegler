@@ -3,50 +3,35 @@ import { productService, cartService, userService, ticketService } from "./servi
 class ViewsService {
 
   async getUsers(query) {
-    const { limit, numPage } = query;
     try {
-      const users = await userService.getUsers({ limit, numPage });
-      return users;
+      return await userService.getUsers(query);
     } catch (error) {
-      throw new Error('Error fetching users from service.');
+      throw new Error('Error al buscar usuarios');
     }
   }
 
   async getUserDetails(uid) {
-    const user = await userService.getUserBy({ _id: uid });
-    return user;
+    return await userService.getUserBy({ _id: uid });
   }
 
   async getProducts(query) {
-    const { limit = 10, pageNum = 1, category, status, title, sortByPrice } = query;
     try {
-      const products = await productService.getProducts({
-        limit,
-        pageNum,
-        category,
-        status,
-        title,
-        sortByPrice,
-      });
-      return products;
+      return await productService.getProducts(query);
     } catch (error) {
-      throw new Error('Error fetching products from service.');
+      throw new Error('Error al buscar productos');
     }
   }
 
   async getProductDetails(pid) {
-    const product = await productService.getProduct({ _id: pid });
-    return product;
+    return await productService.getProductBy({ _id: pid });
   }
 
   async getCartDetails(cid) {
-    const cart = await cartService.getCart({ _id: cid });
-    return cart;
+    return await cartService.getCartBy({ _id: cid });
   }
 
   async getUserTickets(userEmail) {
-    const tickets = await ticketService.getTickets({ purchaser: userEmail });
-    return tickets;
+    return await ticketService.getTicketBy({ purchaser: userEmail });
   }
 
   generateMockingProducts() {
@@ -57,7 +42,7 @@ class ViewsService {
       }
       return products;
     } catch (error) {
-      throw new Error('Error generating mocking products.');
+      throw new Error('Error al generar mock products');
     }
   }
 }

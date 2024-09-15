@@ -30,7 +30,7 @@ createProductForm.addEventListener("submit", async (evt) => {
         stock: stock.value,
         category: category.value,
         thumbnails: thumbnails.value,
-        owner: owner ? owner.innerText : "default"
+        owner: owner ? owner.innerText : "admin"
     };
 
     try {
@@ -138,8 +138,8 @@ const addProductToDOM = (product) => {
             <img src="/images/IMG_placeholder.jpg" alt="Product" />
         </div>
         <div class="product-info">
-            <h2 class="product-title">${product.title || 'No Title'}</h2>
-            <h3 class="product-price">$${product.price || 'N/A'}</h3>
+            <h2 class="product-title">${product.title}</h2>
+            <h3 class="product-price">$${product.price}</h3>
         </div>
         <a href="/product/${product._id}"><button class="product-btn btn btn-primary btn-lg" data-product-id="${product._id}">Ver más</button></a>
         <button class="product-btn btn btn-danger btn-lg delete-product-btn" data-product-id="${product._id}">Borrar producto de la base de datos</button>

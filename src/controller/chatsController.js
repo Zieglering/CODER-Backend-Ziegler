@@ -27,7 +27,7 @@ class ChatController {
     getMessageBy = async (req, res) => {
         try {
             const { pid: id } = req.params;
-            const messageFound = await this.chatService.getMessage({ _id: id });
+            const messageFound = await this.chatService.getMessageBy({ _id: id });
             res.status(200).send({ status: 'success', payload: messageFound });
         } catch (error) {
             res.status(500).send({ status: 'error', error: `Error al buscar el mensaje: ${error.message}` });

@@ -64,16 +64,33 @@
   <section>
     <div class="container mt-5">
       {{#if (eq role "premium")}}
-        <h2>Productos creados por {{email}}</h2>
+      <h2>Productos creados por {{email}}</h2>
+      <div class="product-grid">
+        {{#each products}}
+        <div class="product-card">
+          <div class="product-image">
+            <img src={{this.thumbnails}} alt="Product" />
+          </div>
+          <div class="product-info">
+            <h2 class="product-title">{{this.title}}</h2>
+            <h3 class="product-price">${{this.price}}</h3>
+          </div>
+          <a href="/product/{{this._id}}"><button class="product-btn btn btn-primary btn-lg"
+              data-product-id="{{this._id}}" data-cart-id="{{../cart}}">Ver más</button></a>
+          <button id="deleteProductFromDB" class="delete-product-btn btn btn-danger btn-lg"
+            data-product-id="{{this._id}}">Borrar producto de la base de datos</button>
+        </div>
+        {{/each}}
+      </div>
+      
       {{else if (eq role "admin")}}
-        <h2>Todos los productos</h2>
-      {{/if}}
+      <h2>Todos los productos</h2>
       <div>
         <div class="product-grid">
           {{#each products}}
           <div class="product-card">
             <div class="product-image">
-              <img src="/images/IMG_placeholder.jpg" alt="Product" />
+              <img src={{this.thumbnails}} alt="Product" />
             </div>
             <div class="product-info">
               <h2 class="product-title">{{this.title}}</h2>
@@ -86,8 +103,9 @@
           </div>
           {{/each}}
         </div>
+        {{/if}}
       </div>
     </div>
   </section>
 </main>
-<script src="/js/createproducts.js"></script>
+<script async src="/js/createproducts.js"></script>

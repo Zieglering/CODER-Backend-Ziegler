@@ -48,8 +48,8 @@ export default class ProductService {
         return await this.productRepository.getProducts(filter);
     };
 
-    getProduct = async (filter) => {
-        return await this.productRepository.getProduct(filter);
+    getProductBy = async (filter) => {
+        return await this.productRepository.getProductBy(filter);
     };
 
     updateProduct = async (productId, productToUpdate) => {
@@ -57,9 +57,9 @@ export default class ProductService {
     };
 
     deleteProduct = async (productId) => {
-        const deletedProduct = await this.getProduct({ _id: productId });
+        const deletedProduct = await this.getProductBy({ _id: productId });
         const productOwner = deletedProduct.owner;
-        const user = await userService.getUserBy({ email: productOwner });
+        const user = await this.userService.getUserBy({ email: productOwner });
 
         if (user.role === 'premium') {
             sendEmailMessage({

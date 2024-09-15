@@ -8,9 +8,11 @@ class ProductController {
     }
 
     createProduct = async (req, res, next) => {
+        const product = req.body
+        const user = req.user
         try {
-            const newProduct = await productService.createProduct(req.body, req.user);
-            return res.status(201).json({ status: 'success', payload: new ProductDTO(newProduct, req.user) });
+            const newProduct = await productService.createProduct(product, user);
+            return res.status(201).json({ status: 'success', payload: new ProductDTO(newProduct, user) });
         } catch (error) {
             next(error);
         }
@@ -63,7 +65,7 @@ class ProductController {
 
     getProductBy = async (req, res) => {
         const { pid } = req.params;
-        const productFound = await productService.getProduct({ _id: pid });
+        const productFound = await productService.getProductBy({ _id: pid });
         try {
             if (!productFound)
                 return res.status(400).send({ status: 'error', error: `¡ERROR! No existe ningún producto con el id ${pid}` });
@@ -79,7 +81,7 @@ class ProductController {
         const { pid } = req.params;
         const { title, description, code, price, status, stock, category, thumbnails } = req.body;
 
-        const productFound = await productService.getProduct({ _id: pid });
+        const productFound = await productService.getProductBy({ _id: pid });
         try {
             if (!title || !description || !code || !price || !stock || !category) {
                 return res.status(400).send({ status: 'error', error: `Error, faltan campos: ${error.message}` });
@@ -100,7 +102,7 @@ class ProductController {
         const user = req.user;
 
         try {
-            const productFound = await productService.getProduct({ _id: pid });
+            const productFound = await productService.getProductBy({ _id: pid });
             if (!productFound) return res.status(400).send({ status: 'error', error: `¡ERROR! No existe ningún producto con el id ${pid}` });
             if (user.role === 'premium' && productFound.owner !== user.email) return res.status(401).send({ status: 'error', error: `el producto ${productFound.title} no le pertenece a ${user.email}, por lo tanto no puede borrarlo` });
 

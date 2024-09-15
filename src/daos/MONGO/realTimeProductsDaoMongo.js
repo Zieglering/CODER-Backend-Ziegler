@@ -1,6 +1,6 @@
 import productsModel from "./models/products.model.js";
 
-class ProductsDaoMongo {
+class RealTimeProductsDaoMongo {
     constructor() {
         this.productsModel = productsModel;
     }
@@ -34,4 +34,4 @@ class ProductsDaoMongo {
     };
 }
 
-export default ProductsDaoMongo;
+export default RealTimeProductsDaoMongo;

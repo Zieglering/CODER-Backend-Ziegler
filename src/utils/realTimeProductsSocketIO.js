@@ -1,23 +1,14 @@
-import RealTimeProductController from "../controller/realTimeProductsController.js";
 import { logger } from "./logger.js";
-
-// falta implementar createRealTimeProduct
-
-const {
-    getRealTimeProducts,
-    createRealTimeProduct
-} = new RealTimeProductController();
+import { realTimeProductsService } from "../service/service.js";
 
 export const realTimeProducts = (io) => {
     io.on("connection", async (socket) => {
         logger.info('Cliente conectado');
-        const products = await getRealTimeProducts();
-
+        const products = await realTimeProductsService.getProducts();
         socket.emit("getProducts", products);
-
-        socket.on("createProduct", async (newProductData) => {
+        socket.on("createProduct", async (newProductData, user) => {
             try {
-                const responseData = await createRealTimeProduct(
+                await realTimeProductsService.createProduct(
                     newProductData.title,
                     newProductData.description,
                     newProductData.code,
@@ -25,33 +16,37 @@ export const realTimeProducts = (io) => {
                     newProductData.status,
                     newProductData.stock,
                     newProductData.category,
-                    newProductData.thumbnails
+                    newProductData.thumbnails,
+                    user
                 );
-                io.emit("getProducts", await getRealTimeProducts());
-                return responseData;
+
+                io.emit("getProducts", await realTimeProductsService.getProducts());
+                socket.emit("productCreated", { success: true });
             } catch (error) {
-                logger.error("Error", error);
+                socket.emit("productCreated", { success: false, message: 'Error al crear el producto.' });
             }
         });
 
-        socket.on("updateProduct", async (productID, updatedProduct) => {
+        socket.on("updateProduct", async (productId, updatedProductData) => {
             try {
+                await realTimeProductsService.updateProduct(productId, updatedProductData);
 
-                await productService.update(parseInt(productID), updatedProduct);
-                io.emit("getProducts", await getRealTimeProducts());
-
+                io.emit("getProducts", await realTimeProductsService.getProducts());
+                socket.emit("productUpdated", { success: true });
             } catch (error) {
-                logger.error("Error", error);
+                socket.emit("productUpdated", { success: false, message: error.message });
             }
         });
 
         socket.on("deleteProduct", async (productID) => {
             try {
-                await productService.delete(parseInt(await productID));
-                io.emit("getProducts", await getRealTimeProducts());
+                await realTimeProductsService.deleteProduct(productID);
 
+                io.emit("getProducts", await realTimeProductsService.getProducts());
+                socket.emit("productDeleted", { success: true });
             } catch (error) {
-                logger.error("Error", error);
+                logger.error("Error borrando el producto:", error);
+                socket.emit("productDeleted", { success: false, message: error.message });
             }
         });
     });

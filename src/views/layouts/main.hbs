@@ -1,9 +1,10 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/main.css" />
   <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css " rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
@@ -26,69 +27,64 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               <div class="profile-pic">
-                {{#if user.profilePicture}}
-                <img src={{user.profilePicture}} alt="Profile Picture">
+                {{#if user.thumbnails.profilePicture}}
+                <img src={{user.thumbnails.profilePicture}} alt="Profile Picture">
                 {{else}}
                 <img src="/images/Profile_default.png" alt="Profile Picture">
                 {{/if}}
               </div>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a id="viewCartBtn" class="dropdown-item" href="#"><i
-                    class="fas fa-sliders-h fa-fw"></i>Carrito</a></li>
-              <li><a id="viewUserAccountBtn" class="dropdown-item" href="#" data-user-email={{user.email}}><i
-                    class="fas fa-sliders-h fa-fw"></i>Administrar Cuenta</a></li>
+              <li><h5 id="user-name" class="dropdown-header" data-user-id="{{user.id}}">{{user.first_name}}</h5></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a id="viewCartBtn" class="dropdown-item" href="#" data-user-id={{user.id}}>Carrito</a></li>
+              <li><a id="viewUserAccountBtn" class="dropdown-item" href="#" data-user-id={{user.id}}>Administrar Cuenta</a></li>
+              <li><a id="chatBtn" class="dropdown-item" href="#" data-user-id={{user.id}}>Chat</a></li>
               {{/if}}
               {{#if (eq user.role "premium")}}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                   aria-expanded="false">
                   <div class="profile-pic">
-                    {{#if user.profilePicture}}
-                    <img src={{user.profilePicture}} alt="Profile Picture">
+                    {{#if user.thumbnails.profilePicture}}
+                    <img src={{user.thumbnails.profilePicture}} alt="Profile Picture">
                     {{else}}
                     <img src="/images/Profile_default.png" alt="Profile Picture">
                     {{/if}}
                   </div>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a id="viewCartBtn" class="dropdown-item" href="#"><i
-                    class="fas fa-sliders-h fa-fw"></i>Carrito</a></li>
-                  <li><a id="viewUserAccountBtn" class="dropdown-item" href="#" data-user-email={{user.email}}><i
-                        class="fas fa-sliders-h fa-fw"></i>Administrar Cuenta</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" href="/create-products"><i class="fas fa-sliders-h fa-fw"></i>Crear
-                      Producto</a></li>
+                  <li><h5 id="user-name" class="dropdown-header" data-user-id="{{user.id}}">{{user.first_name}}</h5></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a id="viewCartBtn" class="dropdown-item" href="#" data-user-id={{user.id}}>Carrito</a></li>
+                  <li><a id="viewUserAccountBtn" class="dropdown-item" href="#" data-user-id={{user.id}}>Administrar Cuenta</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a id="createProductBtn" class="dropdown-item" href="/create-products">Crear Producto</a></li>
+                  <li><a id="realtimeproductsBtn" class="dropdown-item" href="/realtimeproducts">Real Time Products</a></li>
                   {{/if}}
                   {{#if (eq user.role "admin")}}
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                       data-bs-toggle="dropdown" aria-expanded="false">
                       <div class="profile-pic">
-                        {{#if user.profilePicture}}
-                        <img src={{user.profilePicture}} alt="Profile Picture">
+                        {{#if user.thumbnails.profilePicture}}
+                        <img src={{user.thumbnails.profilePicture}} alt="Profile Picture">
                         {{else}}
                         <img src="/images/Profile_default.png" alt="Profile Picture">
                         {{/if}}
                       </div>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="/create-products"><i class="fas fa-sliders-h fa-fw"></i>Crear
-                          Producto</a></li>
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
-                      <li><a class="dropdown-item" href="/apidocs"><i class="fas fa-sliders-h fa-fw"></i>API Docs</a>
-                      </li>
-                      <li><a class="dropdown-item" href="/users-manager"><i class="fas fa-sliders-h fa-fw"></i>Todos los
-                          Usuarios</a></li>
+                      <li><h5 class="dropdown-header">admin</h5></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a id="createProductBtn" class="dropdown-item" href="/create-products">Crear Producto</a></li>
+                      <li><a id="realtimeproductsBtn" class="dropdown-item" href="/realtimeproducts">Real Time Products</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="/apidocs">API Docs</a></li>
+                      <li><a class="dropdown-item" href="/users-manager">Todos los Usuarios</a></li>
                       {{/if}}
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
-                      <li><a id="logOutBtn" class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-fw"></i>Log Out</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a id="logOutBtn" class="dropdown-item" href="#">Log Out</a></li>
                     </ul>
                   </li>
                   {{else}}

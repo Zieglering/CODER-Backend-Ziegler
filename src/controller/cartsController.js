@@ -32,11 +32,11 @@ class CartController {
         }
     };
 
-    getCart = async (req, res) => {
+    getCartBy = async (req, res) => {
         const { cid } = req.params;
     
         try {
-            const cartFound = await this.cartService.getCart({ _id: cid });
+            const cartFound = await this.cartService.getCartBy({ _id: cid });
             res.status(200).send({ status: 'success', payload: cartFound });
         } catch (error) {
             res.status(500).send({ status: 'error', error: `Error al buscar el carrito: ${error.message}` });
@@ -99,6 +99,7 @@ class CartController {
             res.status(500).send({ status: 'error', error: `Error en el proceso de compra: ${error.message}` });
         }
     };
+    
 }
 
 export default CartController;

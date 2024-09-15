@@ -4,7 +4,7 @@ export default class TicketsRepository {
     }
 
     createTicket = async newTicket => await this.ticketsDao.create(newTicket);
-    getTicket = async filter => await this.ticketsDao.getBy(filter);
-    getTickets = async filter => await this.ticketsDao.getAll(filter);
+    getTicketBy = async filter => await this.ticketsDao.getBy(filter);
+    getTickets = async () => await this.ticketsDao.getAll();
     deleteTicket = async tid => await this.ticketsDao.delete(tid);
 }

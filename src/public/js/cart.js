@@ -2,6 +2,8 @@ const volverBtn = document.querySelector('#volverBtn');
 const ticketBtn = document.querySelector('#ticketBtn');
 const cartIDElement = document.querySelector('#cartID');
 const totalAmountElement = document.querySelector('#totalAmount');
+const removeProductFromCartBtns = document.querySelectorAll('.removeProductFromCartBtn');
+
 
 const cartID = cartIDElement.textContent.split(':')[1]?.trim();
 
@@ -90,7 +92,7 @@ async function updateProductQuantityInBackend(cartID, productID, quantity) {
           const errorData = await response.json();
           Swal.fire({
               title: 'Error!',
-              text: `Failed to update product quantity: ${errorData.error}`,
+              text: `No se pudo actualizar la cantidad del producto: ${errorData.error}`,
               icon: 'error',
               confirmButtonText: 'OK'
           });
@@ -98,7 +100,7 @@ async function updateProductQuantityInBackend(cartID, productID, quantity) {
   } catch (error) {
       Swal.fire({
           title: 'Error!',
-          text: `Failed to communicate with server: ${error.message}`,
+          text: `Error: ${error.message}`,
           icon: 'error',
           confirmButtonText: 'OK'
       });
@@ -106,60 +108,62 @@ async function updateProductQuantityInBackend(cartID, productID, quantity) {
 }
 
 
-const removeProductFromCartBtn = document.querySelector('#removeProductFromCartBtn');
-removeProductFromCartBtn.addEventListener('click', async (evt) => {
-    evt.preventDefault();
-    const pid = removeProductFromCartBtn.getAttribute("data-product-id");
-    const productTitle = removeProductFromCartBtn.getAttribute('data-product-title');
 
-    const confirmDelete = await Swal.fire({
-        title: `¿Estás seguro?`,
-        text: `¿Quieres quitar ${productTitle} de tu carrito?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, Quitar del carrito',
-        cancelButtonText: 'Cancelar'
-    });
+removeProductFromCartBtns.forEach(button => {
+    button.addEventListener('click', async (evt) => {
+        evt.preventDefault();
+        const pid = button.getAttribute("data-product-id");
+        const productTitle = button.getAttribute('data-product-title');
 
-    if (confirmDelete.isConfirmed) {
-        try {
-            const response = await fetch(`/api/carts/${cartID}/products/${pid}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+        const confirmDelete = await Swal.fire({
+            title: `¿Estás seguro?`,
+            text: `¿Quieres quitar ${productTitle} de tu carrito?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, Quitar del carrito',
+            cancelButtonText: 'Cancelar'
+        });
 
-            if (response.ok) {
-                Swal.fire({
-                    title: 'Quitado',
-                    text: `El producto ${productTitle} fue quitado del carrito correctamente`,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    evt.target.closest('.product-card').remove();
-                    updateTotalAmount(); 
+        if (confirmDelete.isConfirmed) {
+            try {
+                const response = await fetch(`/api/carts/${cartID}/products/${pid}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 });
-            } else {
-                const errorText = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        title: 'Quitado',
+                        text: `El producto ${productTitle} fue quitado del carrito correctamente`,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        button.closest('.product-card').remove();
+                        updateTotalAmount(); 
+                    });
+                } else {
+                    const errorText = await response.json();
+                    Swal.fire({
+                        title: 'Error!',
+                        text: errorText.error,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } catch (error) {
                 Swal.fire({
                     title: 'Error!',
-                    text: errorText.error,
+                    text: error.message,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
             }
-        } catch (error) {
-            Swal.fire({
-                title: 'Error!',
-                text: error.message,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
         }
-    }
+    });
 });
 
 ticketBtn.addEventListener('click', async () => {

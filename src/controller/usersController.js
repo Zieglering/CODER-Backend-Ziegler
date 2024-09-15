@@ -1,5 +1,6 @@
 import { userService, cartService } from '../service/service.js';
 import UserSecureDto from '../dtos/userSecureDto.js';
+import { logger } from '../utils/logger.js';
 
 class UserController {
     constructor() {
@@ -28,9 +29,9 @@ class UserController {
     };
 
     getUserBy = async (req, res) => {
-        const filter = req.query;
+        const filter = req.params;
         try {
-            const userFound = await this.userService.getUserBy(filter);
+            const userFound = await this.userService.getUserBy({_id:filter.uid});
             res.send({ status: 'success', payload: userFound });
         } catch (error) {
             res.status(500).send({ status: 'error', error: `Error al buscar el usuario: ${error.message}` });

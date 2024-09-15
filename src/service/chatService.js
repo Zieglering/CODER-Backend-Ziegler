@@ -14,8 +14,8 @@ export default class ChatService {
         return await this.chatRepository.getMessages();
     }
 
-    async getMessage(filter) {
-        const message = await this.chatRepository.getMessage(filter);
+    async getMessageBy(filter) {
+        const message = await this.chatRepository.getMessageBy(filter);
         if (!message) {
             throw new Error(`No existe el mensaje con el id ${filter._id}`);
         }
