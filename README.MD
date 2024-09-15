@@ -3,7 +3,10 @@
 ## Entrega final Programación Backend
 Entrega final del backend de un coffee house store
 
-## Cómo usar la aplicación
+## Deploy en render.com
+https://coder-backend-ziegler.onrender.com
+
+## O para clonar la app en local (faltan variables de entorno)
 1 - clonar la app de github
 ```git clone https://github.com/Zieglering/CODER-Backend-Ziegler.git```
 2 - navegar a la ruta de la app

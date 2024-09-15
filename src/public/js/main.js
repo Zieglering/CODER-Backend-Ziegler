@@ -2,9 +2,9 @@ const logOutBtn = document.querySelector('#logOutBtn');
 const viewCartBtn = document.querySelector('#viewCartBtn');
 const createProductBtn = document.querySelector('#createProductBtn');
 const realtimeproductsBtn = document.querySelector('#realtimeproductsBtn');
-const viewUserAccountBtn = document.querySelector("#viewUserAccountBtn")
-const userName = document.querySelector("#user-name")
-const chatBtn = document.querySelector('#chatBtn')
+const viewUserAccountBtn = document.querySelector("#viewUserAccountBtn");
+const userName = document.querySelector("#user-name");
+const chatBtn = document.querySelector('#chatBtn');
 
 
 const getUserName = async (userId) => {
@@ -19,14 +19,14 @@ const getUserName = async (userId) => {
         }
     } catch (error) {
         console.error('Error al buscar el nombde de usuario en la base de datos:', error);
-        userName.textContent = "Nombre de usuario no encontrado"; 
+        userName.textContent = "Nombre de usuario no encontrado";
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     const userId = document.querySelector('#user-name').dataset.userId;
     if (userId) {
-        getUserName(userId); 
+        getUserName(userId);
     }
 });
 
@@ -48,12 +48,12 @@ logOutBtn.addEventListener('click', async (evt) => {
         console.error('Error:', error.message);
     }
 });
-if (viewCartBtn){
+if (viewCartBtn) {
     viewCartBtn.addEventListener('click', async (evt) => {
         const userId = evt.target.getAttribute('data-user-id');
-        const response = await fetch(`/api/users/${userId}`)
+        const response = await fetch(`/api/users/${userId}`);
         const result = await response.json();
-        const cartID = result.payload.cart
+        const cartID = result.payload.cart;
         if (cartID) {
             window.location.href = `/cart/${cartID}`;
         } else {
@@ -70,7 +70,7 @@ if (viewUserAccountBtn) {
         const result = await response.json();
         const user = result.payload;
         if (user) {
-            const userId = user._id;            
+            const userId = user._id;
             window.location.href = `/user/${userId}`;
         } else {
             console.log('Usuario no encontrado');
@@ -85,40 +85,42 @@ if (createProductBtn) {
     });
 }
 
-if (realtimeproducts) {
-    realtimeproducts.addEventListener('click', (evt) => {
+if (realtimeproductsBtn) {
+    realtimeproductsBtn.addEventListener('click', (evt) => {
         evt.preventDefault();
-        window.location.href = '/create-products';
+        window.location.href = '/realtimeproducts';
     });
 }
 
 document.querySelectorAll('.dropdown-toggle').forEach(item => {
     item.addEventListener('click', event => {
-   
-      if(event.target.classList.contains('dropdown-toggle') ){
-        event.target.classList.toggle('toggle-change');
-      }
-      else if(event.target.parentElement.classList.contains('dropdown-toggle')){
-        event.target.parentElement.classList.toggle('toggle-change');
-      }
-    })
-  });
 
-  chatBtn.addEventListener('click', async (evt) => {
-    evt.preventDefault();
-    try {
-        const response = await fetch('/chat', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (response.ok) {
-            window.location.href = '/chat';
-        } else {
-            console.error('Error al cargar el chat');
+        if (event.target.classList.contains('dropdown-toggle')) {
+            event.target.classList.toggle('toggle-change');
         }
-    } catch (error) {
-        console.error('Error:', error.message);
-    }
+        else if (event.target.parentElement.classList.contains('dropdown-toggle')) {
+            event.target.parentElement.classList.toggle('toggle-change');
+        }
+    });
 });
+
+if (chatBtn) {
+    chatBtn.addEventListener('click', async (evt) => {
+        evt.preventDefault();
+        try {
+            const response = await fetch('/chat', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.ok) {
+                window.location.href = '/chat';
+            } else {
+                console.error('Error al cargar el chat');
+            }
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    });
+}

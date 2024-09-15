@@ -1,57 +1,63 @@
-import { logger } from "../utils/logger.js";
+import { CustomError } from '../service/errors/CustomError.js';
+import { EError } from '../service/errors/enums.js';
+import { generateInvalidProductError } from '../service/errors/info.js';
 import { sendEmailMessage } from '../utils/sendEmailMessage.js';
 
-
-export default class RealTimeProductsService {
-    constructor(productRepository, userService) {
-        this.productRepository = productRepository;
+export default class RealTimeProductService {
+    constructor(realTimeProductsRepository, userService) {
+        this.realTimeProductsRepository = realTimeProductsRepository;
         this.userService = userService;
     }
 
-    async createProduct(title, description, code, price, status = true, stock, category, thumbnails, user) {
-        if (!title || !description || !code || !price || !stock || !category) {
-            throw new Error('Faltan campos');
+    createProduct = async (product, user) => {
+        const { title, description, code, price, status = true, stock, category } = product;
+
+        try {
+            if (!title || !description || !code || !price || !stock || !category) {
+                throw CustomError.createError({
+                    name: 'Error al crear el producto',
+                    cause: generateInvalidProductError({ title, description, code, price, stock, category }),
+                    message: 'Error al crear el producto, campos faltantes o inválidos',
+                    code: EError.MISSING_OR_INVALID_REQUIRED_DATA_ERROR
+                });
+            }
+
+            const existingProducts = await this.realTimeProductsRepository.getProducts();
+            if (existingProducts.docs.find((prod) => prod.code === code)) {
+                throw CustomError.createError({
+                    name: 'Error al crear el producto',
+                    cause: generateInvalidProductError({ title, description, code, price, stock, category }),
+                    message: `No se pudo crear el producto con el código ${code} porque ya existe un producto con ese código`,
+                    code: EError.MISSING_OR_INVALID_REQUIRED_DATA_ERROR
+                });
+            }
+            product.owner = user.role === 'premium' ? user.email : 'admin';
+            return await this.realTimeProductsRepository.createProduct(product);
+
+        } catch (error) {
+            throw CustomError.createError({
+                name: 'Error al crear el producto',
+                cause: generateInvalidProductError({ title, description, code, price, stock, category }),
+                message: `No se pudo crear el producto: ${error}`,
+                code: EError.MISSING_OR_INVALID_REQUIRED_DATA_ERROR
+            });
         }
-        const products = await this.productRepository.getProducts();
-        const productWithSameCode = products.docs.find((prod) => prod.code === code);
-        if (productWithSameCode) {
-            throw new Error(`No se pudo agregar el producto con el código ${code} porque ya existe un producto con ese código`);
-        }
-        const newProduct = {
-            title,
-            description,
-            code,
-            price,
-            status,
-            stock,
-            category,
-            thumbnails
-        };
+    };
 
-        newProduct.owner = user.role === 'premium' ? user.email : 'admin';
-        return await this.productRepository.createProduct(newProduct);
-    }
+    getProducts = async (filter) => {
+        return await this.realTimeProductsRepository.getProducts(filter);
+    };
 
+    getProductBy = async (filter) => {
+        return await this.realTimeProductsRepository.getProductBy(filter);
+    };
 
-    async getProducts() {
-        return await this.productRepository.getProducts();
-    }
+    updateProduct = async (productId, productToUpdate) => {
+        return await this.realTimeProductsRepository.updateProduct(productId, productToUpdate);
+    };
 
-    async getProductBy(filter) {
-        const product = await this.productRepository.getProductBy(filter);
-        if (!product) {
-            throw new Error(`¡ERROR! No existe ningún producto con el id ${filter._id}`);
-        }
-        return product;
-    }
-
-    async updateProduct(productId, productToUpdate) {
-        return await this.productRepository.updateProduct(productId, productToUpdate);
-
-    }
-
-    async deleteProduct(productId) {
-        const deletedProduct = await this.productRepository.getProductBy({ _id: productId });
+    deleteProduct = async (productId) => {
+        const deletedProduct = await this.getProductBy({ _id: productId });
         const productOwner = deletedProduct.owner;
         const user = await this.userService.getUserBy({ email: productOwner });
 
@@ -65,6 +71,6 @@ export default class RealTimeProductsService {
                 `
             });
         }
-        return await this.productRepository.deleteProduct(productId);
+        return await this.realTimeProductsRepository.deleteProduct(productId);
     };
 }

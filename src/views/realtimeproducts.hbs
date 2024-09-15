@@ -1,5 +1,5 @@
 <main>
-  <h1>Nuestros cafés</h1>
+  <h1>Real Time Products</h1>
   <div class="contenedor">
     <div class="box">
       <form id="createProductForm">
@@ -39,24 +39,31 @@
         <div>
           <label for="owner">Owner<br />
             <input type="hidden" id="user-data" value="{{user.role}}:{{user.email}}" />
-            <input class="btn btn-secondary btn-lg disabled w-100 mt-3" type="text" name="owner" id="owner" placeholder="{{user.role}}" value="{{user.email}}" role="button"
-            aria-disabled="true" /></label>
+            <input class="btn btn-secondary btn-lg disabled w-100 mt-3" type="text" name="owner" id="owner"
+              placeholder="{{user.role}}" value="{{user.email}}" role="button" aria-disabled="true" /></label>
         </div>
         <button type="submit">Agregar Producto</button>
       </form>
     </div>
-     <div class="box">
-      <h2>Productos</h2>
+    <div class="box">
+      <h2>Productos creados por {{user.email}}</h2>
+
       <ul id="listProducts">
-        {{#each products}}
+        {{!-- {{#each products}}
         <li class="product-item">
           <div class="product-card">
             <div class="product-image">
               <img src="{{this.thumbnails}}" alt="{{this.title}}" />
             </div>
             <div class="product-info">
-              <h3 class="product-title">{{this.title}}</h3>
-              <h4 class="product-price">${{this.price}}</h4>
+              <h3 class="product-title">${{this.title}}</h3>
+              <h6 class="product-price">$${{this.description}}</h6>
+              <p class="product-price">${{this.price}}</p>
+              <p class="product-price">${{this.code}}</p>
+              <p class="product-price">${{this.status}}</p>
+              <p class="product-price">${{this.stock}}</p>
+              <p class="product-price">${{this.category}}</p>
+              <p class="product-price">${{this.thumbnails}}</p>
             </div>
             <div class="product-actions">
               <button class="btnDelete" data-id="{{this._id}}">Borrar</button>
@@ -64,28 +71,28 @@
             </div>
           </div>
         </li>
-        {{/each}}
+        {{/each}} --}}
       </ul>
       <div class="pagination">
         {{#if hasPrevPage}}
-          <a href="{{prevLink}}">Previous</a>
+        <a href="{{prevLink}}">Previous</a>
         {{else}}
-          <span>Previous</span>
+        <span>Previous</span>
         {{/if}}
-        
+
         {{#each pages}}
-          <a href="{{this.url}}" class="{{#if (isEqual this.page page)}}active{{/if}}">{{this.page}}</a>
+        <a href="{{this.url}}" class="{{#if (isEqual this.page page)}}active{{/if}}">{{this.page}}</a>
         {{/each}}
-        
+
         {{#if hasNextPage}}
-          <a href="{{nextLink}}">Next</a>
+        <a href="{{nextLink}}">Next</a>
         {{else}}
-          <span>Next</span>
+        <span>Next</span>
         {{/if}}
       </div>
     </div>
   </div>
 </main>
-<link rel="stylesheet" href="/css/realTimeProducts.css" />
 <script src="/socket.io/socket.io.js"></script>
+<link rel="stylesheet" href="/css/realTimeProducts.css" />
 <script src="/js/realtimeproducts.js"></script>

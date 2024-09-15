@@ -15,7 +15,7 @@ import ChatService from "./chatService.js";
 // Repositories
 const userRepository = new UsersRepository(new UsersDao());
 const productRepository = new ProductsRepository(new ProductsDao());
-const realTimeProductsRepository = new RealTimeProductsRepository(new RealtimeProductsDao());
+const realTimeProductsRepository = new RealTimeProductsRepository(new ProductsDao());
 const cartRepository = new CartsRepository(new CartsDao());
 const ticketRepository = new TicketsRepository(new TicketsDao());
 const chatRepository = new ChatsRepository(new ChatsDao());
@@ -23,7 +23,7 @@ const chatRepository = new ChatsRepository(new ChatsDao());
 // Services
 export const userService = new UserService(userRepository, cartRepository);
 export const productService = new ProductService(productRepository, userService);
-export const realTimeProductsService = new RealTimeProductsService(productRepository, userService);
+export const realTimeProductsService = new RealTimeProductsService(realTimeProductsRepository, userService);
 export const ticketService = new TicketService(ticketRepository);
 export const chatService = new ChatService(chatRepository);
 export const cartService = new CartService(cartRepository, productService, ticketService, userService);

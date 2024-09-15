@@ -18,8 +18,44 @@ class RealTimeProductController {
 
     getRealTimeProducts = async (req, res) => {
         try {
-            const products = await this.realTimeProductsService.getProducts();
-            res.status(200).send({ status: 'success', payload: products });
+            const { limit = 10, pageNum = 1, category, status, product: title, sortByPrice } = req.query;
+            const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } = await productService.getProducts({ limit, pageNum, category, status, title, sortByPrice });
+
+            let prevLink = null;
+            let nextLink = null;
+
+            if (hasPrevPage) {
+                prevLink = `/index?pageNum=${prevPage}`;
+                if (limit) prevLink += `&limit=${limit}`;
+                if (title) prevLink += `&product=${title}`;
+                if (category) prevLink += `&category=${category}`;
+                if (status) prevLink += `&status=${status}`;
+                if (sortByPrice) prevLink += `&sortByPrice=${sortByPrice}`;
+            }
+
+            if (hasNextPage) {
+                nextLink = `/index?pageNum=${nextPage}`;
+                if (limit) nextLink += `&limit=${limit}`;
+                if (title) nextLink += `&product=${title}`;
+                if (category) nextLink += `&category=${category}`;
+                if (status) nextLink += `&status=${status}`;
+                if (sortByPrice) nextLink += `&sortByPrice=${sortByPrice}`;
+            }
+
+            res.status(200).send({
+                status: 'success',
+                payload: {
+                    products: docs,
+                    totalPages,
+                    prevPage,
+                    nextPage,
+                    page,
+                    hasPrevPage,
+                    hasNextPage,
+                    prevLink,
+                    nextLink
+                }
+            });
         } catch (error) {
             res.status(500).send({ status: 'error', error: `Error al buscar los productos: ${error.message}` });
         }
